@@ -270,7 +270,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().ResumeAudio();
 
 ### 9.角色设置
 改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”Player””CommandAnchor””CommandGuest””Langrensha””LiveAnchor””LiveGuest”。详细的角色说明请见[游戏实时语音角色说明文档](https://github.com/qsqshaha/TMGSDK)。
+默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
 > 函数原型  
 ```
 ITMGContext TMGRoom public void ChangeRole(String role, byte[] authBuffer)
