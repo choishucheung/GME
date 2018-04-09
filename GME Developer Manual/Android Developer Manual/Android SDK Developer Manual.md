@@ -95,7 +95,7 @@ TMGContext.GetInstance(this).SetTMGDelegate(itmgDelegate);
 ## 实时语音接入
 
 ### 1.设置相关信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)。
+获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
@@ -131,7 +131,7 @@ ITMGContext public void GetSDKVersion()
 ```
 ITMGContext.GetInstance(this).GetSDKVersion();
 ```
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
   
 该函数返回值为 Byte[] 类型。
 > 函数原型
@@ -163,7 +163,7 @@ byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkApp
 用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:加入房间默认不打开麦克风及扬声器。
 
-关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
+关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 > 函数原型
 ```
 ITMGContext public abstract void EnterRoom(int roomID, String controlRole, byte[] authBuffer)
@@ -814,7 +814,7 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 
 
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)。
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 > 函数原型  
 ```
 TlsSig public String getTLSSig(int sdkAppId, String openID, String key) 
