@@ -44,38 +44,38 @@
 修复了 Android 4.2 及以下系统版本必现 crash 的问题。
 
 ## 接入通用文档
-#### [接入指引文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)
-#### [角色配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)
-#### [错误码列表](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/GME%20Error%20Code.md)
+#### [接入指引文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)
+#### [角色配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)
+#### [错误码列表](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Error%20Code.md)
 
 ## 各平台接入文档
 #### PC 平台
-[PC（C++）开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
+[PC（C++）开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
 
 #### iOS 平台
-[iOS 开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
+[iOS 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
 
-[iOS 工程配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
+[iOS 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
 #### Android 平台
-[Android 开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
+[Android 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
 
-[Android 工程配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
+[Android 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
 
 #### Unity 平台
-[Unity 开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
+[Unity 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
 
-[Unity 工程配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
+[Unity 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
 
 #### Unreal Engine 平台
-[Unreal Engine 开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
+[Unreal Engine 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
 
-[Unreal Engine 工程配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
+[Unreal Engine 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
 
 #### Cocos2D 平台
-[Cocos2D-X 开发接入技术文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
+[Cocos2D-X 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
 
-[Cocos2D-X 工程配置文档](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
+[Cocos2D-X 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
 
 ## 联系我们
 QQ：1558615124
