@@ -2,7 +2,7 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Unity 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Unity 开发的接入技术文档。
 
 ## SDK初始化  
-获取相关信息，由腾讯云控制台申请，详情见[游戏音视频接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%E6%8E%A5%E5%85%A5%E6%B5%81%E7%A8%8B.md)。
+获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
@@ -43,7 +43,7 @@ ITMGContext  abstract string GetVersion()
 ```
 ITMGContext.GetInstance().GetVersion();
 ```
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏音视频接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%E6%8E%A5%E5%85%A5%E6%B5%81%E7%A8%8B.md)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
   
 该函数返回值为 NSData 类型。
 > 函数原型
@@ -900,7 +900,7 @@ string tips = ITMGContext.GetInstance().GetRoom().GetQualityTips();
 
 
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[接入指引文档](https://github.com/tencentav/TMGSDK/blob/master/GME%E6%8E%A5%E5%85%A5%E6%B5%81%E7%A8%8B.md)。
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
 > 函数原型  
 ```
