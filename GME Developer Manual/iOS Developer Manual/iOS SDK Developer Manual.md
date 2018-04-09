@@ -56,7 +56,7 @@ TMG 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 ## 实时语音接入
 
 ### 1.设置相关信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)。
+获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
@@ -92,7 +92,7 @@ ITMGContext  -(NSString*)GetSDKVersion
 ```
 [[ITMGContext GetInstance] GetSDKVersion];
 ```
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
   
 该函数返回值为 NSData 类型。
 > 函数原型
@@ -123,7 +123,7 @@ NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:
 ### 2.加入房间
 用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:加入房间默认不打开麦克风及扬声器。
-关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/tencentav/TMGSDK/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
+关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 > 函数原型
 ```
 ITMGContext   -(void)EnterRoom:(int) relationId controlRole:(NSString*)role authBuffer:(NSData*)authBuffer
@@ -230,7 +230,7 @@ GetAudioCtrl -(QAVResult)ResumeAudio
 
 ### 9.角色设置
 改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”Player””CommandAnchor””CommandGuest””Langrensha””LiveAnchor””LiveGuest”。详细的角色说明请见[游戏实时语音角色说明文档](https://github.com/tencentav/TMGSDK/blob/master/%E6%B8%B8%E6%88%8F%E9%9F%B3%E8%A7%86%E9%A2%91%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E8%A7%92%E8%89%B2%E8%AF%B4%E6%98%8E.md)。
+默认自动建6个角色，分别为：”Player””CommandAnchor””CommandGuest””Langrensha””LiveAnchor””LiveGuest”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
 > 函数原型  
 ```
 GetRoom -(void)ChangeRole:(NSString*)role authBuffer:(NSData*)authBuffer
@@ -784,7 +784,7 @@ GetRoom -(NSString*)GetQualityTips
 
 ## 离线语音接入
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/tencentav/TMGSDK/blob/master/GME%20Introduction.md)
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)
 。
 Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
 > 函数原型  

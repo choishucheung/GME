@@ -4,7 +4,7 @@
 ## SDK初始化  
 
 ### 1.获取单例
-TMGSDK 以单例的形式提供，所有调用都从 ITMGContext 开始，通过 ITMGDelegate 回调回传给应用，必须首先设置。    
+GMESDK 以单例的形式提供，所有调用都从 ITMGContext 开始，通过 ITMGDelegate 回调回传给应用，必须首先设置。    
 > 函数原型 
 ```
 ITMGContext virtual void TMGDelegate(ITMGDelegate* delegate)
@@ -16,7 +16,7 @@ m_pTmgContext = ITMGContextGetInstance();
 ```
 
 ### 2.消息传递
-TMG 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVENT_TYPE，data 在 Windows 平台下是 json 字符串格式， 具体 key-value 参见说明文档。
+GMESDK 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVENT_TYPE，data 在 Windows 平台下是 json 字符串格式， 具体 key-value 参见下表。
 > 函数原型
 ```
  ITMGDelegate virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
@@ -72,7 +72,7 @@ m_pTmgContext->TMGDelegate(p);
 
 ## 实时语音接入
 ### 1.设置相关信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏音视频接入指引](https://github.com/tencentav/TMGSDK/blob/master/%E6%B8%B8%E6%88%8F%E9%9F%B3%E8%A7%86%E9%A2%91%E6%8E%A5%E5%85%A5%E6%8C%87%E5%BC%95%E6%96%87%E6%A1%A3.md)。
+获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 >在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置
 
 此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（Id 需参考鉴权使用文档）。
@@ -121,7 +121,7 @@ m_pTmgContext->GetSDKVersion;
 用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置
-关于角色的设置，在[游戏实时语音角色说明](https://github.com/tencentav/TMGSDK/blob/master/%E6%B8%B8%E6%88%8F%E9%9F%B3%E8%A7%86%E9%A2%91%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E8%A7%92%E8%89%B2%E8%AF%B4%E6%98%8E.md)中有介绍。
+关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 > 函数原型
 ```
 ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff,int buffLen)
