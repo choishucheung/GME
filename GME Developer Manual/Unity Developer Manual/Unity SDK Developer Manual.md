@@ -198,7 +198,7 @@ IQAVRoom ChangeRole(string role, byte[] authBuffer)
 | authBuffer    |NSData    |鉴权需要重新设置|
 
 >注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
+流控角色意味着音视频编码参数的调整，所以需要再次调用相关 API 重新设置鉴权（参考生成 AuthBuffer ）。
 
 角色分别代表的通话质量：
 
@@ -278,7 +278,7 @@ IQAVAudioCtrl EnableMic(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 YSE，如果打开麦克风，则参数为 NO|
+| isEnabled    |boolean     |如果需要打开麦克风，则传入的参数为 YES，如果关闭麦克风，则参数为 NO|
 > 示例代码  
 ```
 打开麦克风
@@ -509,7 +509,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ```
 
 ### 30.设置他人是否也可以听到伴奏
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+此函数用于设置他人是否可以听到伴奏。
 > 函数原型  
 ```
 IQAAudioEffectCtrl abstract int EnableAccompanyLoopBack(bool enable)
@@ -578,8 +578,8 @@ IQAAudioEffectCtrl abstract uint SetAccompanyFileCurrentPlayedTimeByMs(uint time
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyFileCurrentPlayedTimeByMs(time);
 ```
-### 35.播放伴奏的音量
-获取播放音效的音量，为DB音量，默认值为61，大于61增益，小于61减益。
+### 35.获取播放伴奏的db音量
+获取播放伴奏的音量，为DB音量，默认值为61，大于61增益，小于61减益。
 > 函数原型  
 ```
 IQAAudioEffectCtrl abstract int GetAccompanyVolumeDB()
@@ -589,8 +589,8 @@ IQAAudioEffectCtrl abstract int GetAccompanyVolumeDB()
 IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolumeDB();
 ```
 
-### 36.设置播放伴奏的音量
-设置播放音效的音量，为DB音量，默认值为61，大于61增益，小于61减益。
+### 36.设置播放伴奏的db音量
+设置播放伴奏的音量，为DB音量，默认值为61，大于61增益，小于61减益。
 > 函数原型  
 ```
 IQAAudioEffectCtrl abstract int SetAccompanyVolumeDB(int dbVol)

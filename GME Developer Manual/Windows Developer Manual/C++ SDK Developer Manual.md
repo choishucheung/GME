@@ -336,7 +336,7 @@ ITMGAudioCtrl virtual int EnableMic(bool bEnabled, const char* pMicId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| enable    |bool     |如果需要关闭麦克风，则传入的参数为 true，如果打开麦克风，则参数为 false		|
+| enable    |bool     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false		|
 | pMicId    |char     |麦克风ID																	|
 > 示例代码  
 ```
