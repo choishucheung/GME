@@ -432,7 +432,7 @@ ITMGAudioCtrl EnableMic(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 YSE，如果打开麦克风，则参数为 NO|
+| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 NO，如果打开麦克风，则参数为 YES|
 > 示例代码  
 ```
 打开麦克风
@@ -663,7 +663,7 @@ ITMGContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ```
 
 ### 34.设置他人是否也可以听到伴奏
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+此函数用于设置他人是否可以听到伴奏。
 > 函数原型  
 ```
 ITMGAudioEffectCtrl abstract int EnableAccompanyLoopBack(bool enable)
