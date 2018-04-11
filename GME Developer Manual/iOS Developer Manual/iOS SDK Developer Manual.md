@@ -832,7 +832,7 @@ GetPTT -(void)StartRecording:(NSString*)fileDir
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| fileDir    |NSString                     |播放的语音路径，可以为 NULL|
+| fileDir    |NSString                     |存放的语音路径|
 > 示例代码  
 ```
 [[[ITMGContext GetInstance]GetPTT]StartRecording:path]; 
@@ -922,7 +922,7 @@ GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*
 ```
 
 ### 10.下载语音文件完成回调
-上传语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
+下载语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
