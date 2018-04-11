@@ -24,8 +24,7 @@ SDK 支持在 iOS7.0 及以上系统上运行。
 需要根据情况在 Xcode 的 Link Binary With Libraries 里面加上下面的依赖库，并设置 Framework Search Paths 指向 SDK 所在目录，如图所示：  
 
 ![image](Image/i3.png)
-
-TMGSDK 里面有三个 Framework，如下：
+GME 里面有三个 Framework，如下：
 >TMG.framework：
 
 音视频的 SDK，必选。

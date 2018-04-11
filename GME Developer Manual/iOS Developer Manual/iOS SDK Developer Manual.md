@@ -4,7 +4,7 @@
 ## SDK初始化  
 
 ### 1.获取单例
-TMGSDK 以单例的形式提供，所有调用都从 ITMGContext 开始。异步操作的结果或者内部状态的改变都通过 ITMGDelegate 传给应用。    
+GME 以单例的形式提供，所有调用都从 ITMGContext 开始。异步操作的结果或者内部状态的改变都通过 ITMGDelegate 传给应用。    
 > 函数原型 
 ```
 ITMGContext @protocol ITMGDelegate <NSObject> 
@@ -16,7 +16,7 @@ _context.TMGDelegate =self;
 ```
 
 ### 2.消息传递
-TMG 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVENT_TYPE，消息内容为一个字典，不同的事件类型，消息内容也会不一样。
+GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVENT_TYPE，消息内容为一个字典，不同的事件类型，消息内容也会不一样。
 > 函数原型
 ```
 - (void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary*)data
@@ -314,7 +314,7 @@ GetAudioCtrl -(void)EnableMic:(BOOL)enable
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 YSE，如果打开麦克风，则参数为 NO|
+| isEnabled    |boolean     |如果需要打开麦克风，则传入的参数为 YES，如果关闭麦克风，则参数为 NO|
 > 示例代码  
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] EnableMic:YES];
