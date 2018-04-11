@@ -373,7 +373,7 @@ ITMGAudioCtrl virtual int EnableMic(bool bEnabled, const char* pMicId)
 ```
 |PROPERTY          | TYPES                  |DESCRIPTION|
 | ------------- |:-------------:|-------------
-| bEnabled    |bool     |The input property is true if microphone is disabled, and false if microphone is enabled.|
+| bEnabled    |bool     |The input property is true if microphone is enabled, and false if microphone is disabled.|
 | pMicId    |char     |The microphone's ID,get it from GetMicList API.|
 > Example  
 ```
@@ -472,7 +472,7 @@ ITMGAudioCtrl virtual int EnableSpeaker(bool bEnabled, const char* pSpeakerID)
 ```
 |PROPERTY          | TYPES                  |DESCRIPTION|
 | ------------- |:-------------:|-------------
-| bEnabled    |bool       |The input property is true if speaker is disabled, and false if speaker is enabled.|
+| bEnabled    |bool       |The input property is true if speaker is enabled, and false if speaker is disabled.|
 | pSpeakerID    |char      | The speaker's ID,get it from GetSpeakerList function.|
 > Example  
 ```
