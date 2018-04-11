@@ -800,11 +800,11 @@ IQAVContext.GetInstance().GetPttCtrl().SetMaxMessageLength(60000);
 此函数用于启动录音。
 > 函数原型  
 ```
-IQAVPTT int StartRecording(string filePath)
+IQAVPTT int StartRecording(string fileDir)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| fileDir    |string                      |播放的语音路径，可以为 NULL|
+| fileDir    |string                      |存放的语音路径|
 > 示例代码  
 ```
 string recordPath = Application.persistentDataPath + string.Format ("/{0}.silk", sUid++);
@@ -849,7 +849,7 @@ IQAVContext.GetInstance().GetPttCtrl().StopRecording();
 
 
 ### 6.上传语音文件
-此函数用于启动录音。
+此函数用于上传语音文件。
 > 函数原型  
 ```
 IQAVPTT int UploadRecordedFile (string filePath)
@@ -976,12 +976,12 @@ void mInnerHandler(int code, string filepath){
 此函数用于停止播放语音。
 > 函数原型  
 ```
-IQAVPTT int StopRecording()
+IQAVPTT int StopPlayFile()
 ```
 
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetPttCtrl().StopRecording();
+IQAVContext.GetInstance().GetPttCtrl().StopPlayFile();
 ```
 
 

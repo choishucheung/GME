@@ -870,7 +870,7 @@ ITMGContext TMGPTT public void StartRecording(String fileDir)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| fileDir    |String                     |播放的语音路径，可以为 NULL|
+| fileDir    |String                     |存放的语音路径|
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetPTT().StartRecording(fileDir);
@@ -915,7 +915,7 @@ ITMGContext.GetInstance(this).GetPTT().CancelRecording();
 ```
 
 ### 7.上传语音文件
-此函数用于启动录音。
+此函数用于上传语音文件。
 > 函数原型  
 ```
 ITMGContext TMGPTT public void UploadRecordedFile(String filePath)
@@ -959,7 +959,7 @@ ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path);
 
 
 ### 10.下载语音文件完成回调
-上传语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
+下载语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 传递的参数包含三个信息，result、file_path 和 file_id。
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {

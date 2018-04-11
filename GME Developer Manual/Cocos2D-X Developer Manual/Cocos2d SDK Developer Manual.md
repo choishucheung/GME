@@ -1098,7 +1098,7 @@ ITMGPTT virtual void StartRecording(const char* fileDir)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| fileDir    |char                     |播放的语音路径，可以为 NULL|
+| fileDir    |char                     |存放的语音路径|
 > 示例代码  
 ```
 ITMGContextGetInstance()->GetPTT()->SetMaxMessageLength(fileDir);
@@ -1150,7 +1150,7 @@ ITMGContextGetInstance()->GetPTT()->CancelRecording();
 ```
 
 ### 7.上传语音文件
-此函数用于启动录音。
+此函数用于上传语音文件。
 > 函数原型  
 ```
 ITMGPTT virtual void UploadRecordedFile(const char* filePath)
@@ -1199,7 +1199,7 @@ ITMGContextGetInstance()->GetPTT()->DownloadRecordedFile(fileID,filePath);
 ```
 
 ### 10.下载语音文件完成回调
-上传语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
+下载语音完成后，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 	switch (eventType) {
