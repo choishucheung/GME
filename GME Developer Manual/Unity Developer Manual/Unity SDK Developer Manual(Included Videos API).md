@@ -442,7 +442,7 @@ ITMGContext.GetInstance().GetAudioCtrl().EnableMic(false);
 ```
 
 ### 18.麦克风状态获取
-此函数获取麦克风状态。
+此函数获取麦克风状态。返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 ITMGAudioCtrl GetMicState()
@@ -508,7 +508,7 @@ ITMGContext.GetInstance().GetAudioCtrl().EnableSpeaker(false);
 
 
 ### 23.扬声器状态获取
-此函数用于扬声器状态获取。返回值为 int 类型数值。
+此函数用于扬声器状态获取。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 ITMGAudioCtrl GetSpeakerState()
