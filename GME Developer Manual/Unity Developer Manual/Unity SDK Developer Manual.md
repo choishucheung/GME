@@ -288,7 +288,7 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableMic(false);
 ```
 
 ### 14.麦克风状态获取
-此函数获取麦克风状态。
+此函数获取麦克风状态。返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 IQAVAudioCtrl GetMicState()
@@ -354,7 +354,7 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(false);
 
 
 ### 19.扬声器状态获取
-此函数用于扬声器状态获取。返回值为 int 类型数值。
+此函数用于扬声器状态获取。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 QAVAudioCtrl GetSpeakerState()
@@ -822,7 +822,7 @@ public abstract event QAVRecordFileCompleteCallback OnRecordFileComplete;
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| code    |string                      |当code为0时，录制完成|
+| code    |string                      |当 code 为 0 时，录制完成|
 | filepath    |string                      |录制的存放地址|
 
 > 示例代码  

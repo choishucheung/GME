@@ -571,7 +571,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 ```
 
 ### 20.麦克风状态获取
-此函数获取麦克风状态。
+此函数获取麦克风状态。返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetMicState()
@@ -673,7 +673,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 ```
 
 ### 27.扬声器状态获取
-此函数用于扬声器状态获取。返回值为 int 类型数值。
+此函数用于扬声器状态获取。返回值为 int 类型数值。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetSpeakerState()
@@ -1191,7 +1191,7 @@ ITMGPTT virtual void DownloadRecordedFile(const char* fileId,const char* filePat
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| fileId  		|char  	|文件的url路径	|
+| fileId  		|char  	|文件的 url 路径	|
 | filePath 	|char 	|文件的下载路径	|
 > 示例代码  
 ```
