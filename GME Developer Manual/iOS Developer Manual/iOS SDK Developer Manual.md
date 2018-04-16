@@ -230,7 +230,7 @@ GetAudioCtrl -(QAVResult)ResumeAudio
 
 ### 9.角色设置
 改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”Player””CommandAnchor””CommandGuest””Langrensha””LiveAnchor””LiveGuest”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
+默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
 > 函数原型  
 ```
 GetRoom -(void)ChangeRole:(NSString*)role authBuffer:(NSData*)authBuffer
@@ -341,7 +341,7 @@ GetAudioCtrl -(void)EnableMic:(BOOL)enable
 }
 ```
 ### 15.麦克风状态获取
-此函数获取麦克风状态。
+此函数获取麦克风状态，返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 GetAudioCtrl -(int)GetMicState
@@ -423,7 +423,7 @@ GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
 ```
 
 ### 21.扬声器状态获取
-此函数用于扬声器状态获取。返回值为 int 类型数值。
+此函数用于扬声器状态获取。返回值为 int 类型数值。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 GetAudioCtrl -(int)GetSpeakerState
@@ -878,7 +878,7 @@ GetPTT -(QAVResult)CancelRecording
 ```
 
 ### 7.上传语音文件
-此函数用于启动录音。
+此函数用于上传语音文件。
 > 函数原型  
 ```
 GetPTT -(void)UploadRecordedFile:(NSString*)filePath
