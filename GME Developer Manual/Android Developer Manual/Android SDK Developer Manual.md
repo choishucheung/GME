@@ -160,7 +160,7 @@ byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkApp
 ```
 
 ### 2.加入房间
-用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:加入房间默认不打开麦克风及扬声器。
 
 关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
