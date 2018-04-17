@@ -76,7 +76,7 @@ byte[] authBuffer = this.GetAuthBuffer(str_appId, str_accountType, str_userId, r
 ```
 
 ### 2.加入房间
-用生成的权鉴进房。
+用生成的鉴权信息进房。
 >注意：默认不打开麦克风、扬声器及摄像头。
 
 关于角色的设置，建议使用以下两个角色：

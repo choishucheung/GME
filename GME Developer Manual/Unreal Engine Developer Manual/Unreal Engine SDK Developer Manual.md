@@ -231,7 +231,7 @@ QAVSDK_AuthBuffer_GenAuthBuffer(appId, roomId, "", account, accountType, expTime
 ```
 
 ### 4.加入房间
-用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数进行相关信息的设置。
@@ -839,7 +839,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyPlay(true);
 ```
 
 ### 8.设置他人是否也可以听到伴奏
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+设置他人是否也可以听到伴奏。
 > 函数原型  
 ```
 ITMGAudioEffectCtrl virtual int EnableAccompanyLoopBack(bool enable)

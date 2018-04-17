@@ -4,7 +4,7 @@
 ## SDK初始化  
 
 ### 1.准备工作
-接入 GMESDK 首先需要引入头文件 tmg_sdk.h，头文件类继承 ITMGDelegate 以进行消息的传递及回调。
+接入 GME 首先需要引入头文件 tmg_sdk.h，头文件类继承 ITMGDelegate 以进行消息的传递及回调。
 > 示例代码  
 ```
 #include "tmg_sdk.h"
@@ -111,7 +111,7 @@ ITMGContext* context = ITMGContextGetInstance();
 context->SetAppInfo(SDKAPPID3RD, ACCOUNTTYPE, openId);
 ```
 
-cocos2D 的更新函数 Update 需要配置。
+Cocos2d 的更新函数 Update 需要配置。
 >Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent事件(回调线程为Poll的调用线程)。
 
 >函数原型
@@ -238,7 +238,7 @@ QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "", atoi(ACCOUNTTYPE)
 ```
 
 ### 4.加入房间
-用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
@@ -847,7 +847,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyPlay(true);
 ```
 
 ### 8.设置他人是否也可以听到伴奏
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+设置他人是否也可以听到伴奏。
 > 函数原型  
 ```
 ITMGAudioEffectCtrl virtual int EnableAccompanyLoopBack(bool enable)
