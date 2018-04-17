@@ -76,6 +76,6 @@ TEA对称加密算法。
 |方案       		| 坏处        				| 详情 																															|
 | ------------- |:-------------:| ------------- 
 | 后台部署    		|工作量大				|[音视频密钥使用说明](https://cloud.tencent.com/document/product/268/11240)													|
-| 客户端部署      	| 安装包体积，安全性 		|工程中额外引入libqav_authbuff.so（Android） 和 QAVSDKAuthBuffer.framework（iOS）两个库文件，并额外引入 QAVAuthBuffer.cs。 	|  
+| 客户端部署      	| 安装包体积大，安全性低	|工程中额外引入libqav_authbuff.so（Android） 和 QAVSDKAuthBuffer.framework（iOS）两个库文件，并额外引入 QAVAuthBuffer.cs。 	|  
 
 使用详情见各平台文档。
