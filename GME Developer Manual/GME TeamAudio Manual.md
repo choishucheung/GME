@@ -1,4 +1,7 @@
-### 2.加入房间
+## 简介
+欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍 GME 小队语音的接入技术文档。
+
+### 1.加入房间
 用生成的鉴权数据进房。
 >注意:加入房间默认不打开麦克风及扬声器。
 
@@ -75,7 +78,7 @@ ITMGContext.GetInstance().EnterRoom(roomId, role, authBuffer,1000,1);
 
 
 
-### 5.修改小队语音通话模式
+### 2.修改小队语音通话模式
 通过此函数修改小队语音通话模式。
 > 函数原型  
 ```
@@ -90,7 +93,7 @@ ITMGRoom int ChangeTeamAudioMode(int audioMode)
 ITMGContext.GetInstance().GetRoom().ChangeTeamAudioMode(1);
 ```
 
-### 6.设置接收语音距离范围
+### 3.设置接收语音距离范围
 此函数用于设置接收的语音范围（距离以游戏引擎为准）。
 >注意：1、调用此函数需要每帧调用
 >2、进房的前提下调用。
