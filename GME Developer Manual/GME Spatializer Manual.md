@@ -31,6 +31,18 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 
 ### 3.更新声源方位（包含朝向）
 此函数用于更新声源方位角信息，传入用户 openID 后每帧调用便可实现 3D 音效效果。
+
+>距离与声音衰减的关系
+
+3D 音效中，音源音量的大小与音源距离有一定的衰减关系。单位距离超过500之后，音量衰减到几乎为零。
+
+|距离范围（引擎单位）|衰减公式	|
+| ------- |---------|
+| 0~40   	|音量衰减：1.0
+| 40～N  |音量大小：40/N          
+
+![](https://github.com/TencentMediaLab/GME/blob/master/Image/t1.jpg)
+
 > 函数原型  
 ```
 QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float elevation,float distance_cm)
