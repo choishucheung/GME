@@ -38,8 +38,8 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 
 |距离范围（引擎单位）|衰减公式	|
 | ------- |---------|
-| 0~40   	|音量衰减：1.0
-| 40～N  |音量大小：40/N          
+| 0< N <40  	|衰减系数：1.0 （音量无衰减）
+| N≥40  |衰减系数：40/N          
 
 ![](https://github.com/TencentMediaLab/GME/blob/master/Image/t1.jpg)
 
@@ -52,7 +52,7 @@ QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float
 | identifier   		|string	|传入一个 identifier，以识别用户（identifier 在进房时候已经确定）	|
 | azimuth    		|float	|方位参数（需要计算）											|
 | elevation    	|float 	|角度参数（需要计算）											|
-| distance_cm    	|float  	|距离参数，以厘米为距离单位（需要计算）							|
+| distance_cm    	|float  	|距离参数（需要计算）							|
 
 >函数原理
 
