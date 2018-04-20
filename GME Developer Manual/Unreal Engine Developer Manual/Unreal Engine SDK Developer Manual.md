@@ -243,7 +243,7 @@ ITMGContext virtual void EnterRoom(int relationId, const char* role, const char*
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId			|int   	|房间号，大于等于六位的整数							|
+| relationId			|int   	|房间号							|
 | role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
 | authBuffer    		|char    	|鉴权码												|
 | buffLen   			|int   	|鉴权码长度											|
