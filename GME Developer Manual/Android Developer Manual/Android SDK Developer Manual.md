@@ -170,7 +170,7 @@ ITMGContext public abstract void EnterRoom(int roomID, String controlRole, byte[
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomID    		|int    	|房间号，大于等于六位的整数	|
+| roomID    		|int    	|房间号 	|
 | controlRole    	|String  	|角色名称，按照需求设置		|
 | authBuffer    	|byte[]  	|鉴权						|
 > 示例代码  
