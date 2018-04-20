@@ -600,7 +600,7 @@ GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyLoopBack:(BOOL)enable
 ```
 
 ### 34.设置伴奏音量
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0-200。
 > 函数原型  
 ```
 GetAudioEffectCtrl -(QAVAccResult)SetAccompanyVolume:(int)vol
