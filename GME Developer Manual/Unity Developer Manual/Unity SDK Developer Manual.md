@@ -86,7 +86,7 @@ IQAVContext EnterRoom(int relationId, string controlRole, byte[] authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId|int    |房间号，大于等于六位的整数|
+| relationId|int    |房间号|
 | controlRole    |string     |角色名称，按照需求设置|
 | authBuffer    |Byte[]    |鉴权|
 > 示例代码  

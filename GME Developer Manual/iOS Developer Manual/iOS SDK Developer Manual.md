@@ -130,7 +130,7 @@ ITMGContext   -(void)EnterRoom:(int) relationId controlRole:(NSString*)role auth
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomID		|int    		|房间号，大于等于六位的整数	|
+| roomID		|int    		|房间号 	|
 | controlRole    	|NSString    	|角色名称，按照需求设置		|
 | authBuffer    	|NSData    	|鉴权						|
 > 示例代码  
