@@ -409,7 +409,7 @@ IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerVolume();
 
 
 ### 23.开始播放伴奏
-调用此函数开始播放伴奏。
+调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
 > 函数原型  
 ```
 IQAVAudioEffectCtrl int StartAccompany(string filePath, bool loopBack, int loopCount, int duckerTimeMs)
