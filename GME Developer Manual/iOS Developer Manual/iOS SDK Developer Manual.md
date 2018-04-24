@@ -108,7 +108,7 @@ ITMGContext  -(NSString*)GetSDKVersion
 | identifier  		|NSString    	|用户标识								|
 | accountType    	|int   		|来自腾讯云控制台的 accountType 号码	|
 | key    			|NSString    	|来自腾讯云控制台的密钥					|
-| expTime    		|int   		|加入房间的超时时间						|
+| expTime    		|int   		|authBuffer 超时时间						|
 | authBits   	 	|uint64    	|权限									|
 
 >关于权限  
