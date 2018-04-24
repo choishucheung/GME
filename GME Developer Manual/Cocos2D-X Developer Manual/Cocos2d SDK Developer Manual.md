@@ -219,7 +219,7 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 | account  		|char    		|用户标识								|
 | accountType    	|int   		|来自腾讯云控制台的 accountType 号码	|
 | key    			|char	    	|来自腾讯云控制台的密钥					|
-| expTime    		|int   		|加入房间的超时时间						|
+| expTime    		|int   		|authBuffer 超时时间						|
 | privilegeMap   	|int    		|权限									|
 | retAuthBuff   	|char    		|返回的 authbuff							|
 | buffLenght   	|int    		|返回的authbuff的长度					|
