@@ -536,7 +536,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 ```
 
 ### 26.开始播放伴奏
-调用此函数开始播放伴奏。
+调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
 注意：1、调用此 API，音量会重置。
 2、下行权限不能启用此 API。
 > 函数原型  
