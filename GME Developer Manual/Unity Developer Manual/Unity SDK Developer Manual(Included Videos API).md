@@ -453,7 +453,7 @@ micToggle.isOn = ITMGContext.GetInstance().GetAudioCtrl().GetMicState() != 0;
 ```
 
 ### 19.获取麦克风实时音量
-IQAVAudioCtrl GetMicLevel()
+获取麦克风实时音量。
 > 函数原型  
 ```
 ITMGAudioCtrl -(int)GetMicLevel
