@@ -863,7 +863,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyLoopBack(true);
 ```
 
 ### 9.设置伴奏音量
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+设置播放伴奏的 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益。
 > 函数原型  
 ```
 ITMGAudioEffectCtrl virtual int SetAccompanyVolume(int vol)
@@ -1277,7 +1277,23 @@ ITMGContextGetInstance()->GetPTT()->GetFileSize(filePath);
 ```
 
 ### 15.获取语音文件的时长
-此函数用于获取语音文件的时长。
+通过此函数，获取语音文件的时长。
+> 函数原型  
+```
+ITMGPTT virtual int GetVoiceFileDuration(const char* filePath)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| filePath    |char                     |语音文件的路径|
+> 示例代码  
+```
+ITMGContextGetInstance()->GetPTT()->GetVoiceFileDuration(filePath);
+```
+
+
+
+### 16.翻译语音文件
+此函数用于翻译语音文件。
 > 函数原型  
 ```
 ITMGPTT virtual void SpeechToText(const char* fileID)
@@ -1290,7 +1306,7 @@ ITMGPTT virtual void SpeechToText(const char* fileID)
 ITMGContextGetInstance()->GetPTT()->SpeechToText(fileID);
 ```
 
-### 16.将指定的语音文件翻译成文字
+### 17.将指定的语音文件翻译成文字
 将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){

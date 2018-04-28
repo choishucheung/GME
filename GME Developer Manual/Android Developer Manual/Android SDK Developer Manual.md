@@ -158,7 +158,19 @@ import com.tencent.av.sig.AuthBuffer;//头文件
 long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
 byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, Integer.parseInt(accountType), key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
 ```
+最后是设置最大混音路数（同时听到多少人讲话），在进房前调用。
+> 函数原型
+```
+ITMGContext void SetRecvMixStreamCount(int nCount)
+```
 
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| nCount    |int   |混音路数，默认为6|
+> 示例代码  
+```
+IQAVContext.GetInstance(this).SetRecvMixStreamCount(nCount);
+```
 ### 2.加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:加入房间默认不打开麦克风及扬声器。
@@ -521,7 +533,57 @@ ITMGContext TMGAudioCtrl public int GetSpeakerVolume()
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().GetSpeakerVolume();
 ```
-### 25.启动耳返
+
+### 25. 跟踪成员音量变化
+此函数用于触发主动抛音频能量事件。成功返回 OK。
+
+> 函数原型  
+```
+ITMGAudioCtrl abstract int TrackingVolume(float fTrackingTimeS)
+```
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| fTrackingTimeS    |float            |通知间隔|
+> 示例代码  
+```
+IQAVContext.GetInstance(this).GetAudioCtrl().TrackingVolume(time);
+```
+
+### 26.停止跟踪成员音量变化
+
+此函数用于停止主动抛音频能量事件。成功返回 OK。
+
+> 函数原型  
+```
+ITMGAudioCtrl abstract int StopTrackingVolume()
+```
+
+> 示例代码  
+```
+IQAVContext.GetInstance(this).GetAudioCtrl().StopTrackingVolume();
+```
+
+### 27.音频能量事件的回调
+由 TrackingVolume 触发的主动推送说话人音量的回调函数，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_VOLUMES，在 OnEvent 函数中对事件消息进行判断。
+传递的参数 intent 包含事件内容为字典，如下表格。
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| uin    |string            |对应说话人员的UIN|
+| volume    |int            |uin对应说话人员的声音能量值|
+
+> 示例代码  
+```
+public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
+	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVNET_TYPE_USER_VOLUMES == type)
+        {
+		//音频能量事件的回调
+	}
+}
+```
+
+### 28.启动耳返
 此函数用于启动耳返。
 > 函数原型  
 ```
@@ -535,7 +597,7 @@ ITMGContext TMGAudioCtrl public int EnableLoopBack(boolean enable)
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 ```
 
-### 26.开始播放伴奏
+### 29.开始播放伴奏
 调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
 注意：1、调用此 API，音量会重置。
 2、下行权限不能启用此 API。
@@ -553,7 +615,7 @@ ITMGContext TMGAudioEffectCtrl public int StartAccompany(String filePath, boolea
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().StartAccompany(filePath,true,loopCount,duckerTimeMs);
 ```
 
-### 27.播放伴奏的回调
+### 30.播放伴奏的回调
 开始播放伴奏完成后，回调函数调用 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH，在 OnEvent 函数中对事件消息进行判断。
 传递的参数 intent 包含两个信息，一个是 result，另一个是 file_path。
 > 示例代码  
@@ -566,7 +628,7 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 }
 ```
 
-### 28.停止播放伴奏
+### 31.停止播放伴奏
 调用此函数停止播放伴奏。
 > 函数原型  
 ```
@@ -581,7 +643,7 @@ ITMGContext TMGAudioEffectCtrl public int StopAccompany(int duckerTimeMs)
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().StopAccompany(duckerTimeMs);
 ```
 
-### 29.伴奏是否播放完毕
+### 32.伴奏是否播放完毕
 如果播放完毕，返回值为 true，如果没播放完，返回值为 false。
 > 函数原型  
 ```
@@ -593,7 +655,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().IsAccompanyPlayEnd();
 ```
 
 
-### 30.暂停播放伴奏
+### 33.暂停播放伴奏
 调用此函数暂停播放伴奏。
 > 函数原型  
 ```
@@ -605,7 +667,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().PauseAccompany();
 ```
 
 
-### 31.重新播放伴奏
+### 34.重新播放伴奏
 此函数用于重新播放伴奏。
 > 函数原型  
 ```
@@ -616,8 +678,8 @@ ITMGContext TMGAudioEffectCtrl public int ResumeAccompany()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().ResumeAccompany();
 ```
 
-### 32.设置伴奏音量
-设置 DB 的音量，为线性音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0到200。
+### 35.设置伴奏音量
+设置 DB 音量，为线性音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0到200。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public int SetAccompanyVolume(int vol)
@@ -631,7 +693,7 @@ ITMGContext TMGAudioEffectCtrl public int SetAccompanyVolume(int vol)
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetAccompanyVolume(Volume);
 ```
 
-### 33.获取播放伴奏的音量
+### 36.获取播放伴奏的音量
 此函数用于获取播放伴奏的音量。
 > 函数原型  
 ```
@@ -642,7 +704,7 @@ ITMGContext TMGAudioEffectCtrl public int GetAccompanyVolume()
 string currentVol = "VOL: " + ITMGContext.GetInstance(this).GetAudioEffectCtrl().GetAccompanyVolume();
 ```
 
-### 34.获得伴奏播放进度
+### 37.获得伴奏播放进度
 以下两个函数用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
 > 函数原型  
 ```
@@ -656,7 +718,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().GetAccompanyFileCurrentPlayed
 ```
 
 
-### 35.设置播放进度
+### 38.设置播放进度
 此函数用于设置播放进度。
 > 函数原型  
 ```
@@ -672,7 +734,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetAccompanyFileCurrentPlayed
 ```
 
 
-### 36.获取播放音效的音量
+### 39.获取播放音效的音量
 获取播放音效的音量，为线性音量，默认值为 100，数值大于 100 为增益效果，数值小于 100 为减益效果。
 > 函数原型  
 ```
@@ -684,7 +746,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().GetEffectsVolume();
 ```
 
 
-### 37.设置播放音效的音量
+### 40.设置播放音效的音量
 调用此函数设置播放音效的音量。
 > 函数原型  
 ```
@@ -701,7 +763,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 
 
-### 38.播放音效
+### 41.播放音效
 此函数用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
 > 函数原型  
 ```
@@ -718,7 +780,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().PlayEffect(soundId,filePath,l
 ```
 
 
-### 39.暂停播放音效
+### 42.暂停播放音效
 此函数用于暂停播放音效。
 > 函数原型  
 ```
@@ -733,7 +795,7 @@ ITMGContext TMGAudioEffectCtrl public int PauseEffect(int soundId)
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().PauseEffect(soundId);
 ```
 
-### 40.暂停所有音效
+### 43.暂停所有音效
 调用此函数暂停所有音效。
 > 函数原型  
 ```
@@ -744,7 +806,7 @@ ITMGContext TMGAudioEffectCtrl public int PauseAllEffects()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().PauseAllEffects();
 ```
 
-### 41.重新播放音效
+### 44.重新播放音效
 此函数用于重新播放音效。
 > 函数原型  
 ```
@@ -760,7 +822,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().ResumeEffect(soundId);
 
 
 
-### 42.重新播放所有音效
+### 45.重新播放所有音效
 调用此函数重新播放所有音效。
 > 函数原型  
 ```
@@ -771,7 +833,7 @@ ITMGContext TMGAudioEffectCtrl public int ResumeAllEffects()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().ResumeAllEffects();
 ```
 
-### 43.停止播放音效
+### 46.停止播放音效
 此函数用于停止播放音效。
 > 函数原型  
 ```
@@ -785,7 +847,7 @@ ITMGContext TMGAudioEffectCtrl public int StopEffect(int soundId)
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().StopEffect(soundId);
 ```
 
-### 44.停止播放所有音效
+### 47.停止播放所有音效
 调用此函数停止播放所有音效。
 > 函数原型  
 ```
@@ -796,7 +858,7 @@ ITMGContext TMGAudioEffectCtrl public int StopAllEffects()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().StopAllEffects();
 ```
 
-### 45.获取诊断信息
+### 48.获取诊断信息
 获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以不用关心它。
 > 函数原型  
 ```
@@ -1030,7 +1092,7 @@ ITMGContext TMGPTT public int GetFileSize(String filePath)
 ITMGContext.GetInstance(this).GetPTT().GetFileSize(path);
 ```
 
-### 14.获取语音文件的时长
+### 15.获取语音文件的时长
 此函数用于获取语音文件的时长。
 > 函数原型  
 ```
@@ -1045,9 +1107,21 @@ ITMGContext.GetInstance(this).GetPTT().GetVoiceFileDuration(path);
 ```
 
 
-
-
 ### 16.将指定的语音文件翻译成文字
+此函数用于将指定的语音文件翻译成文字。
+> 函数原型  
+```
+ITMGContext TMGPTT public int SpeechToText(String fileID)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| fileID    |String                     |语音文件 url|
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID);
+```
+
+### 17.将指定的语音文件翻译成文字
 将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 传递的参数包含三个信息，result、file_path 和 text，其中 text 为翻译的文本。
 ```

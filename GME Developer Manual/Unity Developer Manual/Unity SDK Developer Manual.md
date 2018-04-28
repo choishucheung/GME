@@ -21,7 +21,7 @@ int ret = IQAVContext.GetInstance().SetAppInfo(str_appId, str_accountType, 
 	}
 ```
 ## 实时语音接入
-### 1、设置相关信息
+### 1.设置相关信息
 设置版本信息，用于查 Log 信息及 Bug 时使用（不设置不影响功能）。
 > 函数原型
 ```
@@ -75,7 +75,7 @@ byte[] GetAuthBuffer(string appId, string accountType, string userId, int
 byte[] authBuffer = this.GetAuthBuffer(str_appId, str_accountType, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
 ```
 
-最后是设置最大混音路数。
+最后是设置最大混音路数（同时听到多少人讲话）。
 > 函数原型
 ```
 ITMGContext int SetMaxMicCount(int nCount)
@@ -453,8 +453,26 @@ ITMGAudioCtrl abstract int StopTrackingVolume()
 IQAVContext.GetInstance().GetAudioCtrl().StopTrackingVolume();
 ```
 
+### 25.音频能量事件的回调
+由 TrackingVolume 触发的主动推送说话人音量的回调函数，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_VOLUMES，通过委托传递消息。
+> 函数原型  
+```
+委托函数：
+public abstract event AVAudioVolumeCallBack audioVolumeCallback;
+事件函数：
+public delegate void AVAudioVolumeCallBack(Dictionary<string, int> volume);
+```
+>示例代码
+```
+对事件进行监听：
+IQAVContext.GetInstance().GetAudioEffectCtrl().AVAudioVolumeCallBack += new AVAudioVolumeCallBack(OnAVAudioVolumeCallBackHandler);
+监听处理：
+void OnAVAudioVolumeCallBackHandler(Dictionary<string, int> volume){
+    //音频能量事件的回调
+}
+```
 
-### 25.开始播放伴奏
+### 26.开始播放伴奏
 调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
 > 函数原型  
 ```
@@ -470,7 +488,7 @@ IQAVAudioEffectCtrl int StartAccompany(string filePath, bool loopBack, int loopC
 IQAVContext.GetInstance().GetAudioEffectCtrl().StartAccompany(filePath,true,loopCount,duckerTimeMs);
 ```
 
-### 26.播放伴奏的回调
+### 27.播放伴奏的回调
 伴奏播放结束时的回调，通过委托传递消息。
 > 函数原型  
 ```
@@ -489,7 +507,7 @@ void OnAccomponyFileCompleteHandler(int code, string filepath){
 }
 ```
 
-### 27.停止播放伴奏
+### 28.停止播放伴奏
 调用此函数停止播放伴奏。
 > 函数原型  
 ```
@@ -504,7 +522,7 @@ IQAVAudioEffectCtrl int StopAccompany(int duckerTimeMs)
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopAccompany(duckerTimeMs);
 ```
 
-### 28.伴奏是否播放完毕
+### 29.伴奏是否播放完毕
 如果播放完毕，返回值为 YES，如果没播放完，返回值为 NO。
 > 函数原型  
 ```
@@ -516,7 +534,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().IsAccompanyPlayEnd();
 ```
 
 
-### 29.暂停播放伴奏
+### 30.暂停播放伴奏
 调用此函数暂停播放伴奏。
 > 函数原型  
 ```
@@ -529,7 +547,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAccompany();
 
 
 
-### 30.重新播放伴奏
+### 31.重新播放伴奏
 此函数用于重新播放伴奏。
 > 函数原型  
 ```
@@ -540,7 +558,7 @@ IQAAudioEffectCtrl abstract int ResumeAccompany()
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAccompany();
 ```
 
-### 31.设置自己是否可以听到伴奏
+### 32.设置自己是否可以听到伴奏
 此函数用于设置自己是否可以听到伴奏。
 > 函数原型  
 ```
@@ -554,7 +572,7 @@ IQAAudioEffectCtrl abstract int EnableAccompanyPlay(bool enable)
 IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ```
 
-### 32设置他人是否也可以听到伴奏
+### 33.设置他人是否也可以听到伴奏
 此函数用于设置他人是否可以听到伴奏。
 > 函数原型  
 ```
@@ -570,8 +588,8 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyLoopBack(true);
 ```
 
 
-### 33.设置伴奏音量
-设置播放伴奏的音量，为线性音量，默认值为 100，数值大于 100 伴奏音量增益，数值小于 100 伴奏音量减益。
+### 34.设置 DB 音量
+设置 DB 音量，默认值为 100，数值大于 100 增益，数值小于 100减益，值域为 0 到 200。
 > 函数原型  
 ```
 IQAAudioEffectCtrl abstract int SetAccompanyVolume(int vol)
@@ -585,8 +603,8 @@ IQAAudioEffectCtrl abstract int SetAccompanyVolume(int vol)
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolume(vol);
 ```
 
-### 34.获取播放伴奏的音量
-此函数用于获取播放伴奏的音量。
+### 35.获取 设置 DB 音量
+此函数用于获取播放 DB 音量。
 > 函数原型  
 ```
 IQAAudioEffectCtrl abstract int GetAccompanyVolume()
@@ -596,7 +614,7 @@ IQAAudioEffectCtrl abstract int GetAccompanyVolume()
 string currentVol = "VOL: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolume();
 ```
 
-### 35.获得伴奏播放进度
+### 36.获得伴奏播放进度
 以下两个函数用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
 > 函数原型  
 ```
@@ -610,7 +628,7 @@ string total = "Total: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAcc
 ```
 
 
-### 36.设置播放进度
+### 37.设置播放进度
 此函数用于设置播放进度。
 > 函数原型  
 ```
@@ -624,30 +642,8 @@ IQAAudioEffectCtrl abstract uint SetAccompanyFileCurrentPlayedTimeByMs(uint time
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyFileCurrentPlayedTimeByMs(time);
 ```
-### 37.获取播放伴奏的db音量
-获取播放伴奏的音量，为DB音量，默认值为61，大于61增益，小于61减益。
-> 函数原型  
-```
-IQAAudioEffectCtrl abstract int GetAccompanyVolumeDB()
-```
-> 示例代码  
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolumeDB();
-```
 
-### 38.设置播放伴奏的db音量
-设置播放伴奏的音量，为DB音量，默认值为61，大于61增益，小于61减益。
-> 函数原型  
-```
-IQAAudioEffectCtrl abstract int SetAccompanyVolumeDB(int dbVol)
-```
-> 示例代码  
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolumeDB(vol);
-```
-
-
-### 39.获取播放音效的音量
+### 38.获取播放音效的音量
 获取播放音效的音量，为线性音量，默认值为 100，数值大于 100 为增益效果，数值小于 100 为减益效果。
 > 函数原型  
 ```
@@ -659,7 +655,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().GetEffectsVolume();
 ```
 
 
-### 40.设置播放音效的音量
+### 39.设置播放音效的音量
 调用此函数设置播放音效的音量。
 > 函数原型  
 ```
@@ -676,7 +672,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 
 
 
-### 41.播放音效
+### 40.播放音效
 此函数用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
 > 函数原型  
 ```
@@ -696,7 +692,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PlayEffect(soundId,filePath,true,
 ```
 
 
-### 42.暂停播放音效
+### 41.暂停播放音效
 此函数用于暂停播放音效。
 > 函数原型  
 ```
@@ -711,7 +707,7 @@ IQAAudioEffectCtrl abstract int PauseEffect(int soundId)
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseEffect(soundId);
 ```
 
-### 43.暂停所有音效
+### 42.暂停所有音效
 调用此函数暂停所有音效。
 > 函数原型  
 ```
@@ -722,7 +718,7 @@ IQAAudioEffectCtrl abstract int PauseAllEffects()
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAllEffects();
 ```
 
-### 44.重新播放音效
+### 43.重新播放音效
 此函数用于重新播放音效。
 > 函数原型  
 ```
@@ -738,7 +734,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeEffect(soundId);
 
 
 
-### 45.重新播放所有音效
+### 44.重新播放所有音效
 调用此函数重新播放所有音效。
 > 函数原型  
 ```
@@ -749,7 +745,7 @@ IQAAudioEffectCtrl abstract int ResumeAllEffects()
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAllEffects();
 ```
 
-### 46.停止播放音效
+### 45.停止播放音效
 此函数用于停止播放音效。
 > 函数原型  
 ```
@@ -763,7 +759,7 @@ IQAAudioEffectCtrl abstract int StopEffect(int soundId)
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopEffect(soundId);
 ```
 
-### 47.停止播放所有音效
+### 46.停止播放所有音效
 调用此函数停止播放所有音效。
 > 函数原型  
 ```
@@ -774,7 +770,7 @@ IQAAudioEffectCtrl abstract int StopAllEffects()
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopAllEffects(soundId); 
 ```
 
-### 48.获取诊断信息
+### 47.获取诊断信息
 获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以不用关心它。
 > 函数原型  
 ```
@@ -1061,9 +1057,24 @@ int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuratio
 ```
 
 
+### 16.将指定的语音文件翻译成文字
+此函数用于将指定的语音文件翻译成文字。
+> 函数原型  
+```
+IQAVPTT int SpeechToText(String fileID)
+IQAVPTT int SpeechToText(String fileID,String language)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| fileID    |string                      |语音文件的 url|
+| language    |string                      |语言id，参数为“KR-KR”,“ZH-ZH”|
 
+> 示例代码  
+```
+IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID);
+```
 
-### 15.将指定的语音文件翻译成文字
+### 17.将指定的语音文件翻译成文字
 将指定的语音文件翻译成文字，通过委托传递消息。
 > 函数原型  
 ```
