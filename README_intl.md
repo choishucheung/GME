@@ -13,34 +13,33 @@
 #### [Error Code](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Error%20Code_intl.md)
 
 ##  Development Guide
-#### Unity platform
-[Unity Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration_intl.md)
+#### Unity Engine
+- ##### *Supported platforms:Android, iOS*
+- [Unity Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration_intl.md)
 
-[Unity API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual_intl.md)
+- [Unity API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual_intl.md)
 
-#### Unreal Engine platform
+#### Unreal Engine 
+- ##### *Supported platforms:Android, iOS, Windows, MAC*
+- [Unreal Engine API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual_intl.md)
+
+#### Cocos2D Engine
+- ##### *Supported platforms:Android, iOS*
+- [Cocos2D-X Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration_intl.md)
+
+- [Cocos2D-X API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual_intl.md)
 
 
-[Unreal Engine API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual_intl.md)
+#### Native Applications
+- [PC（C++）API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual_intl.md)
 
-#### Cocos2D platform
-[Cocos2D-X Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration_intl.md)
+- [iOS Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration_intl.md)
 
-[Cocos2D-X API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual_intl.md)
+- [iOS API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual_intl.md)
 
+- [Android Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration_intl.md)
 
-#### PC platform
-[PC（C++）API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual_intl.md)
-
-#### iOS platform
-[iOS Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration_intl.md)
-
-[iOS API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual_intl.md)
-
-#### Android platform
-[Android Engineering Configuration](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration_intl.md)
-
-[Android API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual_intl.md)
+- [Android API Documentation](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual_intl.md)
 
 
 
@@ -67,7 +66,7 @@ Fix the system crash in Android 4.2 and earlier versions.
 ## Contact Us
 QQ：1558615124
 
-E-Mail：terryzuo@tencent.com		garyzeng@tencent.com		v_caisxcai@tencent.com
+E-Mail：terryzuo@tencent.com;garyzeng@tencent.com;v_caisxcai@tencent.com
 
 ## 文档
 [文档目录(中文)](https://github.com/TencentMediaLab/GME/blob/master/README.md)

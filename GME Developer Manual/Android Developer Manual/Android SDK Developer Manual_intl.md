@@ -139,7 +139,7 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 | identifier    	|String   |User identifier.								|
 | accountType    	|int   	|The value is obtained from Tencent Cloud Console.	|
 | key    			|string   	|The value is the key provided by Tencent Cloud Console.					|
-| expTime    		|int   	|Timeout interval for entering a room.						|
+| expTime    		|int   	|Timeout interval for authBuffer.						|
 | authBits    		|int    	|Permissions.									|
 
 >About permissions
