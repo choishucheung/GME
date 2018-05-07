@@ -1,4 +1,4 @@
-﻿Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access technologies for Unity development so that Unity developers can easily debug and access APIs for Tencent Cloud GME.
+Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access technologies for Unity development so that Unity developers can easily debug and access APIs for Tencent Cloud GME.
 
 ## SDK Initialization
 Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](/document/product/607/10782).
@@ -320,7 +320,7 @@ public interface ITMGVideoPlayer
 Function description:
 
 |Function     				| Parameter Type         		|Description			|
-| ---------------------	| : -------------------: 	|-----------------	|
+| ---------------------	|:-------------:|-----------------	|
 | AddRender		|QAVVideoRenderer	|Add a renderer.	|
 | removeRender  	|QAVVideoRenderer	|Remove a renderer.	|
 
@@ -340,7 +340,7 @@ public interface ITMGVideoRenderer
 Attribute description:
 
 |Attribute     				| Type         		|Description			|
-| ---------------------	| : ------------: 	|-----------------	|
+| ---------------------	|:-------------:|-----------------	|
 | identifier    			|string     		|A user's video image ID.	|
 | playerOrientation  	|PlayOrientation	|Types of orientation are portrait and landscape. 			|
 | mirror  			|bool    			|Indicates whether to adopt mirroring.		|
