@@ -4,11 +4,14 @@ Welcome to [Tencent Cloud Game Multimedia Engine (GME) SDK](https://cloud.tencen
 
 ### 1. Create an application.
 After the login, if you do not have any applications, you need to create one. Click **Create Application**. In the pop-up dialog box, enter the information about your new application, select services as required, and click **OK**. After the application is created, it is displayed on the application list.
+
 ![](https://main.qcloudimg.com/raw/5f71f6d402a06d5303a77f3b63adc53e.png)
 
 ### 2. Finish the application's basic settings.
 Click **App Basic Settings**. On the displayed tab page, click **Edit** beside **Account System Integration** to finish the settings.
+
 ![](https://main.qcloudimg.com/raw/fdcf7504a15a15cfebe9e558e28f9b46.png)
+
 Select an integration mode as required, add a RestApi user account, and click **Save**.
 There are two numbers, **accountType** under **Account System Integration** and **SdkAppId** under **Application Information**.
 >Note: Remember these two parameters, which will be used for the SetAppInfo API.
@@ -22,7 +25,9 @@ The plaintext includes **appid**, **accountType**, and **openid**.
 
 ### 2. Key acquisition
 Set the integration mode to **Independent Mode**. Download the public and private key pair .zip file. Select **private_key** as the encryption key of the authentication algorithm.  
+
 ![](https://main.qcloudimg.com/raw/ff81abec59251394e6ed42137a7df92e.png)
+
 Decompress the downloaded .zip file. The following table describes the two files in the package. 
 
 |File Name       |Description    |
