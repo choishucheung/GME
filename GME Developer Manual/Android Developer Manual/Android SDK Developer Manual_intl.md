@@ -9,7 +9,7 @@ public static ITMGContext GetInstance(Context context)
 ```
 
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------|
+| ------------- |:-------------:|-------------|
 | context    |Context |Context object of an application.|
 
 #### Sample Code
@@ -38,14 +38,14 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 Rewrite the callback function in a constructor to process callback parameters.
 
 |Parameter     | Type         |Description|
-| ------------- |: -------------: | ------------- |
+| ------------- |:-------------:| ------------- |
 | type    	|ITMGContext.ITMG_MAIN_EVENT_TYPE 	|Type of an event for which a callback is performed.				|
 | data    	|Intent message type  						|Callback-related information or event data.	|
 
 Callback event list:
 
 |Callback Event     | Description
-| ------------- |: -------------:|
+| ------------- |:-------------:|
 | ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    					|Entry into an audio/video room.
 | ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    					|Exit from an audio/video room.
 | ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    			|Disconnection from a room due to network issues or other reasons.
@@ -96,7 +96,7 @@ The SetAppInfo function contains the **sdkAppId**, **accountType**, and **openID
 ITMGContext public int SetAppInfo(String sdkAppId, String accountType, String openID)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | sdkAppId    	|String  |The value is obtained from Tencent Cloud Console.			|
 | accountType    	|String  |The value is obtained from Tencent Cloud Console.			|
 | openID    		|String  |The value indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers. Currently, the value must be greater than **10000**.|
@@ -110,7 +110,7 @@ The SetAppVersion function is used to set version information that is used durin
 ITMGContext public void SetAppVersion(String sAppVersion)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | sAppVersion    |String  |Version number.|
 #### Sample Code
 ```
@@ -133,7 +133,7 @@ The function returns a Byte[] value.
 AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, int accountType, String key, int expTime, int authBits)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | appId    		|int   	|The value is the same as the value of **sdkAppId** on Tencent Cloud Console.		|
 | roomId    		|int   	|Name of the room to be entered.							|
 | identifier    	|String   |User identifier.								|
@@ -162,7 +162,7 @@ For more information about role settings, see the [GME Voice Role Description](/
 ITMGContext public abstract void EnterRoom(int roomID, String controlRole, byte[] authBuffer)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | roomID    		|int    	|Room number, which is an integer of six or more digits.	|
 | controlRole    	|String  	|Role name. Set the parameter based on the requirements.		|
 | authBuffer    	|byte[]  	|The value is used for authentication.						|
@@ -270,7 +270,7 @@ The following six roles are automatically established by default: esports, Rhost
 ITMGContext TMGRoom public void ChangeRole(String role, byte[] authBuffer)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | role    			|String     |Role			|
 | authBuffer    	|byte[]     |The parameter must be reset each time.	|
 
@@ -280,7 +280,7 @@ Changing a flow control role means modifying audio and video encoding parameters
 The following table lists the speech quality corresponding to each role.
 
 |Role Name     | Applicable Scenario         |Key Features|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | esports    	|MOBA, competitive, and shooting games.     								|Ordinary sound quality and ultra-low latency.	|
 | Rhost    	|Commander mode of MMORPGs. Only a commander can join broadcasting.     		|High fluency and low latency.		|
 | Raudience	|Commander mode of MMORPGs. Only a commander can join broadcasting.     		|High fluency and low latency.		|
@@ -330,7 +330,7 @@ ITMGContext TMGRoom public int SetAudioBlackList(String[] identifierList)
 ```
 
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | identifierList    |String[]     |Blacklist.|
 #### Sample Code
 ```
@@ -346,7 +346,7 @@ The EnableMic function is used to enable or disable a microphone.
 ITMGContext public void EnableMic(boolean isEnabled)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | isEnabled    |boolean     |To enable a microphone, set the input parameter to **true**. To disable a microphone, set the input parameter to **false**.|
 #### Sample Code
 ```
@@ -406,7 +406,7 @@ The SetMicVolume function is used to set the software volume of a microphone. Th
 ITMGContext TMGAudioCtrl public int SetMicVolume(int volume) 
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | volume    |int      |Volume, ranging from **0** to **100**.|
 #### Sample Code
 ```
@@ -431,7 +431,7 @@ The EnableSpeaker function is used to enable or disable speakers.
 ITMGContext public void EnableSpeaker(boolean isEnabled)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | isEnabled    |boolean       |To enable speakers, set the input parameter to **true**. To disable speakers, set the input parameter to **false**.|
 #### Sample Code
 ```
@@ -497,7 +497,7 @@ The SetSpeakerVolume function is used to set the software volume of speakers.
 ITMGContext TMGAudioCtrl public int SetSpeakerVolume(int volume)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | volume    |int        |Volume, ranging from **0** to **100**.|
 #### Sample Code
 ```
@@ -523,7 +523,7 @@ The EnableLoopBack function is used to enable in-ear monitoring.
 ITMGContext TMGAudioCtrl public int EnableLoopBack(boolean enable)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | enable    |boolean         |Indicates whether to enable in-ear monitoring.|
 #### Sample Code
 ```
@@ -540,7 +540,7 @@ ITMGContext TMGAudioEffectCtrl public int StartAccompany(String filePath, boolea
 ```
 
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | filePath   |String    |Path for playing an accompaniment.	|
 | loopBack  |boolean    |Indicates whether to send a mix. The parameter is generally set to **true**.	|
 | loopCount |int    	|Number of loops. Value **-1** means an infinite loop.	|
@@ -569,7 +569,7 @@ The StopAccompany function is used to stop playing an accompaniment.
 ITMGContext TMGAudioEffectCtrl public int StopAccompany(int duckerTimeMs)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | duckerTimeMs    |int             |Fading time.|
 
 #### Sample Code
@@ -619,7 +619,7 @@ The SetAccompanyVolume function is used to set the linear volume of an accompani
 ITMGContext TMGAudioEffectCtrl public int SetAccompanyVolume(int vol)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | vol    |int             |Volume.|
 
 #### Sample Code
@@ -658,7 +658,7 @@ The SetAccompanyFileCurrentPlayedTimeByMs function is used to set playback progr
 ITMGContext TMGAudioEffectCtrl public int SetAccompanyFileCurrentPlayedTimeByMs(long time)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | time    |long                |Playback progress.|
 
 #### Sample Code
@@ -686,7 +686,7 @@ The SetEffectsVolume function is used to set the volume of a sound effect.
 ITMGContext TMGAudioEffectCtrl public int SetEffectsVolume(int volume)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | volume    |int                    |Volume.|
 
 #### Sample Code
@@ -703,7 +703,7 @@ The PlayEffect function is used to play a sound effect. The **soundId** paramete
 ITMGContext TMGAudioEffectCtrl public int PlayEffect(int soundId, String filePath, boolean loop)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | soundId    	|int    		|Sound effect ID.|
 | filePath    	|String		|Sound effect path.|
 | loop    		|boolean	|Indicates whether to repeat playback.|
@@ -720,7 +720,7 @@ The PauseEffect function is used to pause a sound effect.
 ITMGContext TMGAudioEffectCtrl public int PauseEffect(int soundId)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | soundId    |int                    |Sound effect ID.|
 
 #### Sample Code
@@ -746,7 +746,7 @@ The ResumeEffect function is used to resume a sound effect.
 ITMGContext TMGAudioEffectCtrl public int ResumeEffect(int soundId)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | soundId    |int                    |Sound effect ID.|
 #### Sample Code
 ```
@@ -771,7 +771,7 @@ The StopEffect function is used to stop playing a sound effect.
 ITMGContext TMGAudioEffectCtrl public int StopEffect(int soundId)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | soundId    |int                    |Sound effect ID.|
 #### Sample Code
 ```
@@ -808,7 +808,7 @@ Initializing PTT access requires passing **accessToken** to TLS-related function
 TlsSig public String getTLSSig(int sdkAppId, String openID, String key)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | sdkAppId  	|int           	|The value is obtained from Tencent Cloud Console.|
 | openID    	|String   	|Identifier that uniquely identifies a user. The setting rule is customized by application developers.|
 | key    		|String      	|The value is the key provided by Tencent Cloud Console.|
@@ -842,7 +842,7 @@ The SetMaxMessageLength function is used to specify the maximum length of a voic
 ITMGContext TMGPTT public void SetMaxMessageLength(int msTime)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | msTime    |int                    |Length of a voice message.|
 #### Sample Code
 ```
@@ -857,7 +857,7 @@ The StartRecording function is used to start recording.
 ITMGContext TMGPTT public void StartRecording(String fileDir)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | fileDir    |String                     |Path for playing a voice file, which can be NULL.|
 #### Sample Code
 ```
@@ -909,7 +909,7 @@ The UploadRecordedFile function is used to upload a voice file.
 ITMGContext TMGPTT public void UploadRecordedFile(String filePath)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | filePath    |String                      |Path for uploading a voice file.|
 #### Sample Code
 ```
@@ -937,7 +937,7 @@ The QAVDownloadFileCompleteCallback function is used to download a voice file.
 ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downloadFilePath)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | fileID    			|String                      |URL of a file.	|
 | downloadFilePath 	|String                      |Path for downloading a file.	|
 #### Sample Code
@@ -966,7 +966,7 @@ The PlayRecordedFile function is used to play a voice file.
 ITMGContext TMGPTT public int PlayRecordedFile(String downloadFilePath)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | downloadFilePath    |String                      |Path for downloading a file.|
 #### Sample Code
 ```
@@ -1005,7 +1005,7 @@ The GetFileSize function is used to obtain the size of a voice file.
 ITMGContext TMGPTT public int GetFileSize(String filePath)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | filePath    |String                     |Path for storing a voice file.|
 #### Sample Code
 ```
@@ -1019,7 +1019,7 @@ The GetVoiceFileDuration function is used to obtain the duration of a voice file
 ITMGContext TMGPTT public int GetVoiceFileDuration(String filePath)
 ```
 |Parameter     | Type         |Description|
-| ------------- |: -------------: |-------------
+| ------------- |:-------------:|-------------
 | filePath    |String                     |Path for storing a voice file.|
 #### Sample Code
 ```
