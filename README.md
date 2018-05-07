@@ -85,3 +85,6 @@
 QQ：1558615124
 
 邮箱：terryzuo@tencent.com		garyzeng@tencent.com		v_caisxcai@tencent.com
+
+## Documentation
+[GME Documentation(English)](https://github.com/TencentMediaLab/GME/blob/master/README_intl.md)
