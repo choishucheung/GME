@@ -82,7 +82,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 
 ## Real-Time Voice Access
 ### 1. Initialization
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](/document/product/607/10782).
+Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 ITMGContext should be obtained before the EnterRoom function is called. The GME SDK is provided as a singleton. All calls start with ITMGContext, and messages are transferred back to an application via ITMGDelegate callbacks. Therefore, this function must be set first.
 #### Sample Code
 ```
@@ -241,7 +241,7 @@ When a user enters a room with a generated **AuthBuffer** value, the ITMG_MAIN_E
 >Notes:
 >1. The microphone and speakers are disabled by default when a user enters a room.
 >2. The SetAppInfo and SetAppVersion functions need to be called to set relevant information before the EnterRoom function.
->For more information about role settings, see the [GME Voice Role Description](/document/product/607/15172).
+>For more information about role settings, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 
 #### Function Prototype
 ```
@@ -377,7 +377,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 
 ### 10. Role Setting
 Change a flow control role. The ChangeRole method is used to set a user role before a user joins a channel. The user is allowed to change the role after the user joins a channel.
-The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](/document/product/607/15172).
+The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 #### Function Prototype
 ```
 ITMGRoom virtual void ChangeRole(const char* role, const unsigned char* authBuff, int authBuffLenght)
@@ -1050,7 +1050,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->StopAllEffects();
 
 ## PTT Access
 ### 1. Initialize PTT Access
-Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](/document/product/607/10782).
+Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 #### Function Prototype
 ```
 QAVSDK_API int QAVSDK_CALL QAVSDK_SIG_GenSig(unsigned int appId,const char* uin,const char* privateKey,char* retSigBuff,unsigned int buffLenght);

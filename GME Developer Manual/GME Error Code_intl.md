@@ -1,6 +1,6 @@
 Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes error codes that may be reported during Tencent Cloud GME development so that developers can easily debug and access APIs for Tencent Cloud GME.
 
-## TMGSDK Client Errors
+## GMESDK Client Errors
 |Error Code Name     |Error Code Value |Description           |Cause          |Suggested Solution       |
 |-------- |---- |------- |-------------------- |-------------------|
 |AV_ERR_FAILED                  				|1    	  |Common error.                                                    								|The specific cause needs to be located based on log analysis or other operations.                                                                                                                                                                                     |Analyze logs.                                                               |
@@ -30,7 +30,7 @@ Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describ
 |QAV_ERR_TRY_NEW_ROOM_FAILED    	|2002 |A client attempts to enter a new room but fails, and exits the original room.                                   				|A client fails to switch to a new room and has exited the original room.                                                                                                                                                                                   																					|Re-enter a room.                                                         																					|
 
 
-## TMGSDK Server Errors
+## GMESDK Server Errors
 |Error Code Name                              |Error Code Value |Description   |Cause                                                                                            |Suggested Solution                                                     |
 |----------------------------------- |----- |----- |---------------------------------------------------------------------------------------------- |---------------------------------------------------------|
 |AV_ERR_SERVER_FAILED                				|10001 |Common error.  		|The specific cause needs to be located based on the real error code (in logs) returned from the backend to a client.                                                             																						|Analyze logs, obtain the real error code returned from the backend to the client, and ask backend personnel for help.                       									|
@@ -45,7 +45,7 @@ Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describ
 |AV_ERR_SERVER_ENDPOINT_NOT_EXIST    		|10010 |The member does not exist. 	|Some operations related to a nonexistent member are performed.                                                                 																							|Analyze logs, obtain the real error code returned from the backend to the client, and ask backend personnel for help.                      									|
 |AV_ERR_SERVER_INVALID_ABILITY       			|10011 |Invalid capability.  		|The specific cause needs to be located based on the real error code (in logs) returned from the backend to a client.                                                              																						|Analyze logs, obtain the real error code returned from the backend to the client, and ask backend personnel for help.                       									|
 
-## TMGSDK PTT Errors
+## GMESDK PTT Errors
 
 |Error Code Name                              |Error Code Value |Description   |Cause                                                                                            |Suggested Solution                                                     |
 |----------------------------------- |----- |----- |---------------------------------------------------------------------------------------------- |-----------------------------------------------------------------------------------------------|

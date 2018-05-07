@@ -1,6 +1,6 @@
 Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access technologies for Unity development so that Unity developers can easily debug and access APIs for Tencent Cloud GME.
 ## SDK Initialization
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](/document/product/607/10782).
+Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 The SetAppInfo function contains the **sdkAppId**, **accountType**, and **openID** parameters. The values of **sdkAppId** and **accountType** are obtained from Tencent Cloud Console. The value of **openID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. Currently, the ID can be only of the int64 type.
 #### Function Prototype
 ```
@@ -41,7 +41,7 @@ ITMGContext  abstract string GetVersion()
 ```
 IQAVContext.GetInstance().GetVersion();
 ```
-Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](/document/product/607/10782).
+Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 
 The return value of this function is of the NSData type.
 #### Function Prototype
@@ -76,7 +76,7 @@ byte[] authBuffer = this.GetAuthBuffer(str_appId, str_accountType, str_userId, r
 A user enters a room with a generated **AuthBuffer** value.
 >Note: The microphone and speakers are disabled by default when a user enters a room.
 
-For more information about role settings, see the [GME Voice Role Description](/document/product/607/15172).
+For more information about role settings, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 #### Function Prototype
 ```
 IQAVContext EnterRoom(int relationId, string controlRole, byte[] authBuffer)
@@ -184,7 +184,7 @@ IQAVContext.GetInstance ().GetAudioCtrl ().ResumeAudio();
 
 ### Role Setting
 Change a flow control role. The ChangeRole method is used to set a user role before a user joins a channel. The user is allowed to change the role after the user joins a channel.
-The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](/document/product/607/15172).
+The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 #### Function Prototype
 ```
 IQAVRoom ChangeRole(string role, byte[] authBuffer)
@@ -728,7 +728,7 @@ string tips = IQAVContext.GetInstance().GetRoom().GetQualityTips();
 
 ## PTT Access
 ### Initialize PTT Access
-Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](/document/product/607/10782).
+Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 The **Error** parameter is used to pass error information. For example, when **appId** is set to **0** or **privateKey** or **identifier** is left blank, error information indicating that a parameter is incorrectly set is returned.
 #### Function Prototype
 ```

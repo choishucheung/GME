@@ -70,7 +70,7 @@ m_pTmgContext->TMGDelegate(p);
 
 ## Real-Time Voice Access
 ### Set Relevant Information
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](/document/product/607/10782).
+Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 >The SetAppInfo and SetAppVersion functions need to be called to set relevant information before the EnterRoom function.
 
 The SetAppInfo function contains the **sdkAppId**, **accountType**, and **openID** parameters. The values of **sdkAppId** and **accountType** are obtained from Tencent Cloud Console. The value of **openID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. For **openID** settings, see the authentication document.
@@ -120,7 +120,7 @@ When a user enters a room with a generated **AuthBuffer** value, the ITMG_MAIN_E
 >Notes: 
 >- The microphone and speakers are disabled by default when a user enters a room.
 >- The SetAppInfo and SetAppVersion functions need to be called to set relevant information before the EnterRoom function.
-For more information about role settings, see the [GME Voice Role Description](/document/product/607/15172).
+For more information about role settings, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 
 #### Function Prototype
 ```

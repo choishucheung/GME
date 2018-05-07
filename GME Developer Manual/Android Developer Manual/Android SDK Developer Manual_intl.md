@@ -89,7 +89,7 @@ TMGContext.GetInstance(this).SetTMGDelegate(itmgDelegate);
 ## Real-Time Voice Access
 
 ### 1. Set Relevant Information
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](/document/product/607/10782).
+Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 The SetAppInfo function contains the **sdkAppId**, **accountType**, and **openID** parameters. The values of **sdkAppId** and **accountType** are obtained from Tencent Cloud Console. The value of **OpenID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. Currently, the ID can be only of the int64 type.
 #### Function Prototype
 ```
@@ -125,7 +125,7 @@ ITMGContext public void GetSDKVersion()
 ```
 ITMGContext.GetInstance(this).GetSDKVersion();
 ```
-Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](/document/product/607/10782).
+Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 
 The function returns a Byte[] value.
 #### Function Prototype
@@ -156,7 +156,7 @@ byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkApp
 When a user enters a room with a generated **AuthBuffer** value, the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message is received as a callback.
 >Note: The microphone and speakers are disabled by default when a user enters a room.
 
-For more information about role settings, see the [GME Voice Role Description](/document/product/607/15172).
+For more information about role settings, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 #### Function Prototype
 ```
 ITMGContext public abstract void EnterRoom(int roomID, String controlRole, byte[] authBuffer)
@@ -264,7 +264,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().ResumeAudio();
 
 ### 9. Role Setting
 Change a flow control role. The ChangeRole method is used to set a user role before a user joins a channel. The user is allowed to change the role after the user joins a channel.
-The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](/document/product/607/15172).
+The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
 #### Function Prototype
 ```
 ITMGContext TMGRoom public void ChangeRole(String role, byte[] authBuffer)
@@ -802,7 +802,7 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 
 ## PTT Access
 ### 1. Initialize PTT Access
-Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](/document/product/607/10782).
+Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 #### Function Prototype
 ```
 TlsSig public String getTLSSig(int sdkAppId, String openID, String key)
