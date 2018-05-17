@@ -12,7 +12,11 @@
 ### 2.将相关 SDK 文件导入工程中，文件夹视图如下图所示。
 路径： 工程目录\Assets\Plugins
 
+![image](Image/m1.jpg)
+
 路径： 工程目录\Assets
+
+![image](Image/m2.png)
 
 ## QQ 音乐相关 API 初始化
 ### 1.设置相关信息
