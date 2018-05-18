@@ -858,7 +858,7 @@ ITMGContext TMGAudioEffectCtrl public int StopAllEffects()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().StopAllEffects();
 ```
 
-### 48.停止播放所有音效
+### 48.变声特效
 调用此函数设置变声特效。
 > 函数原型  
 ```
