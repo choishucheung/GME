@@ -57,19 +57,18 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 
 ### 1.设置相关信息
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
-ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID accountType:(NSString*)accountType openID:(NSString*)openID
+ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID openID:(NSString*)openID
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|NSString  |来自腾讯云控制台的 SdkAppId 号码				|
-| accountType    	|NSString  |来自腾讯云控制台的 accountType 号码			|
 | openID    		|NSString  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于10000的数字类型|
 > 示例代码  
 ```
-[[ITMGContext GetInstance] SetAppInfo:SDKAPPID3RD accountType:ACCOUNTTYPE openID:_openId];
+[[ITMGContext GetInstance] SetAppInfo:SDKAPPID3RD openID:_openId];
 ```
 设置版本信息，用于查 Log 信息及 Bug 时使用（不设置不影响功能）。
 > 函数原型
@@ -98,7 +97,7 @@ ITMGContext  -(NSString*)GetSDKVersion
 > 函数原型
 ```
 @interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier accountType:(unsigned int)accountType key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
++ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
 @end
 ```
 |参数     | 类型         |意义|
@@ -106,7 +105,6 @@ ITMGContext  -(NSString*)GetSDKVersion
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int  		|要加入的房间名							|
 | identifier  		|NSString    	|用户标识								|
-| accountType    	|int   		|来自腾讯云控制台的 accountType 号码	|
 | key    			|NSString    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | authBits   	 	|uint64    	|权限									|
@@ -117,7 +115,7 @@ ITMG_AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用�
 
 > 示例代码  
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId accountType:ACCOUNTTYPE.intValue key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_ALL];
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_ALL];
 ```
 
 设置最大混音路数（同时听到多少人讲话），在进房前调用。

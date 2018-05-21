@@ -96,19 +96,18 @@ TMGContext.GetInstance(this).SetTMGDelegate(itmgDelegate);
 
 ### 1.设置相关信息
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
-ITMGContext public int SetAppInfo(String sdkAppId, String accountType, String openID)
+ITMGContext public int SetAppInfo(String sdkAppId, String openID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码			|
-| accountType    	|String  |来自腾讯云控制台的 accountType 号码			|
 | openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于10000的数字类型|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).SetAppInfo(sdkAppId, accountType, identifier);
+ITMGContext.GetInstance(this).SetAppInfo(sdkAppId, identifier);
 ```
 设置版本信息，用于查 Log 信息及 Bug 时使用（不设置不影响功能）。
 > 函数原型
@@ -136,14 +135,13 @@ ITMGContext.GetInstance(this).GetSDKVersion();
 该函数返回值为 Byte[] 类型。
 > 函数原型
 ```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, int accountType, String key, int expTime, int authBits)
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int   	|要加入的房间名							|
 | identifier    	|String   |用户标识								|
-| accountType    	|int   	|来自腾讯云控制台的 accountType 号码	|
 | key    			|string   	|来自腾讯云控制台的密钥					|
 | expTime    		|int   	|authBuffer 超时时间						|
 | authBits    		|int    	|权限									|
@@ -156,7 +154,7 @@ AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用，AUT
 ```
 import com.tencent.av.sig.AuthBuffer;//头文件
 long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
-byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, Integer.parseInt(accountType), key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
+byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
 ```
 最后是设置最大混音路数（同时听到多少人讲话），在进房前调用。
 > 函数原型

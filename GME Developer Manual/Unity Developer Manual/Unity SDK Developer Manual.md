@@ -3,19 +3,18 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Unity 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Unity 开发的接入技术文档。
 ## SDK初始化  
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
 ```
-IQAVContext SetAppInfo(string sdkAppID, string accountType, string openID)
+IQAVContext SetAppInfo(string sdkAppID, string openID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    |string  |来自腾讯云控制台的 SdkAppId 号码|
-| accountType    |string  |来自腾讯云控制台的 accountType 号码|
 | openID    |string  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于10000的数字类型|
 > 示例代码  
 ```
-int ret = IQAVContext.GetInstance().SetAppInfo(str_appId, str_accountType, str_userId);
+int ret = IQAVContext.GetInstance().SetAppInfo(str_appId, str_userId);
 	if (ret != QAVError.OK) {
 		return;
 	}
@@ -48,14 +47,13 @@ IQAVContext.GetInstance().GetVersion();
 该函数返回值为 NSData 类型。
 > 函数原型
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, int accountType, string key, int expTime, uint authBits)
+QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, string key, int expTime, uint authBits)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    |int   |来自腾讯云控制台的 SdkAppId 号码|
 | roomId    |int   |要加入的房间名|
 | identifier    |string     |用户标识|
-| accountType    |int   |来自腾讯云控制台的 accountType 号码|
 | key    |string     |来自腾讯云控制台的密钥|
 | expTime    |int   |authBuffer 超时时间|
 | authBits    |uint     |权限|
@@ -66,13 +64,13 @@ ITMG_AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用�
 
 > 示例代码  
 ```
-byte[] GetAuthBuffer(string appId, string accountType, string userId, int roomId, uint authBits)
+byte[] GetAuthBuffer(string appId, string userId, int roomId, uint authBits)
     {
 	TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
 	double timeStamp = t.TotalSeconds;
-	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, int.Parse(accountType), "a495dca2482589e9", (int)timeStamp + 1800, authBits);
+	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9", (int)timeStamp + 1800, authBits);
 }
-byte[] authBuffer = this.GetAuthBuffer(str_appId, str_accountType, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
+byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
 ```
 
 最后是设置最大混音路数（同时听到多少人讲话）。
@@ -808,13 +806,13 @@ IQAVPTT ApplyAccessToken(string accessToken)
 | accessToken    | string|Gensig 函数返回的 accessToken|
 > 示例代码  
 ```
-string GetAccessToken(string appId, string accountType, string userId)
+string GetAccessToken(string appId, string openid, string userId)
 	{
 		string key = 云后台获取的鉴权;
 		return QAVSig.GenSig(int.Parse(appId), userId, key);
 	}
 
-string sig = this.GetAccessToken(appId, accountType, userId);
+string sig = this.GetAccessToken(appId, openid, userId);
 		if (sig != null) {
 			IQAVContext.GetInstance().GetPttCtrl().ApplyAccessToken(sig);
 			//成功
