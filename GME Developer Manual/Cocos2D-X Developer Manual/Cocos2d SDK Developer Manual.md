@@ -91,24 +91,22 @@ ITMGContext* context = ITMGContextGetInstance();
 context->TMGDelegate(this);
 ```
 
-调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可。
+调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可。
 > 函数原型 
 ```
-ITMGContext virtual void SetAppInfo(const char* sdkAppId,const char* accountType, const char* openId)
+ITMGContext virtual void SetAppInfo(const char* sdkAppId, const char* openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码					|
-| accountType    	|char  	|来自腾讯云控制台的 accountType 号码				|
 | openID    		|char  	|OpenID 为 Int32 类型，必须大于 10000，用于标识用户 	|
 > 示例代码  
 ```
 #define SDKAPPID3RD "1400035750"
-#define ACCOUNTTYPE "14181"
 
 cosnt char* openId="10000";
 ITMGContext* context = ITMGContextGetInstance();
-context->SetAppInfo(SDKAPPID3RD, ACCOUNTTYPE, openId);
+context->SetAppInfo(SDKAPPID3RD, openId);
 ```
 
 Cocos2d 的更新函数 Update 需要配置。
@@ -210,14 +208,13 @@ context->SetLogPath(logDir);
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, unsigned int accountType, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | authId    		|int  		|要加入的房间名							|
 | account  		|char    		|用户标识								|
-| accountType    	|int   		|来自腾讯云控制台的 accountType 号码	|
 | key    			|char	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | privilegeMap   	|int    		|权限									|
@@ -234,7 +231,7 @@ unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
 unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
 
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "", atoi(ACCOUNTTYPE), AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
 
 ### 4.加入房间

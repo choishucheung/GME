@@ -91,22 +91,20 @@ void AUEDemoLevelScriptActor::OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char
  ITMGContextGetInstance()->TMGDelegate(this);
 ```
 
-调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置此函数需要来自腾讯云控制台的 SdkAppId 号码及 accountType 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可。
+调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可。
 > 函数原型 
 ```
-ITMGContext virtual void SetAppInfo(const char* sdkAppId,const char* accountType, const char* openId)
+ITMGContext virtual void SetAppInfo(const char* sdkAppId, const char* openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码					|
-| accountType    	|char  	|来自腾讯云控制台的 accountType 号码				|
 | openID    		|char  	|OpenID 为 Int32 类型，必须大于 10000，用于标识用户 	|
 > 示例代码  
 ```
 std::string appid = TCHAR_TO_UTF8(CurrentWidget->editAppID->GetText().ToString().operator*());
-std::string accountType = TCHAR_TO_UTF8(CurrentWidget->editAccountType->GetText().ToString().operator*());
 std::string userId = TCHAR_TO_UTF8(CurrentWidget->editUserID->GetText().ToString().operator*());
-ITMGContextGetInstance()->SetAppInfo(appid.c_str(), accountType.c_str(), userId.c_str());
+ITMGContextGetInstance()->SetAppInfo(appid.c_str(), userId.c_str());
 ```
 
  Unreal Engine 的更新函数 Tick 需要配置。
@@ -203,14 +201,13 @@ context->SetLogPath(logDir);
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, unsigned int accountType, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | authId    		|int  		|要加入的房间名							|
 | account  		|char    		|用户标识								|
-| accountType    	|int   		|来自腾讯云控制台的 accountType 号码	|
 | key    			|char	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | privilegeMap   	|int    		|权限									|
@@ -227,7 +224,7 @@ unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
 unsigned int expTime =0;
 
-QAVSDK_AuthBuffer_GenAuthBuffer(appId, roomId, "", account, accountType, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+QAVSDK_AuthBuffer_GenAuthBuffer(appId, roomId, "", account, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
 
 ### 4.加入房间
