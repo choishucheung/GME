@@ -119,7 +119,8 @@ ITMG_AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用�
 ```
 NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId accountType:ACCOUNTTYPE.intValue key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_ALL];
 ```
-最后是设置最大混音路数（同时听到多少人讲话），在进房前调用。
+
+设置最大混音路数（同时听到多少人讲话），在进房前调用。
 > 函数原型
 ```
 ITMGContext -(void)SetRecvMixStreamCount:(int)count
@@ -132,6 +133,30 @@ ITMGContext -(void)SetRecvMixStreamCount:(int)count
 ```
 [[ITMGContext GetInstance]SetRecvMixStreamCount:count];
 ```
+
+设置后台播放声音，在进房前调用，进房后且处于观众状态时可用，即角色 roleType="4" "6" 或者 "audience" "Raudience" 时。
+同时，应用侧有如下两点需要注意：
+1、退后台时没有暂停音频引擎的采集和播放（即 PauseAudio），
+2、App 的 Info.plist 中，需要至少增加 key:Required background modes，string:App plays audio or streams audio/video using AirPlay。
+
+> 函数原型
+```
+ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)audioCategory
+```
+
+|类型     | 参数代表         |意义|
+| ------------- |:-------------:|-------------
+| ITMG_CATEGORY_AMBIENT    	|0	|退后台没有声音（默认）|
+| ITMG_CATEGORY_PLAYBACK    	|1   	|退后台有声音	|
+>注意 ：
+>具体实现为修改 kAudioSessionProperty_AudioCategory，相关资料可参照 Apple 官方文档。
+
+
+> 示例代码  
+```
+[[ITMGContext GetInstance]SetDefaultAudienceAudioCategory:ITMG_CATEGORY_AMBIENT];
+```
+
 ### 2.加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:加入房间默认不打开麦克风及扬声器。
