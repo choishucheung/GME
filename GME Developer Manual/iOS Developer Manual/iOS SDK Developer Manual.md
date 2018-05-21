@@ -840,7 +840,37 @@ GetAudioEffectCtrl -(QAVResult)StopAllEffects
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] StopAllEffects]; 
 ```
 
-### 50.获取诊断信息
+### 50.变声特效
+调用此函数设置变声特效。
+> 函数原型  
+```
+AudioEffectCtrl -(QAVResult)SetVoiceType:(ITMG_VOICE_TYPE) type
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| type    |int                    |表示本端音频变声类型|
+
+
+|类型参数     |参数代表|意义|
+| ------------- |-------------|------------- |
+|VOICE_TYPE_ORIGINAL_SOUND  	|0	|原声
+|VOICE_TYPE_LOLITA    			|1	|萝莉
+|VOICE_TYPE_UNCLE  			|2	|大叔
+|VOICE_TYPE_INTANGIBLE    		|3	|空灵
+|VOICE_TYPE_KINDER_GARTEN    	|4	|幼稚园
+|VOICE_TYPE_HEAVY_GARTEN    	|5	|重机器
+|VOICE_TYPE_OPTIMUS_PRIME    	|6	|擎天柱
+|VOICE_TYPE_CAGED_ANIMAL    	|7	|困兽
+|VOICE_TYPE_DIALECT    			|8	|土掉渣/歪果仁/方言
+|VOICE_TYPE_METAL_ROBOT    	|9	|金属机器人
+|VOICE_TYPE_DEAD_FATBOY    	|10	|死肥仔
+
+> 示例代码  
+```
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetVoiceType:0]; 
+```
+
+### 51.获取诊断信息
 获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以不用关心它。
 > 函数原型  
 ```
