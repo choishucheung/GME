@@ -26,7 +26,7 @@ QQMusicEngine void SetAppInfo (String app_id,String app_key,String app_private_k
 | ------------- |:-------------:|-------------
 | app_id    			|string	|QQ 音乐分配的 appid|
 | app_key    			|string	|QQ 音乐分配的 appkey|
-| app_private_key		|string	|QQ 音乐分配的 app_private_key|
+| app_private_key	|string	|QQ 音乐分配的 app_private_key|
 > 示例代码
   
 ```
