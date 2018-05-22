@@ -292,6 +292,8 @@ ITMGContext TMGRoom public void ChangeRole(String role, byte[] authBuffer)
 
 >注意
 流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成  AuthBuffer ）。
+ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
+与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
 
 角色分别代表的通话质量：
 
