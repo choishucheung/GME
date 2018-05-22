@@ -9,7 +9,7 @@ A：请在[腾讯云游戏多媒体引擎官网](https://cloud.tencent.com/produ
 
 #### Q：游戏多媒体引擎 Demo 下载后如果要换为自己申请的账号可以吗？
 A：	1、可以，需要在控制台获取两个号码，分别为 sdkappid、权限密钥。
-2、如果需要用到离线语音还需要获得 TLS 签名密钥。以上号码具体获取方法参见[接入指引](https://cloud.tencent.com/document/product/607/10782)。
+2、如果需要用到离线语音还需要获得 TLS 签名密钥。以上号码具体获取方法参见[接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 3、实时语音用自己的appid的话需要在AVChatViewController中的GetAuthBuffer中修改实时语音的key。
 
 #### Q：Unity 的 Demo 可以在编辑器模式下运行吗？
