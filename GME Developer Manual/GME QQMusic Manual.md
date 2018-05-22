@@ -14,9 +14,6 @@
 
 ![image](Image/m1.jpg)
 
-路径： 工程目录\Assets
-
-![image](Image/m2.png)
 
 ## QQ 音乐相关 API 初始化
 ### 1.设置相关信息
