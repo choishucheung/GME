@@ -563,6 +563,336 @@ ITMGRoom virtual const char* GetQualityTips()
 ```
 m_pTmgContext.GetRoom().GetQualityTips();
 ```
+## 音效接入
+### 1.开始播放伴奏
+调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
+注意：1、调用此 API，音量会重置。
+2、下行权限不能启用此 API。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual void StartAccompany(const char* filePath, bool loopBack, int loopCount, int msTime) 
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| filePath    	|char	|播放伴奏的路径											|
+| loopBack  	|bool	|是否混音发送，一般都设置为 true，即其他人也能听到伴奏	|
+| loopCount	|int 		|循环次数，数值为 -1 表示无限循环							|
+| msTime	|int   	|延迟时间												|
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->StartAccompany(filePath,true,-1,0);
+```
+
+### 2.播放伴奏的回调
+开始播放伴奏完成后，回调函数调用 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH，在 OnEvent 函数中对事件消息进行判断。
+> 示例代码  
+```
+void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
+	switch (eventType) {
+		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
+		{
+		//进行处理
+		break;
+	   	}
+		...
+        case ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH:
+		{
+		//进行处理
+		break;
+		}
+	}
+}
+```
+
+### 3.停止播放伴奏
+调用此函数停止播放伴奏。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int StopAccompany(int duckerTime)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| duckerTime	|int             |淡出时间|
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->StopAccompany(0);
+```
+
+### 4.伴奏是否播放完毕
+如果播放完毕，返回值为 true，如果没播放完，返回值为 false。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual bool IsAccompanyPlayEnd()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->IsAccompanyPlayEnd();
+```
+
+### 5.暂停播放伴奏
+调用此函数暂停播放伴奏。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int PauseAccompany()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->PauseAccompany();
+```
+
+### 6.重新播放伴奏
+此函数用于重新播放伴奏。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int ResumeAccompany()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->ResumeAccompany();
+```
+
+### 7.设置自己是否可以听到伴奏
+此函数用于设置自己是否可以听到伴奏。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int EnableAccompanyPlay(bool enable)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| enable    |bool             |是否能听到|
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyPlay(false);
+ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyPlay(true);
+```
+
+### 8.设置他人是否也可以听到伴奏
+设置他人是否也可以听到伴奏。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int EnableAccompanyLoopBack(bool enable)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| enable    |bool             |是否能听到|
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyLoopBack(false);
+ITMGContextGetInstance()->GetAudioEffectCtrl()->EnableAccompanyLoopBack(true);
+```
+
+### 9.设置伴奏音量
+设置播放伴奏的 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int SetAccompanyVolume(int vol)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| vol    |int             |音量数值|
+
+> 示例代码  
+```
+int vol=100;
+ITMGContextGetInstance()->GetAudioEffectCtrl()->SetAccompanyVolume(vol);
+```
+
+### 10.获取播放伴奏的音量
+此函数用于获取播放伴奏的音量。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int GetAccompanyVolume()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->GetAccompanyVolume();
+```
+
+### 11.获得伴奏播放进度
+以下两个函数用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int GetAccompanyFileTotalTimeByMs()
+ITMGAudioEffectCtrl virtual int GetAccompanyFileCurrentPlayedTimeByMs()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->GetAccompanyFileTotalTimeByMs();
+ITMGContextGetInstance()->GetAudioEffectCtrl()->GetAccompanyFileCurrentPlayedTimeByMs();
+```
+
+### 12.设置播放进度
+此函数用于设置播放进度。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int SetAccompanyFileCurrentPlayedTimeByMs(unsigned int time)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| time    |int                |播放进度，以毫秒为单位|
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->SetAccompanyFileCurrentPlayedTimeByMs(time);
+```
+
+### 13.获取播放音效的音量
+获取播放音效的音量，为线性音量，默认值为 100，数值大于 100 为增益效果，数值小于 100 为减益效果。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int GetEffectsVolume()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->GetEffectsVolume();
+```
+
+### 14.设置播放音效的音量
+调用此函数设置播放音效的音量。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int SetEffectsVolume(int volume)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| volume    |int                    |音量数值|
+
+> 示例代码  
+```
+int volume=1;
+ITMGContextGetInstance()->GetAudioEffectCtrl()->SetEffectsVolume(volume);
+```
+
+### 15.播放音效
+此函数用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int PlayEffect(int soundId,  const char* filePath, bool loop, double pitch, double pan, double gain)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| soundId  	|int        	|音效 id													|
+| filePath    	|char    	|音效路径												|
+| loop    		|bool  	|是否重复播放											|
+| pitch    	|double	|播放频率，默认为 1.0，该值越小播放速度越慢、时间越长		|
+| pan    		|double	|声道，取值范围为 -1.0 到 1.0 之间，-1.0 表示只开启左声道	|
+| gain    		|double	|增益音量，取值范围为 0.0 到 1.0 之间，默认为 1.0			|
+> 示例代码  
+```
+double pitch = 1.0;
+double pan = 0.0;
+double gain = 0.0;
+ITMGContextGetInstance()->GetAudioEffectCtrl()->PlayEffect(soundId,filepath,true,pitch,pan,gain);
+```
+
+### 16.暂停播放音效
+此函数用于暂停播放音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int PauseEffect(int soundId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| soundId    |int                    |音效 id|
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->PauseEffect(soundId);
+```
+
+### 17.暂停所有音效
+调用此函数暂停所有音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int PauseAllEffects()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->PauseAllEffects();
+```
+
+### 18.重新播放音效
+此函数用于重新播放音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int ResumeEffect(int soundId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| soundId    |int                    |音效 id|
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->ResumeEffect(soundId);
+```
+
+### 19.重新播放所有音效
+调用此函数重新播放所有音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int ResumeAllEffects()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->ResumeAllEffects();
+```
+
+### 20.停止播放音效
+此函数用于停止播放音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int StopEffect(int soundId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| soundId    |int                    |音效 id|
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->StopEffect(soundId);
+```
+
+### 21.停止播放所有音效
+调用此函数停止播放所有音效。
+> 函数原型  
+```
+ITMGAudioEffectCtrl virtual int StopAllEffects()
+```
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->StopAllEffects();
+```
+
+### 22.变声特效
+调用此函数设置变声特效。
+> 函数原型  
+```
+TMGAudioEffectCtrl int setVoiceType(int type)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| type    |int                    |表示本端音频变声类型|
+
+
+|类型参数     |参数代表|意义|
+| ------------- |-------------|------------- |
+|VOICE_TYPE_ORIGINAL_SOUND  	|0	|原声
+|VOICE_TYPE_LOLITA    			|1	|萝莉
+|VOICE_TYPE_UNCLE  			|2	|大叔
+|VOICE_TYPE_INTANGIBLE    		|3	|空灵
+|VOICE_TYPE_KINDER_GARTEN    	|4	|幼稚园
+|VOICE_TYPE_HEAVY_GARTEN    	|5	|重机器
+|VOICE_TYPE_OPTIMUS_PRIME    	|6	|擎天柱
+|VOICE_TYPE_CAGED_ANIMAL    	|7	|困兽
+|VOICE_TYPE_DIALECT    			|8	|土掉渣/歪果仁/方言
+|VOICE_TYPE_METAL_ROBOT    	|9	|金属机器人
+|VOICE_TYPE_DEAD_FATBOY    	|10	|死肥仔
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetAudioEffectCtrl()->setVoiceType(0);
+```
+
 
 ## 3D音效接入
 ### 1.开关3D音效
