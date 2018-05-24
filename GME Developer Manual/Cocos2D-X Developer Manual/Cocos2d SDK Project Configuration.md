@@ -53,7 +53,6 @@ public class AppActivity extends Cocos2dxActivity {
         System.loadLibrary("stlport_shared");
         System.loadLibrary("xplatform");
         System.loadLibrary("UDT");
-        System.loadLibrary("qav_authbuff");
         System.loadLibrary("qav_tlssign");
         System.loadLibrary("traeimp-armeabi-v7a");
         System.loadLibrary("qavsdk");
@@ -70,7 +69,6 @@ protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //初始化， 顺序不能错
-        AVLoggerChooser.setUseImsdk(false);
         AVChannelManager.setIMChannelType(AVChannelManager.IMChannelTypeImplementInternal);
         gameWrapper = new OpensdkGameWrapper(this);
         runOnGLThread(new Runnable() {
