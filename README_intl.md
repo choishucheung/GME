@@ -44,6 +44,26 @@
 
 
 ## Change History
+### GME1.2（2018-04-02）
+#### New Features
+1、Support Cocos2d Engine .
+
+2、Provide an adjustable microphone volume interface.
+
+3、Support real-time team chatting,perfectly match the requirements of such games.
+
+4、PC SDK Support play accompaniment,suitable for multifarious formats of media.
+
+5、Support sound effects in more multiple formats  for Android.
+#### Optimization
+1、 Optimize the effect of audio preprocessing in table game scenes,and multiple users can speak clearly at the same time.
+
+2、Optimize the sound quality in karaoke scenes.
+
+3、Optimize the sound quality  in Moba game scenes and real-time team chatting.
+
+4、Optimize the noise elimination algorithm,the sound quality become clearly.
+
 ### GME1.1（2017-10-18）
 #### New Features
 1、Support video chat in table game scenes.
