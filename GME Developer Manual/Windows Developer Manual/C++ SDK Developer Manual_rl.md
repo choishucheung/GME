@@ -83,69 +83,25 @@ m_pTmgContext->TMGDelegate(p);
 
 
 ## 实时语音接入
-### 1.初始化工作
+### 1.设置相关信息
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-在 EnterRoom 函数调用之前要先获取 ITMGContext ，ITMGContext 以单例的形式提供，所有调用都从 ITMGContext 开始，由ITMGDelegate 回调回传给应用，必须首先设置。
->示例代码
-```
-ITMGContext* context = ITMGContextGetInstance();
-context->TMGDelegate(this);
-```
+>在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置
 
-调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可。
+此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（Id 需参考鉴权使用文档）。
 > 函数原型 
 ```
 ITMGContext virtual void SetAppInfo(const char* sdkAppId, const char* openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码					|
-| openID    		|char  	|OpenID 为 Int32 类型，必须大于 10000，用于标识用户 	|
+| sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码		|
+| openID    		|char  	|OpenID 为Int32类型，必须大于 10000 	|
 > 示例代码  
 ```
-#define SDKAPPID3RD "1400035750"
-
-cosnt char* openId="10000";
-ITMGContext* context = ITMGContextGetInstance();
-context->SetAppInfo(SDKAPPID3RD, openId);
+ITMGContext* m_pTmgContext;
+m_pTmgContext->SetAppInfo(strAppid, strUserID);
 ```
 
-Cocos2d 的更新函数 Update 需要配置。
->Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent事件(回调线程为Poll的调用线程)。
-
->函数原型
-```
-class ITMGContext {
-protected:
-    virtual ~ITMGContext() {}
-    
-public:
-	//Destroy TMGSDK, make sure to release SDK after use.
-    	virtual void Destroy() = 0;
-	//Poll
-    	virtual void Poll()= 0;
-	//Pause
-	virtual int Pause() = 0;
-	//Resume
-    	virtual int Resume() = 0;
-}
-```
->示例代码
-```
-//头文件中的声明
-class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
-{
-void update(float delta); 
-}
-
-//代码实现
-void TMGTestScene::update(float delta){
-    ITMGContextGetInstance()->Poll();
-}
-```
-
-
-### 2.设置相关信息
 设置版本信息，用于查 Log 信息及 Bug 时使用，方便后台统计, 策略调整等（不设置不影响功能）。
 > 函数原型
 ```
@@ -156,8 +112,8 @@ ITMGContext virtual void SetAppVersion(const char* appVersion)
 | appVersion    |char  |版本号|
 > 示例代码  
 ```
-ITMGContext* context = ITMGContextGetInstance();
-context->SetAppVersion("Test_demo_1.0");
+ITMGContext* m_pTmgContext;
+m_pTmgContext->SetAppVersion("Test_demo_1.0");
 ```
 获取 SDK 版本号。
 > 函数原型
@@ -166,137 +122,65 @@ ITMGContext virtual const char* GetSDKVersion()
 ```
 > 示例代码  
 ```
-ITMGContext* context = ITMGContextGetInstance();
-context->GetSDKVersion;
+ITMGContext* m_pTmgContext;
+m_pTmgContext->GetSDKVersion;
 ```
-
-设置打印日志等级。
-> 函数原型
-```
-ITMGContext virtual void SetLogLevel(ITMG_LOG_LEVEL logLevel)
-```
->ITMG_LOG_LEVEL 对照表
->
-|ITMG_LOG_LEVEL|意义|
-| -------------------------------	|----------------------	|
-|TMG_LOG_LEVEL_NONE		|不打印日志			|
-|TMG_LOG_LEVEL_ERROR		|打印错误日志		|
-|TMG_LOG_LEVEL_INFO		|打印提示日志		|
-|TMG_LOG_LEVEL_DEBUG	|打印开发调试日志	|
-|TMG_LOG_LEVEL_VERBOSE	|打印高频日志		|
-> 示例代码  
-```
-ITMGContext* context = ITMGContextGetInstance();
-context->SetLogLevel(TMG_LOG_LEVEL_NONE);
-```
-
-设置打印日志路径。
-> 函数原型
-```
-ITMGContext virtual void SetLogPath(const char* logDir) 
-```
-
-> 示例代码  
-```
-cosnt char* logDir = ""//自行设置路径
-ITMGContext* context = ITMGContextGetInstance();
-context->SetLogPath(logDir);
-```
-
-### 3.生成鉴权
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%AF%86%E9%92%A5)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情参考鉴权使用文档。
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
+### 2.加入房间
+用生成的权鉴进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+>注意:1、加入房间默认不打开麦克风及扬声器。
+>2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置
+关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff,int buffLen)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| authId    		|int  		|要加入的房间名							|
-| account  		|char    		|用户标识								|
-| key    			|char	    	|来自腾讯云控制台的密钥					|
-| expTime    		|int   		|authBuffer 超时时间						|
-| privilegeMap   	|int    		|权限									|
-| retAuthBuff   	|char    		|返回的 authbuff							|
-| buffLenght   	|int    		|返回的authbuff的长度					|
-
->关于权限  
-
-ITMG_AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用，ITMG_AUTH_BITS_RECV 代表下行权限，建议纯听众、观众使用，不能使用startAccompany。
-
+| relationId		|int   	|房间号 						|
+| role    			|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
+| authBuffer    	|char    	|鉴权码												|
+| buffLen   		|int   	|鉴权码长度											|
 > 示例代码  
 ```
-unsigned int bufferLen = 512;
-unsigned char retAuthBuff[512] = {0};
-unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
-
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+m_pTmgContext->EnterRoom(nRoomID, strUserRole, strAuthBuffer, nLength);
 ```
 
-### 4.加入房间
-用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
->注意:
->1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
-
-> 函数原型
-```
-ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| relationId			|int   	|房间号 					|
-| role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
-| authBuffer    		|char    	|鉴权码												|
-| buffLen   			|int   	|鉴权码长度											|
-| teamId    			|int    	|默认值为0											|
-| gameAudioMode   	|int   	|默认值为0											|
-> 示例代码  
-```
-ITMGContext* context = ITMGContextGetInstance();
-context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen,atoi(_teamId->getText()),atoi(_audioModeId->getText()));
-```
-
-### 5.加入房间事件的回调
+### 3.加入房间事件的回调
 加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
 > 代码说明
 ```
-//在头文件中继承了 ITMGDelegate，并进行声明。
-class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
+class Callback : public ITMGDelegate 
 {
-public:
-    void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data);
-    ...	
-}
-
-//实现代码
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
-            case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
+ 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
+ 	{
+ 	    switch(eventType)
+	    {
+		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
 		{
-		//进行处理
-		break;
-		}
-	}
+		    //加入房间
+		    break;
+	        }
+		...
+            }
+        }
 }
 ```
 
-### 6.判断是否已经进入房间
-通过调用此函数可以判断是否已经进入房间，返回值为 bool 类型。
+### 4.判断是否已经进入房间
+通过调用此函数可以判断是否已经进入房间，返回值为 BOOL 类型。
 > 函数原型  
 ```
 ITMGContext virtual bool IsRoomEntered()
 ```
 > 示例代码  
 ```
-ITMGContext* context = ITMGContextGetInstance();
-context->IsRoomEntered();
+m_pTmgContext->IsRoomEntered();
 ```
 
-### 7.退出房间
+### 5.退出房间
 通过调用此函数可以退出所在房间。
 > 函数原型  
 ```
@@ -304,45 +188,59 @@ ITMGContext virtual void ExitRoom()
 ```
 > 示例代码  
 ```
-ITMGContext* context = ITMGContextGetInstance();
-context->ExitRoom();
+m_pTmgContext->ExitRoom();
 ```
 
-### 8.退出房间回调
-退出房间完成回调，SDK 通过此回调通知程序成功退出了房间，事件为 ITMG_MAIN_EVENT_TYPE_EXIT_ROOM。
+### 6.退出房间回调
+退出房间完成回调，SDK 通过此回调通知 APP 成功退出了房间，事件为 ITMG_MAIN_EVENT_TYPE_EXIT_ROOM。
 > 示例代码  
 ```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
-            case ITMG_MAIN_EVENT_TYPE_EXIT_ROOM:
+class Callback : public ITMGDelegate 
+{
+ 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
+ 	{
+ 	    switch(eventType)
+	    {
+		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
 		{
-		//进行处理
-		break;
-		}
-	}
+		    //加入房间
+		    break;
+	        }
+		...
+		case ITMG_MAIN_EVENT_TYPE_EXIT_ROOM:
+		{
+		    //退出房间
+		    break;
+	        }
+            }
+        }
 }
 ```
 
-### 9.成员状态变化
+### 7.成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，其中 data 包含两个信息，event_id 及 user_list，在 OnEvent 函数中需要对信息 event_id 进行判断。
 
 |event_id     | 含义         |应用侧维护内容|
 | ------------- |:-------------:|-------------|
-| ITMG_EVENT_ID_USER_ENTER    				|有成员进入房间		|应用侧维护成员列表		|
-| ITMG_EVENT_ID_USER_EXIT    				|有成员退出房间		|应用侧维护成员列表		|
-| ITMG_EVENT_ID_USER_HAS_AUDIO    		|有成员开启麦克风	|应用侧维护通话成员列表	|
-| ITMG_EVENT_ID_USER_NO_AUDIO    		|有成员关闭麦克风	|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO	|有成员开启摄像头	|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO	|有成员关闭摄像头	|应用侧维护通话成员列表	|
+| ITMG_EVENT_ID_USER_ENTER    			|有成员进入房间		|应用侧维护成员列表		|
+| ITMG_EVENT_ID_USER_EXIT    			|有成员退出房间		|应用侧维护成员列表		|
+| ITMG_EVENT_ID_USER_HAS_AUDIO    	|有成员开启麦克风	|应用侧维护通话成员列表	|
+| ITMG_EVENT_ID_USER_NO_AUDIO    	|有成员关闭麦克风	|应用侧维护通话成员列表	|
 
 > 示例代码  
 ```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
-            case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+class Callback : public ITMGDelegate 
+{
+ 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
+ 	{
+ 	    switch(eventType)
+	    {
+		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
+		...
+		case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+		//角色状态变化
 		{
-		//进行处理
-		//开发者对参数进行解析，得到信息 event_id及 user_list
+		    //开发者对 Json 类型参数进行解析，得到信息 event_id及 user_list
 		    switch (eventID)
  		    {
  		    case ITMG_EVENT_ID_USER_ENTER:
@@ -357,229 +255,153 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
 			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
 		    default:
 			    break;
  		    }
-		break;
-		}
-	}
+		    break;
+	        }
+        }
+    }
 }
 ```
 
-### 10.角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
-> 函数原型  
-```
-ITMGRoom virtual void ChangeRole(const char* role, const unsigned char* authBuff, int authBuffLenght)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| role    				|char     	|设置角色			|
-| authBuffer    		|char    	|鉴权需要重新设置	|
-| authBuffLenght	|int    	|鉴权长度			|
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
-
-角色分别代表的通话质量：
-
-|角色名称     | 适用场景         |关键特性|
-| ------------- |:-------------:|-------------
-| esports    		|适用于 MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost 			|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦  			|高流畅、低延时		|
-| Raudience    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦   			|高流畅、低延时		|
-| Werewolf    	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host    			|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience    	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-
-> 示例代码  
-```
-ITMGContextGetInstance()->GetRoom()->ChangeRole(role,authBuff,authBuffLenght);
-```
-
-### 11.角色设置完成回调
-角色设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE，在 OnEvent 函数中对事件消息进行判断。
-> 示例代码  
-```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
-		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
-		{
-		//进行处理
-		break;
-	    	}
-		...
-            case ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE:
-		{
-		//进行处理
-		break;
-		}
-	}
-}
-```
-
-### 12.获取诊断信息
-获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以不用关心它。
-> 函数原型  
-```
-ITMGRoom virtual const char* GetQualityTips()
-```
-> 示例代码  
-```
-ITMGContextGetInstance()->GetRoom()->GetQualityTips();
-```
-
-### 13.获取麦克风设备数量
+### 8.获取麦克风设备数量
 此函数用来获取麦克风设备数量。
 >注意：需要在开启麦克风之前调用。
 
 > 函数原型  
 ```
-ITMGAudioCtrl virtual int GetMicListCount()
+ITMGAudioCtrl virtual int GetMicListCount(int& nCount)
 ```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| nCount    |int     |指定一个传值的对象的地址，传递设备数量|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetMicListCount();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->GetMicListCount(nCount);
 ```
 
-### 14.枚举麦克风设备
+### 9.枚举麦克风设备
 此函数用来枚举麦克风设备。需要先获取麦克风设备数量。
 >注意：需要在开启麦克风之前调用。
 
 > 函数原型  
 ```
-ITMGAudioCtrl virtual int GetMicList(TMGAudioDeviceInfo* ppDeviceInfoList, int nCount)
-
-class TMGAudioDeviceInfo
-{
-public:
-	const char* pDeviceID;
-	const char* pDeviceName;
-};
+ITMGAudioCtrl virtual int GetMicList(TMGAudioDeviceInfo* ppDeviceInfoList, int& nCount)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| ppDeviceInfoList    	|TMGAudioDeviceInfo   	|设备列表				|
-| nCount    			|int     					|获取的麦克风设备数量	|
+| ppDeviceInfoList    |TMGAudioDeviceInfo     |设备列表|
+| nCount    |int     |获取的麦克风设备数量|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetMicList(ppDeviceInfoList,nCount);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetMicList(ppDeviceInfoList,nCount);
 ```
 
-### 15.获取扬声器设备数量
+### 10.获取扬声器设备数量
 此函数用来获取扬声器设备数量。
 >注意：需要在开启扬声器之前调用。
 
 > 函数原型  
 ```
-ITMGAudioCtrl virtual int GetSpeakerListCount()
+ITMGAudioCtrl virtual int GetSpeakerListCount(int& nCount)
 ```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| nCount    |int     |指定一个传值的对象的地址，传递设备数量|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerListCount();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->GetSpeakerListCount(nCount);
 ```
 
-### 16.枚举扬声器设备
+### 11.枚举扬声器设备
 此函数用来枚举扬声器设备。需要先获取扬声器设备数量。
 >注意：需要在开启扬声器之前调用。
 
 > 函数原型  
 ```
-ITMGAudioCtrl virtual int GetSpeakerList(TMGAudioDeviceInfo* ppDeviceInfoList, int nCount)
-
-class TMGAudioDeviceInfo
-{
-public:
-	const char* pDeviceID;
-	const char* pDeviceName;
-};
+ITMGAudioCtrl virtual int GetSpeakerList(TMGAudioDeviceInfo* ppDeviceInfoList, int& nCount)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| ppDeviceInfoList    	|TMGAudioDeviceInfo    	|设备列表				|
-| nCount   			|int     					|获取的扬声器设备数量	|
+| ppDeviceInfoList    |TMGAudioDeviceInfo     |设备列表|
+| nCount    |int     |获取的扬声器设备数量|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerList(ppDeviceInfoList,nCount);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetSpeakerList(ppDeviceInfoList,nCount);
 ```
 
-### 17.搜索麦克风设备
-此函数用来搜索麦克风设备。
-> 函数原型  
-```
-ITMGAudioCtrl virtual int SelectMic(const char* pMicID)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| pMicID    |char     |麦克风设备 ID|
-> 示例代码  
-```
-const char* pMicID ="1";
-ITMGContextGetInstance()->GetAudioCtrl()->SelectMic(pMicID);
-```
-
-### 18.麦克风开启关闭事件
+### 12.麦克风开启关闭事件
 此函数用来开启及关闭麦克风。
 >注意:加入房间默认不打开麦克风及扬声器。
 
 > 函数原型  
 ```
-ITMGAudioCtrl virtual void EnableMic(bool bEnabled)
+ITMGAudioCtrl virtual int EnableMic(bool bEnabled, const char* pMicId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| bEnabled    |bool     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false		|
+| enable    |bool     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false		|
+| pMicId    |char     |麦克风ID																	|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->EnableMic(true);
-ITMGContextGetInstance()->GetAudioCtrl()->EnableMic(false);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->EnableMic(true,pMicId);
+pTmgAudioCtrl->EnableMic(false,pMicId);
 ```
 
-### 19麦克风事件的回调
+### 13.麦克风事件的回调
 麦克风事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了麦克风，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_MIC， ITMG_MAIN_EVENT_TYPE_DISABLE_MIC，在 OnEvent 函数中对事件消息进行判断。
 
 > 示例代码  
 ```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
+class Callback : public ITMGDelegate 
+{
+ 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
+ 	{
+ 	    switch(eventType)
+	    {
 		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
 		{
-		//进行处理
-		break;
+		    //加入房间
+		    break;
 	        }
 		...
-            	case ITMG_MAIN_EVENT_TYPE_ENABLE_MIC:
+		case ITMG_MAIN_EVENT_TYPE_ENABLE_MIC:
 		{
-		//进行处理
-		break;
-		}
+		    //开麦克风回调
+		    break;
+	        }
 		case ITMG_MAIN_EVENT_TYPE_DISABLE_MIC:
 		{
-		//进行处理
-		break;
-		}
-	}
+		    //关麦克风回调
+		    break;
+	        }
+            }
+        }
 }
 ```
 
-### 20.麦克风状态获取
-此函数获取麦克风状态。返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 4 为设备没初始化好。
+### 14.麦克风状态获取
+此函数获取麦克风状态。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetMicState()
 ```
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetMicState();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetMicState();
 ```
 
-### 21.获取麦克风实时音量
+### 15.获取麦克风实时音量
 此函数用于获取麦克风实时音量，返回值为 int 类型。
 > 函数原型  
 ```
@@ -587,25 +409,26 @@ ITMGAudioCtrl virtual int GetMicLevel()
 ```
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetMicLevel();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetMicLevel();
 ```
 
-### 22.设置麦克风的软件音量
+### 16.设置麦克风的软件音量
 此函数用于设置麦克风的软件音量。参数 volume 用于设置麦克风的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 > 函数原型  
 ```
-ITMGAudioCtrl virtual void SetMicVolume(int vol)
+ITMGAudioCtrl virtual void SetMicVolume(int volume)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| vol    |int      |设置音量，范围 0 到 100|
+| volume    |int      |设置音量，范围 0 到 100|
 > 示例代码  
 ```
-int vol = 100;
-ITMGContextGetInstance()->GetAudioCtrl()->SetMicVolume(vol);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->SetMicVolume(volume);
 ```
 
-### 23.获取麦克风的软件音量
+### 17.获取麦克风的软件音量
 此函数用于获取麦克风的软件音量。返回值为一个int类型数值。
 > 函数原型  
 ```
@@ -613,65 +436,61 @@ ITMGAudioCtrl virtual int GetMicVolume()
 ```
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetMicVolume();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetMicVolume();
 ```
-### 24.搜索扬声器设备
-此函数用来搜索扬声器设备。
-> 函数原型  
-```
-ITMGAudioCtrl virtual int SelectSpeaker(const char* pSpeakerID)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| pSpeakerID    |char     |扬声器设备 ID|
-> 示例代码  
-```
-const char* pSpeakerID ="1";
-ITMGContextGetInstance()->GetAudioCtrl()->SelectSpeaker(pSpeakerID);
-```
-### 25.扬声器开启关闭事件
+
+### 18.扬声器开启关闭事件
 此函数用于设置扬声器开启关闭。
 > 函数原型  
 ```
-ITMGAudioCtrl virtual void EnableSpeaker(bool enabled)
+ITMGAudioCtrl virtual int EnableSpeaker(bool bEnabled, const char* pSpeakerID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | enable   		|bool       	|如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true	|
+| pSpeakerID    	|char      	|扬声器ID																|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
-ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(false);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->EnableSpeaker(true,pSpeakerID);
+pTmgAudioCtrl->EnableSpeaker(false,pSpeakerID);
 ```
 
-### 26.扬声器事件的回调
+### 19.扬声器事件的回调
 扬声器事件回调，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
 > 示例代码  
 ```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
+class Callback : public ITMGDelegate 
+{
+ 	virtual void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data)
+ 	{
+ 	    switch(eventType)
+	    {
 		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
 		{
-		//进行处理
-		break;
-	    	}
+		    //加入房间
+		    break;
+	        }
 		...
-        	case ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER:
+		case ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER:
 		{
-		//进行处理
-		break;
-		}
- 		case ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER:
+		    //开启扬声器回调
+		    break;
+	        }
+		case ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER:
 		{
-		//进行处理
-		break;
-		}	
-	}
+		    //关闭扬声器回调
+		    break;
+	        }
+            }
+        }
 }
 ```
 
-### 27.扬声器状态获取
-此函数用于扬声器状态获取。返回值为 int 类型数值。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
+### 20.扬声器状态获取
+此函数用于扬声器状态获取。返回值为 int 类型数值。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetSpeakerState()
@@ -679,10 +498,11 @@ ITMGAudioCtrl virtual int GetSpeakerState()
 
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerState();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetSpeakerState();
 ```
 
-### 28.获取扬声器实时音量
+### 21.获取扬声器实时音量
 此函数用于获取扬声器实时音量。返回值为 int 类型数值，表示扬声器实时音量。
 > 函数原型  
 ```
@@ -691,10 +511,11 @@ ITMGAudioCtrl virtual int GetSpeakerLevel()
 
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerLevel();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->GetSpeakerLevel();
 ```
 
-### 29.设置扬声器的软件音量
+### 22.设置扬声器的软件音量
 此函数用于设置扬声器的软件音量。
 >注意：参数 volume 用于设置扬声器的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 
@@ -707,11 +528,11 @@ ITMGAudioCtrl virtual void SetSpeakerVolume(int vol)
 | vol    |int        |设置音量，范围 0 到 100|
 > 示例代码  
 ```
-int vol = 100;
-ITMGContextGetInstance()->GetAudioCtrl()->SetSpeakerVolume(vol);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+pTmgAudioCtrl->SetSpeakerVolume(vol);
 ```
 
-### 30.获取扬声器的软件音量
+### 23.获取扬声器的软件音量
 此函数用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量。
 >注意：Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
@@ -721,10 +542,12 @@ ITMGAudioCtrl virtual int GetSpeakerVolume()
 ```
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerVolume();
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->GetSpeakerVolume();
 ```
 
-### 31.启动耳返
+### 24.启动耳返
 此函数用于启动耳返。
 > 函数原型  
 ``` 
@@ -735,11 +558,23 @@ ITMGAudioCtrl virtual int EnableLoopBack(bool enable)
 | enable    |bool         |设置是否启动|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetAudioCtrl()->EnableLoopBack(true);
-ITMGContextGetInstance()->GetAudioCtrl()->EnableLoopBack(false);
+ITMGAudioCtrl* pTmgAudioCtrl = m_pTmgContext->GetAudioCtrl();
+
+pTmgAudioCtrl->EnableLoopBack(true);
+pTmgAudioCtrl->EnableLoopBack(false);
 ```
 
+### 25.获取诊断信息
+获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等。
+> 函数原型  
+```
+ITMGRoom virtual const char* GetQualityTips()
+```
 
+> 示例代码  
+```
+m_pTmgContext.GetRoom().GetQualityTips();
+```
 ## 音效接入
 ### 1.开始播放伴奏
 调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
