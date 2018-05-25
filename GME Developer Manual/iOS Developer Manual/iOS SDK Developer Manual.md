@@ -81,7 +81,7 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 
 ### 设置 App 信息
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型
 
 ```
@@ -98,7 +98,7 @@ ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID openID:(NSString*)openID
 ```
 
 ### 设置版本信息
-设置版本信息，用于查 Log 信息及 Bug 时使用（不设置不影响功能）。
+设置版本信息，用于查 Log 信息及 Bug 时使用。方便后台统计, 策略调整等（不设置不影响功能）。
 > 函数原型
 
 ```
@@ -113,7 +113,7 @@ ITMGContext  -(void)SetAppVersion:(NSString*)appVersion
 [[ITMGContext GetInstance]SetAppVersion:appversion];
 ```
 
-### 获取 SDK 版本号
+### 获取版本号
 获取 SDK 版本号，用于分析。
 > 函数原型
 
@@ -128,8 +128,9 @@ ITMGContext  -(NSString*)GetSDKVersion
 
 ### 实时语音鉴权信息
 接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
+>注意：在加入房间之前需要 AuthBuffer 作为参数。
 
-该函数返回值为 NSData 类型。
+该接口返回值为 NSData 类型。
 > 函数原型
 
 ```
@@ -162,8 +163,6 @@ NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:
 ```
 ITMGContext -(void)SetRecvMixStreamCount:(int)count
 ```
-
-
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | nCount    |int   |混音路数，默认为 6|
@@ -201,8 +200,10 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 ## 实时语音房间事件接口
 
 ### 加入房间
-用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
-关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。>注意:
+>1、加入房间默认不打开麦克风及扬声器。
+>2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
+>关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 
 > 函数原型
 
@@ -212,8 +213,8 @@ ITMGContext   -(void)EnterRoom:(int) relationId controlRole:(NSString*)role auth
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | roomID		|int    		|房间号 	|
-| controlRole    	|NSString    	|角色名称，按照需求设置		|
-| authBuffer    	|NSData    	|鉴权						|
+| controlRole    	|NSString    	|角色名称，按照需求设置，也可以询问接入技术人员获取|
+| authBuffer    	|NSData    	|鉴权码						|
 > 示例代码  
 
 ```
@@ -302,6 +303,7 @@ ITMGContext GetRoom -(void)ChangeRole:(NSString*)role authBuffer:(NSData*)authB
 流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
 ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
 与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
+
 角色分别代表的通话质量：
 
 |角色名称     | 适用场景         |关键特性|
@@ -338,23 +340,57 @@ ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，包含两个信息，event_id 及 endpoints，在 OnEvent 函数中对事件消息进行判断。
+
+|event_id     | 含义         |应用侧维护内容|
+| ------------- |:-------------:|-------------|
+|ITMG_EVENT_ID_USER_ENTER    				|有成员进入房间			|应用侧维护成员列表		|
+|ITMG_EVENT_ID_USER_EXIT    				|有成员退出房间			|应用侧维护成员列表		|
+|ITMG_EVENT_ID_USER_HAS_AUDIO    		|有成员发送音频包		|应用侧维护通话成员列表	|
+|ITMG_EVENT_ID_USER_NO_AUDIO    			|有成员停止发送音频包	|应用侧维护通话成员列表	|
+|ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO	|有成员开启摄像头		|应用侧维护通话成员列表	|
+|ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO	|有成员关闭摄像头		|应用侧维护通话成员列表	|
+
 > 示例代码  
 
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_USER_UPDATE：
-        {
-	    //成员状态变化
-        }
-            break;
+        case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+		{
+		//进行处理
+		//开发者对参数进行解析，得到信息 event_id及 user_list
+		    switch (eventID)
+ 		    {
+ 		    case ITMG_EVENT_ID_USER_ENTER:
+  			    //有成员进入房间
+  			    break;
+ 		    case ITMG_EVENT_ID_USER_EXIT:
+  			    //有成员退出房间
+			    break;
+		    case ITMG_EVENT_ID_USER_HAS_AUDIO:
+			    //有成员开启麦克风
+			    break;
+		    case ITMG_EVENT_ID_USER_NO_AUDIO:
+			    //有成员关闭麦克风
+			    break;
+		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
+			    //有成员开启摄像头
+			    break;
+		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
+			    //有成员关闭摄像头
+			    break;
+		    default:
+			    break;
+ 		    }
+		break;
+		}
     }
 }
 ```
 
 ### 获取诊断信息
-获取音视频通话的实时通话质量的相关信息。该接口主要用来查看实时通话质量、排查问题等，业务侧可以不用关心它。
+获取音视频通话的实时通话质量的相关信息。该接口主要用来查看实时通话质量、排查问题等，业务侧可以忽略。
 > 函数原型  
 
 ```
@@ -707,7 +743,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)PauseAccompany
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] IsAccompanyPlayEnd];
 ```
 
-### 34.重新播放伴奏
+### 重新播放伴奏
 此接口用于重新播放伴奏。
 > 函数原型  
 
