@@ -183,7 +183,7 @@ context->SetLogPath(logDir);
 ```
 
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%AF%86%E9%92%A5)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 > 函数原型
@@ -239,7 +239,7 @@ context->SetRecvMixStreamCount(nCount);
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
 >3、关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
->4、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。
+>4、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
@@ -1102,7 +1102,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->setVoiceType(0);
 
 ## 离线语音接入
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引文档-TLS说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 > 函数原型  
 ```
 QAVSDK_API int QAVSDK_CALL QAVSDK_SIG_GenSig(unsigned int appId,const char* uin,const char* privateKey,char* retSigBuff,unsigned int buffLenght);
