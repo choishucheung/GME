@@ -40,8 +40,8 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 
 |消息     | 消息代表的意义   
 | ------------- |:-------------:|
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|进入音视频房间消息
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|退出音视频房间消息
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|进入音频房间消息
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|退出音频房间消息
 | ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT			|房间因为网络等原因断开消息
 | ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|打开麦克风消息
 | ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|关闭麦克风消息
@@ -51,10 +51,6 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				|关闭扬声器消息
 |ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE			|新增扬声器设备消息
 |ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE		|丢失扬声器设备消息
-|ITMG_MAIN_EVENT_TYPE_OPEN_CAMERA				|打开摄像头消息
-|ITMG_MAIN_EVENT_TYPE_CLOSE_CAMERA				|关闭摄像头消息
-|ITMG_MAIN_EVENT_TYPE_REQUEST_VIDEO_LIST			|打开视频白名单
-|ITMG_MAIN_EVENT_TYPE_CANCEL_VIDEO_LIST			|关闭视频白名单
 |ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE				|切换角色消息
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE					|房间成员更新消息
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			|伴奏结束消息
@@ -114,7 +110,7 @@ ITMGContext* context = ITMGContextGetInstance();
 context->SetAppInfo(SDKAPPID3RD, openId);
 ```
 
-### 设置 Update 更新函数
+### 设置更新函数
 Cocos2d 的更新函数 Update 需要配置。
 >Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent事件(回调线程为Poll的调用线程)。
 
@@ -213,7 +209,7 @@ context->SetLogPath(logDir);
 ```
 
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E9%9F%B3%E8%A7%86%E9%A2%91%E5%AF%86%E9%92%A5)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 > 函数原型
@@ -270,7 +266,7 @@ context->SetRecvMixStreamCount(nCount);
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
 >3、关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
->4、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。
+>4、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
@@ -1133,7 +1129,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->setVoiceType(0);
 
 ## 离线语音接入
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引文档-TLS说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 > 函数原型  
 ```
 QAVSDK_API int QAVSDK_CALL QAVSDK_SIG_GenSig(unsigned int appId,const char* uin,const char* privateKey,char* retSigBuff,unsigned int buffLenght);
@@ -1412,3 +1408,4 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 	}
 }
 ```
+
