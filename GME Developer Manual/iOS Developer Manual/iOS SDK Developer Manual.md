@@ -174,6 +174,7 @@ ITMGContext -(void)SetRecvMixStreamCount:(int)count
 [[ITMGContext GetInstance]SetRecvMixStreamCount:count];
 ```
 
+### 设置后台播放声音
 设置后台播放声音，在进房前调用，进房后且处于观众状态时可用，即角色 roleType="4" "6" 或者 "audience" "Raudience" 时。
 同时，应用侧有如下两点需要注意：
 1、退后台时没有暂停音频引擎的采集和播放（即 PauseAudio），
