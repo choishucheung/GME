@@ -54,8 +54,6 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 |ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	       |下载 PTT 完成
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
-|ITMG_MAIN_EVENT_TYPE_OPEN_CAMERA				    	|打开摄像头消息
-|ITMG_MAIN_EVENT_TYPE_CLOSE_CAMERA					|关闭摄像头消息
 
 >Data 列表
 
@@ -200,7 +198,8 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 ## 实时语音房间事件接口
 
 ### 加入房间
-用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。>注意:
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+>注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
 >关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
@@ -557,7 +556,10 @@ ITMGContext GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
 > 示例代码  
 
 ```
+打开扬声器
 [[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:YES];
+关闭扬声器
+[[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:NO];
 ```
 
 ### 扬声器事件的回调
@@ -740,7 +742,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)PauseAccompany
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] IsAccompanyPlayEnd];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseAccompany];
 ```
 
 ### 重新播放伴奏
@@ -769,7 +771,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyPlay:(BOOL)enable
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAudioEffectCtrl :YES];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] EnableAccompanyPlay :YES];
 ```
 
 ### 设置他人是否也可以听到伴奏
@@ -1205,7 +1207,7 @@ ITMGContext GetPTT -(void)PlayRecordedFile:(NSString*)downloadFilePath
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]downloadFilePath:path];
+[[[ITMGContext GetInstance]GetPTT]PlayRecordedFile:path];
 ```
 
 ### 播放语音的回调
@@ -1235,6 +1237,7 @@ ITMGContext GetPTT -(int)StopPlayFile
 ```
 [[[ITMGContext GetInstance]GetPTT]StopPlayFile];
 ```
+
 ### 获取语音文件的大小
 通过此接口，获取语音文件的大小。
 > 函数原型  
@@ -1283,7 +1286,7 @@ ITMGContext GetPTT -(int)SpeechToText:(NSString*)fileID
 [[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID];
 ```
 
-### 将指定的语音文件翻译成文字
+### 翻译回调
 将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
