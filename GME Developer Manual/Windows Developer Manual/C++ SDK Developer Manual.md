@@ -97,7 +97,7 @@ ITMGContext virtual void SetAppInfo(const char* sdkAppId, const char* openId)
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码					|
-| openID    		|char  	|唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于 10000 的数字类型|
+| openID    		|char  	|OpenID 为 Int32 类型，必须大于 10000，用于标识用户 	|
 > 示例代码  
 
 ```
@@ -108,7 +108,7 @@ context->SetAppInfo(SDKAPPID3RD, openId);
 ```
 
 ### 设置版本信息
-设置版本信息，用于查 Log 信息及 Bug 时使用。方便后台统计, 策略调整等（不设置不影响功能）。
+设置版本信息，用于查 Log 信息及 Bug 时使用，方便后台统计, 策略调整等（不设置不影响功能）。
 > 函数原型
 
 ```

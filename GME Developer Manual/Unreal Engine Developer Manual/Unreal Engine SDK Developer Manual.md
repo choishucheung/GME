@@ -41,13 +41,13 @@ void AUEDemoLevelScriptActor::OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char
 
 |消息     | 消息代表的意义   
 | ------------- |:-------------:|
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|进入音频房间消息
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|退出音频房间消息
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT			|房间因为网络等原因断开消息
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|打开麦克风消息
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|关闭麦克风消息
-| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|新增麦克风设备消息
-| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|丢失麦克风设备消息
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|进入音频房间消息
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|退出音频房间消息
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT			|房间因为网络等原因断开消息
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|打开麦克风消息
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|关闭麦克风消息
+|ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|新增麦克风设备消息
+|ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|丢失麦克风设备消息
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				|打开扬声器消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				|关闭扬声器消息
 |ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE			|新增扬声器设备消息
@@ -154,7 +154,7 @@ ITMGContext virtual void SetAppVersion(const char* appVersion)
 | appVersion    |char  |版本号|
 > 示例代码  
 ```
-ITMGContextGetInstance()->SetAppVersion("1.0");
+ITMGContextGetInstance()->SetAppVersion("1.3");
 ```
 
 ### 获取版本号
@@ -1384,7 +1384,7 @@ ITMGPTT virtual void SpeechToText(const char* fileID)
 ITMGContextGetInstance()->GetPTT()->SpeechToText(fileID);
 ```
 
-### 将指定的语音文件翻译成文字
+### 翻译回调
 将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
