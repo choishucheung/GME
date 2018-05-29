@@ -72,7 +72,7 @@ ITMGContext  EnterTeamRoom(int relationId, string controlRole, byte[] authBuffer
 
 > 示例代码  
 ```
-ITMGContext.GetInstance().EnterRoom(roomId, role, authBuffer,1000,1);
+ITMGContext.GetInstance().EnterTeamRoom(roomId, role, authBuffer,1000,1);
 ```
 
 
