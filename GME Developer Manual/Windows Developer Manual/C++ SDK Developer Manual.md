@@ -1358,7 +1358,7 @@ ITMGPTT virtual void SpeechToText(const char* fileID)
 ITMGContextGetInstance()->GetPTT()->SpeechToText(fileID);
 ```
 
-### 将指定的语音文件翻译成文字
+### 翻译回调
 将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
