@@ -3,11 +3,16 @@
 欢迎使用[腾讯云游戏多媒体引擎 SDK](https://cloud.tencent.com/product/tmg?idx=1) 。为方便开发者接入腾讯云游戏多媒体引擎产品，这里向您介绍适用于游戏多媒体引擎 SDK 的接入指引。
 
 使用GME 有以下五个步骤：
-1、在腾讯云后台新建 GME 服务
+[1、在腾讯云后台新建 GME 服务](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E6%96%B0%E5%BB%BA%E6%9C%8D%E5%8A%A1)
+
 2、下载对应版本的客户端SDK
+
 3、参照接入API文档， 将SDK移植到工程
+
 4、查看日常运营后台统计
+
 5、接入过程中特殊问题自主排除与反馈
+
 
 
 ## 新建服务
