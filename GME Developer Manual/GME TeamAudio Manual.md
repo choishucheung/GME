@@ -14,9 +14,9 @@ ITMGContext EnterRoom(int relationId, string controlRole, byte[] authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId|int    |房间号，大于等于六位的整数|
-| controlRole    |string     |角色名称，按照需求设置|
-| authBuffer    |Byte[]    |鉴权数据|
+| relationId		|int    	|房间号，大于等于六位的整数	|
+| controlRole    	|string 	|角色名称，按照需求设置		|
+| authBuffer    	|Byte[]  	|鉴权数据					|
 > 示例代码  
 ```
 ITMGContext.GetInstance().EnterRoom(roomId, role, authBuffer);
@@ -64,10 +64,10 @@ ITMGContext  EnterTeamRoom(int relationId, string controlRole, byte[] authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    	|房间号，大于等于六位的整数				|
+| relationId		|int    	|房间号									|
 | controlRole    	|string 	|角色名称，按照需求设置					|
 | authBuffer    	|Byte[] 	|鉴权数据								|
-| teamId    		|int    	|加入的小队语音队伍标识码				|
+| teamId    		|int    	|加入的小队语音队伍标识码（不能为 0 ）	|
 | audioMode    	|int    	|0 代表全局语音，1 代表小队语音			|
 
 > 示例代码  

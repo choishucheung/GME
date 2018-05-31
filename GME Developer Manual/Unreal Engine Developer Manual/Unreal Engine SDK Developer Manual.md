@@ -267,7 +267,6 @@ context->SetRecvMixStreamCount(nCount);
 
 ```
 ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff, int buffLen)//普通进房接口
-ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff, int buffLen, int teamId, int gameAudioMode)//小队语音接口
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
@@ -275,14 +274,33 @@ ITMGContext virtual void EnterRoom(int relationId, const char* role, const char*
 | role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
 | authBuffer    		|char    	|鉴权码												|
 | buffLen   			|int   	|鉴权码长度											|
-| teamId    			|int    	|默认值为0（小队语音）								|
-| gameAudioMode   	|int   	|默认值为0（小队语音）								|
 > 示例代码  
 
 ```
 ITMGContext* context = ITMGContextGetInstance();
 context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen);//普通语音进房示例代码
-context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen,atoi(_teamId->getText()),atoi(_audioModeId->getText()));//小队语音进房示例代码
+```
+
+
+#### 小队语音房间
+详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+> 函数原型
+```
+ITMGContext virtual void EnterTeamRoom(int relationId, const char* role, const char* authBuff, int buffLen,int teamId, int audioMode)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| relationId			|int   	|房间号 					|
+| role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
+| authBuffer    		|char    	|鉴权码												|
+| buffLen   			|int   	|鉴权码长度											|
+| teamId    		|int    	|加入的小队语音队伍标识码（不能为 0 ）	|
+| audioMode    	|int    	|0 代表全局语音，1 代表小队语音			|
+
+> 示例代码  
+```
+ITMGContext* context = ITMGContextGetInstance();
+context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen,1000,0);
 ```
 
 ### 加入房间事件的回调

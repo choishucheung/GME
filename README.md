@@ -10,10 +10,10 @@
 ## 接入通用文档
 #### [接入指引文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)
 #### [角色配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)
-#### [错误码列表](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Error%20Code.md)
+#### [控制台用量统计文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
+#### [密钥技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)
 
 ## 各平台接入文档
-
 
 #### Unity 引擎
 - ##### *支持平台:Android, iOS*
