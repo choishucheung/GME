@@ -97,6 +97,7 @@ IQAVContext.GetInstance().SetMaxMicCount(nCount);
 ## 实时语音房间事件接口
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
+小队语音详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
