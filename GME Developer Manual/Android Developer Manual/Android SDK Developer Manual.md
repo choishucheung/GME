@@ -55,11 +55,11 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 |ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件
 |ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE				      	|切换角色消息
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			       |伴奏结束消息
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE					  	|房间成员更新消息
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		       |PTT 录音完成
@@ -72,23 +72,24 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  		|{"error_info":"waiting timeout, please check your network","result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  		|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  		|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;  event_id		|{"event_id":1,"user_list":["0"]}
-| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  		|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  	|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  	|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  		|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id	|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;event_id					|{"event_id":1,"user_list":["0"]}
+| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id				|{"file_id":"","filepath":"","result":0}
 
 > 示例代码  
 ```
@@ -206,20 +207,26 @@ IQAVContext.GetInstance(this).SetRecvMixStreamCount(nCount);
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 
 > 函数原型
 ```
-ITMGContext public abstract void EnterRoom(int roomID, String controlRole, byte[] authBuffer)
+ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomID    		|int    	|房间号 	|
-| controlRole    	|String  	|角色名称，按照需求设置，也可以询问接入技术人员获取|
-| authBuffer    	|byte[]  	|鉴权码						|
+| relationId 	|int		|房间号				|
+| roomType 	|int		|房间音频类型		|
+| authBuffer	|byte[]	|鉴权码				|
+
+|音频类型     	| 代表参数   |含义|
+| ------------- |:-------------:|------------- 
+| ITMG_ROOM_TYPE_FLUENCY		|0	|流畅音质	|
+| ITMG_ROOM_TYPE_STANDARD		|0	|标准音质	|
+| ITMG_ROOM_TYPE_HIGHQUALITY	|0	|高清音质	|
+
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(strRoomID), "user", authBuffer);
+ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, authBuffer);    
 ```
 
 ### 加入房间事件的回调
@@ -234,16 +241,6 @@ public void onEnterRoomComplete(int nRet, String strErrMsg) {
                 TMGContext.this.HandleUnExceptionEnd(nRet, strErrMsg);
             }
         }
-```
-传递的参数 it 是函数 TMGCallbackHelper.GetCallBackIntent 的 Intent 类型返回值，其中包含两个信息，一个是 result，另一个是 error_info。
-> 代码说明
-```
-static Intent GetCallBackIntent(int nRet, String strErrMsg) {
-        Intent intent= new Intent();
-        intent.putExtra("result", nRet);
-        intent.putExtra("error_info", strErrMsg);
-        return intent;
-    }
 ```
 > 示例代码  
 ```
@@ -279,7 +276,7 @@ ITMGContext public void ExitRoom()
 ITMGContext.GetInstance(this).ExitRoom();
 ```
 
-### 6.退出房间回调
+### 退出房间回调
 退出房间事件调用完成后，会调用函数 OnEvent，事件消息为ITMG_MAIN_EVENT_TYPE_EXIT_ROOM，在 OnEvent 函数中对事件消息进行判断。
 > 示例代码  
 ```
@@ -291,53 +288,56 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 }
 ```
 
-
-### 角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
+### 修改用户房间音频类型
+此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
 > 函数原型  
 ```
-ITMGContext TMGRoom public void ChangeRole(String role, byte[] authBuffer)
+IITMGContext TMGRoom public void ChangeRoomType(int nRoomType)
 ```
+
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| role    			|String     |设置角色			|
-| authBuffer    	|byte[]     |鉴权需要重新设置	|
-
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成  AuthBuffer ）。
-ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
-与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
-
-角色分别代表的通话质量：
-
-|角色名称     | 适用场景         |关键特性|
-| ------------- |:-------------:|-------------
-| esports    	|适用于MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Raudience	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Werewolf 	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host  		|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience  	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
+| nRoomType    |int    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
 
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetRoom().ChangeRole("user",bytes);
+ITMGContext.GetInstance(this).GetRoom().ChangeRoomType(nRoomType);
 ```
 
-### 角色设置完成回调
-角色设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE，返回的参数 intent 包含两个信息，result 及 error_info，在 OnEvent 函数中对事件消息进行判断。
+
+### 获取用户房间音频类型
+此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+
+> 函数原型  
+```
+IITMGContext TMGRoom public  int GetRoomType()
+```
+
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetRoom().GetRoomType();
+```
+
+
+### 房间类型完成回调
+房间类型设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE，返回的参数为 result、error_info 及 new_room_type，new_room_type 代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|事件子类型     | 代表参数   |含义|
+| ------------- |:-------------:|-------------
+| ITMG_ROOM_CHANGE_EVENT_ENTERROOM		|1 	|表示在进房的过程中，自带的音频类型与房间不符合，被修改为所进入房间的音频类型	|
+| ITMG_ROOM_CHANGE_EVENT_START			|2	|表示已经在房间内，音频类型开始切换（例如调用 ChangeRoomType 接口后切换音频类型 ）|
+| ITMG_ROOM_CHANGE_EVENT_COMPLETE		|3	|表示已经在房间，音频类型切换完成|
+| ITMG_ROOM_CHANGE_EVENT_REQUEST			|4	|表示房间成员调用 ChangeRoomType 接口，请求切换房间音频类型|	
+
+
 > 示例代码  
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE == type)
+	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE == type)
         {
-		int nErrCode =data.getIntExtra("result" , -1);
-		if (nErrCode == AVError.AV_OK)
-			{
-				//修改角色成功
-			}
-	}
+		//对房间类型事件进行处理
+	 }
 }
 ```
 
