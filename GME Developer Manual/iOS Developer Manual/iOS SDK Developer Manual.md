@@ -42,6 +42,7 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 |ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件
 |ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
@@ -62,6 +63,7 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 | ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info		|{"error_info":"","result":0}
 | ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  		|{"error_info":"","result":0}
 | ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  		|{"error_info":"waiting timeout, please check your network","result":0}
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
 | ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
 | ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
 | ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  		|{"error_info":"","result":0}
@@ -85,6 +87,7 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 ```
 ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID openID:(NSString*)openID
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|NSString  |来自腾讯云控制台的 SdkAppId 号码				|
@@ -207,17 +210,25 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 > 函数原型
 
 ```
-ITMGContext   -(void)EnterRoom:(int) relationId controlRole:(NSString*)role authBuffer:(NSData*)authBuffer
+ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomID		|int    		|房间号 	|
-| controlRole    	|NSString    	|角色名称，按照需求设置，也可以询问接入技术人员获取|
+| relationId		|int    		|房间号 	|
+| roomType 		|int			|房间音频类型		|
 | authBuffer    	|NSData    	|鉴权码						|
+
+|音频类型     	| 代表参数   |含义|
+| ------------- |:-------------:|------------- 
+| ITMG_ROOM_TYPE_FLUENCY		|0	|流畅音质	|
+| ITMG_ROOM_TYPE_STANDARD		|0	|标准音质	|
+| ITMG_ROOM_TYPE_HIGHQUALITY	|0	|高清音质	|
+
+
 > 示例代码  
 
 ```
-[[ITMGContext GetInstance] EnterRoom:_roomId controlRole:@"user" authBuffer:authBuffer];
+[[ITMGContext GetInstance] EnterRoom:_roomId roomType:_roomType authBuffer:authBuffer];
 ```
 
 ### 加入房间事件的回调
@@ -285,57 +296,63 @@ ITMGContext -(void)ExitRoom
 
 
 
-### 角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
-> 函数原型  
+### 修改用户房间音频类型
+此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
 
+> 函数原型  
 ```
-ITMGContext GetRoom -(void)ChangeRole:(NSString*)role authBuffer:(NSData*)authBuffer
+ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| role    			|NSString     	|设置角色			|
-| authBuffer    	|NSData    	|鉴权需要重新设置	|
-
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
-ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
-与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
-
-角色分别代表的通话质量：
-
-|角色名称     | 适用场景         |关键特性|
-| ------------- |:-------------:|-------------
-| esports    	|适用于MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Raudience	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Werewolf 	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host  		|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience  	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
+| nRoomType    |int    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
 
 > 示例代码
 
 ```
-[[[ITMGContext GetInstance]GetRoom ]ChangeRole:@"Playre"authBuffer:authBuffer];
+[[[ITMGContext GetInstance]GetRoom ]ChangeRoomType:_roomType];
 ```
 
-### 角色设置完成回调
-角色设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE，在 OnEvent 函数中对事件消息进行判断。
+### 获取用户房间音频类型
+此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+
+> 函数原型  
+```
+ITMGContext GetRoom -(int)GetRoomType
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| nRoomType    |int    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
+
+> 示例代码
+
+```
+[[[ITMGContext GetInstance]GetRoom ]GetRoomType];
+```
+
+### 房间类型完成回调
+房间类型设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE，返回的参数为 result、error_info 及 new_room_type，new_room_type 代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|事件子类型     | 代表参数   |含义|
+| ------------- |:-------------:|-------------
+| ITMG_ROOM_CHANGE_EVENT_ENTERROOM		|1 	|表示在进房的过程中，自带的音频类型与房间不符合，被修改为所进入房间的音频类型	|
+| ITMG_ROOM_CHANGE_EVENT_START			|2	|表示已经在房间内，音频类型开始切换（例如调用 ChangeRoomType 接口后切换音频类型 ）|
+| ITMG_ROOM_CHANGE_EVENT_COMPLETE		|3	|表示已经在房间，音频类型切换完成|
+| ITMG_ROOM_CHANGE_EVENT_REQUEST			|4	|表示房间成员调用 ChangeRoomType 接口，请求切换房间音频类型|	
+
+
 > 示例代码  
-
 ```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
+-(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data {
+	NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE：
-        {
-	    //角色设置完成
-        }
-            break;
+ 		case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+			//进行处理
+	 }
     }
 }
 ```
+
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，包含两个信息，event_id 及 endpoints，在 OnEvent 函数中对事件消息进行判断。
