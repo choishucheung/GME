@@ -86,3 +86,23 @@
 |QAVPTTERROR_V2T_RSP_DATA_DECODE_FAIL				|32772|语音转文字错误 |回包解包失败|分析日志，获取后台返回给客户端的真正错误码，并联系后台同事协助解决。									|
 |QAVPTTERROR_V2T_SIGN_CHECK_EXPIRED					|32773|语音转文字错误 |TLS 签名校验明确过期，需要重新申请 TLS 签名|分析日志，获取后台返回给客户端的真正错误码，并联系后台同事协助解决。	|
 |QAVPTTERROR_V2T_APPINFO_UNSET						|32774|语音转文字错误 |没有设置 appinfo|分析日志，获取后台返回给客户端的真正错误码，并联系后台同事协助解决。								|
+
+
+
+## GME 伴奏错误
+
+|错误码名称                              |错误码值 |含义   |原因                                                                                            |建议方案                                                     |
+|-----------------------------------|-----|-----|----------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+|AV_ERROR_ACCOMPY_ERRORSUCCESS							|20000|成功播放伴奏		|成功播放伴奏					|无|
+|AV_ERROR_ACCOMPY_ERROROPENFILEFAILED					|20001|打开文件失败		|打开文件失败					|对需要打开的文件进行检查，看是否存在|
+|AV_ERROR_ACCOMPY_ERRORFILEFORAMTNOTSUPPORT			|20002|文件格式不支持	|文件格式不支持					|对文件格式进行检查|
+|AV_ERROR_ACCOMPY_ERRORDECODERFAILED					|20003|文件解码失败		|文件解码失败					|对文件格式进行检查，询问技术人员是否支持此格式|
+|AV_ERROR_ACCOMPY_ERRORBADPARAM						|20004|错误参数			|接口参数错误					|传入接口的参数的错误的，需要进行检查|
+|AV_ERROR_ACCOMPY_ERRORMEMORYALLOCFAILED				|20005|分配内存失败		|播放伴奏是分配内存失败			|询问相关技术人员进行解决|
+|AV_ERROR_ACCOMPY_ERRORCREATETHREADFAILED				|20006|创建解码线程失败	|创建解码线程失败				|询问相关技术人员进行解决|
+|AV_ERROR_ACCOMPY_ERRORSTATEILLEGAL						|20007|切换状态不合法	|切换状态不合法					|查看接口是否使用有问题|
+|AV_ERROR_ACCOMPY_ERRORSDKVERSIONTOLOWFORMP3		|20008|解码问题			|解码mp3的Android版本过低		|升级Android版本|
+|AV_ERROR_ACCOMPY_ERRORNOTIMPLEMENT					|20009|预加载问题		|自研音效，不支持预加载文件接口	|询问相关技术人员进行解决|
+|AV_ERROR_ACCOMPY_WARNINGDUCKERTIMETOOSHORT		|20010|duck 时间问题	|duck 时间小于20ms				|拉长 duck 时间|
+|AV_ERROR_ACCOMPY_WARNINGREPETITIVEOPERATION			|20011|重复操作			|重复操作相同API					|对代码进行检查|
+|AV_ERROR_ACCOMPY_WARNINGDUCKERTIMELARGELEFTTIME	|20012|duck 时间问题	|duck 时间超过文件剩余播放时间	|对 duck 时间进行修改|
