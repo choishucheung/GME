@@ -47,7 +47,6 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 |ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE				      	|切换角色消息
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			       |伴奏结束消息
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE					  	|房间成员更新消息
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		       |PTT 录音完成
@@ -175,7 +174,7 @@ ITMGContext -(void)SetRecvMixStreamCount:(int)count
 ```
 
 ### 设置后台播放声音
-设置后台播放声音，在进房前调用，进房后且处于观众状态时可用，即角色 roleType="4" "6" 或者 "audience" "Raudience" 时。
+设置后台播放声音，在进房前调用。
 同时，应用侧有如下两点需要注意：
 1、退后台时没有暂停音频引擎的采集和播放（即 PauseAudio），
 2、App 的 Info.plist 中，需要至少增加 key:Required background modes，string:App plays audio or streams audio/video using AirPlay。
@@ -205,7 +204,6 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 
 > 函数原型
 
