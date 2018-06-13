@@ -1,10 +1,11 @@
 ## 简介
 
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Android 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Android 开发的接入技术文档。
+
 ## SDK初始化  
 
-### 获取通讯管理器
-初始化 SDK 需要从通讯管理器 TMGContext 开始，第一步需要获取单例。    
+### 初始化
+通过 TMGContext 完成初始化。    
 
 > 函数原型 
 
@@ -68,7 +69,7 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
 
->Data 列表
+Data 列表：
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
@@ -114,7 +115,7 @@ ITMGContext public int SetTMGDelegate(ITMGDelegate delegate)
 TMGContext.GetInstance(this).SetTMGDelegate(itmgDelegate);
 ```
 
-### 设置 App 信息
+### 设置基本信息
 获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型 
