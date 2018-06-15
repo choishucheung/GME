@@ -205,7 +205,7 @@ void OnExitRoomComplete(){
 ```
 
 ### 获取用户房间音频类型
-此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+此接口用于获取用户房间音频类型，返回值为房间音频类型，返回值为0时代表获取用户房间音频类型发生错误，房间音频类型参考 EnterRoom 接口。
 
 > 函数原型  
 ```
@@ -214,11 +214,11 @@ ITMGContext ITMGRoom public  int GetRoomType()
 
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetRoom().GetRoomType(1);
+IQAVContext.GetInstance().GetRoom().GetRoomType();
 ```
 
 ### 修改用户房间音频类型
-此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
+此接口用于修改用户房间音频类型。
 > 函数原型  
 ```
 ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
@@ -230,13 +230,13 @@ ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
 
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetRoom().ChangeRoomType(1);
+IQAVContext.GetInstance().GetRoom().ChangeRoomType(ITMG_ROOM_TYPE_FLUENCY);
 ```
 
 
 
-### 主动修改房间类型回调
-主动设置房间类型，房间类型设置完成后，通过委托传递消息。
+### 修改房间音频类型回调
+主动设置房间类型，房间类型设置后，通过委托传递修改完成的相关消息。
 
 |返回的参数     | 意义  
 | ------------- |:-------------:|
@@ -260,9 +260,8 @@ void OnChangeRoomtypeCallback(){
 }
 ```
 
-### 房间类型修改通知
-房间类型设置完成后，通过委托传递修改通知，通知其他房间的用户房间类型修改，返回的是房间类型，参考 EnterRoom 接口。
-
+### 房间类型变化通知
+用户主动修改房间类型，或者房间内其它用户修改房间类型，只要房间类型发生变化，该回调函数就会被调用，通过次回调函数通知业务层房间类型发生变化，返回的是房间类型，参考 EnterRoom 接口。
 ```
 委托函数：
 public delegate void QAVOnRoomTypeChangedEvent(int roomtype);
