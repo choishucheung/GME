@@ -219,11 +219,11 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
-|音频类型     	|含义|
-| ------------- |------------- 
-| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|
-| ITMG_ROOM_TYPE_STANDARD			|标准音质	|
-| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|
+|音频类型     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
 
 > 示例代码  
 ```
