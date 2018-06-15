@@ -68,7 +68,7 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
 
->Data 列表
+Data 列表：
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
