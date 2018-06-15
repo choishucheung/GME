@@ -114,20 +114,26 @@ IQAVContext.GetInstance().SetMaxMicCount(nCount);
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 
 > 函数原型
 ```
-ITMGContext EnterRoom(int relationId, string controlRole, byte[] authBuffer)
+ITMGContext EnterRoom(int relationId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | relationId		|int    	|房间号					|
-| controlRole	|string 	|角色名称，按照需求设置	|
+| roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权					|
+
+|ITMGRoomType     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+
 > 示例代码  
 ```
-IQAVContext.GetInstance().EnterRoom(roomId, role, authBuffer);
+IQAVContext.GetInstance().EnterRoom(roomId, roomType, authBuffer);
 ```
 
 ### 加入房间事件的回调
@@ -198,57 +204,84 @@ void OnExitRoomComplete(){
 }
 ```
 
-### 角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎语音角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
+### 获取用户房间音频类型
+此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+
 > 函数原型  
 ```
-IQAVRoom ChangeRole(string role, byte[] authBuffer)
+ITMGContext ITMGRoom public  int GetRoomType()
 ```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| role    |NSString     |设置角色|
-| authBuffer    |NSData    |鉴权需要重新设置|
-
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
-ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
-与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
-
-角色分别代表的通话质量：
-
-|角色名称     | 适用场景         |关键特性|
-| ------------- |:-------------:|-------------
-| esports    	|适用于MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Raudience	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Werewolf 	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host  		|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience  	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
 
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetRoom().ChangeRole(role, authBuffer);
+IQAVContext.GetInstance().GetRoom().GetRoomType(1);
 ```
 
-### 角色设置完成回调
-角色设置完成回调，通过委托传递消息。
+### 修改用户房间音频类型
+此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
 > 函数原型  
 ```
+ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
+```
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| roomtype    |ITMGRoomType    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
+
+> 示例代码  
+```
+IQAVContext.GetInstance().GetRoom().ChangeRoomType(1);
+```
+
+
+
+### 主动修改房间类型回调
+主动设置房间类型，房间类型设置完成后，通过委托传递消息。
+
+|返回的参数     | 意义  
+| ------------- |:-------------:|
+| result    |0 是代表成功
+| error_info    |如果失败，会传递相关错误信息
+
+```
 委托函数：
-public delegate void QAVAudioRouteChangeCallback(int code);
+public delegate void QAVOnChangeRoomtypeCallback(int result, string error_info);
+
 事件函数：
-public abstract event QAVCallback OnChangeRoleCallback;
+public abstract event QAVCallback OnChangeRoomtypeCallback; 
 ```
 > 示例代码  
 ```
 对事件进行监听：
-IQAVContext.GetInstance().GetAudioCtrl().OnAudioRouteChangeComplete += new QAVAudioRouteChangeCallback(OnAudioRouteChange);
-void OnAudioRouteChange(int code){
-    //角色设置完成回调
+IQAVContext.GetInstance().OnChangeRoomtypeCallback += new QAVOnChangeRoomtypeCallback(OnChangeRoomtypeCallback);
+监听处理：
+void OnChangeRoomtypeCallback(){
+    //房间类型设置完成后的处理
 }
 ```
 
+### 房间类型修改通知
+房间类型设置完成后，通过委托传递修改通知，通知其他房间的用户房间类型修改，返回的是房间类型，参考 EnterRoom 接口。
+
+```
+委托函数：
+public delegate void QAVOnRoomTypeChangedEvent(int roomtype);
+
+事件函数：
+public abstract event QAVOnRoomTypeChangedEvent OnRoomTypeChangedEvent;	
+```
+> 示例代码  
+```
+对事件进行监听：
+IQAVContext.GetInstance().OnRoomTypeChangedEvent += new QAVOnRoomTypeChangedEvent(OnRoomTypeChangedEvent);
+监听处理：
+void OnRoomTypeChangedEvent(){
+    //房间类型改变后的处理
+}
+```
+
+
+	
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存。
 
@@ -258,8 +291,6 @@ void OnAudioRouteChange(int code){
 |ITMG_EVENT_ID_USER_EXIT    				|有成员退出房间			|应用侧维护成员列表		|
 |ITMG_EVENT_ID_USER_HAS_AUDIO    		|有成员发送音频包		|应用侧维护通话成员列表	|
 |ITMG_EVENT_ID_USER_NO_AUDIO    			|有成员停止发送音频包	|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO	|有成员开启摄像头		|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO	|有成员关闭摄像头		|应用侧维护通话成员列表	|
 
 > 示例代码  
 ```
@@ -291,12 +322,7 @@ void OnEndpointsUpdateInfo(int eventID, int count, string[] identifierList)
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
 			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
+		  
 		    default:
 			    break;
  		    }
