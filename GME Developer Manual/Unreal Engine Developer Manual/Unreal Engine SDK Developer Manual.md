@@ -39,7 +39,7 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 ```
 //函数实现：
 //UEDemoLevelScriptActor.h:
-class UEDEMO1_API AUEDemoLevelScriptActor : public ALevelScriptActor, public ITMGDelegate
+class UEDEMO1_API AUEDemoLevelScriptActor : public ALevelScriptActor, public SetTMGDelegate
 {
 public:
 	void OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char* data);
@@ -105,13 +105,13 @@ void AUEDemoLevelScriptActor::OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char
  ITMGContextGetInstance()->TMGDelegate(this);
 ```
 
-### 设置 App 信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+### 初始化 SDK
+相关信息由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
 
-此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT32）。
+初始化 SDK 需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT32）。
 > 函数原型 
 ```
-ITMGContext virtual void SetAppInfo(const char* sdkAppId, const char* openId)
+ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
@@ -157,7 +157,17 @@ ITMGContextGetInstance()->Poll();
 }
 ```
 
-
+### 反初始化 SDK
+反初始化 SDK，在退出 app 或者相关需要的时候调用。
+> 函数原型 
+```
+ITMGContext virtual void Uninit()
+```
+> 示例代码  
+```
+ITMGContext* context = ITMGContextGetInstance();
+context->Uninit();
+```
 ### 设置版本信息
 设置版本信息，用于查 Log 信息及 Bug 时使用，方便后台统计, 策略调整等（不设置不影响功能）。
 > 函数原型
