@@ -121,7 +121,7 @@ ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 ```
 std::string appid = TCHAR_TO_UTF8(CurrentWidget->editAppID->GetText().ToString().operator*());
 std::string userId = TCHAR_TO_UTF8(CurrentWidget->editUserID->GetText().ToString().operator*());
-ITMGContextGetInstance()->SetAppInfo(appid.c_str(), userId.c_str());
+ITMGContextGetInstance()->Init(appid.c_str(), userId.c_str());
 ```
 
 ### 设置更新函数
@@ -135,8 +135,6 @@ protected:
     virtual ~ITMGContext() {}
     
 public:
-	//Destroy TMGSDK, make sure to release SDK after use.
-    	virtual void Destroy() = 0;
 	//Poll
     	virtual void Poll()= 0;
 	//Pause
@@ -228,7 +226,7 @@ context->SetLogPath(logDir);
 ```
 
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 > 函数原型
@@ -297,7 +295,7 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 
 #### 小队语音房间
-详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 > 函数原型
 ```
 ITMGContext virtual void EnterTeamRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
@@ -1151,7 +1149,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->setVoiceType(0);
 
 ## 离线语音接入
 ### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 > 函数原型  
 ```
 QAVSDK_API int QAVSDK_CALL QAVSDK_SIG_GenSig(unsigned int appId,const char* uin,const char* privateKey,char* retSigBuff,unsigned int buffLenght);
