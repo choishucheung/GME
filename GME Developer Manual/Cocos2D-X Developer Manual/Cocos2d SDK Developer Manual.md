@@ -3,17 +3,17 @@
 
 ## 目录
 	
-[SDK初始化](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#sdk%E5%88%9D%E5%A7%8B%E5%8C%96)
+[SDK初始化](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#sdk%E5%88%9D%E5%A7%8B%E5%8C%96)
 
-[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
 
-[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
 
-[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[离线语音](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%85%A5)
+[离线语音](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%85%A5)
 
 ## SDK初始化  
 
@@ -65,7 +65,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				|关闭扬声器消息
 |ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE			|新增扬声器设备消息
 |ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE		|丢失扬声器设备消息
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE				|切换角色消息
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE			|房间类型变化事件
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE					|房间成员更新消息
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			|伴奏结束消息
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		|PTT 录音完成
@@ -89,6 +89,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 | ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  		|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
 | ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
 | ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
 | ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;  event_id		|{"event_id":1,"user_list":["0"]}
 | ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  		|{"filepath":"","result":0}
 | ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  	|{"file_id":"","filepath":"","result":0}
@@ -97,7 +98,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 | ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id	|{"file_id":"","filepath":"","result":0}
 
 ### 设置单例
-在 EnterRoom 函数调用之前要先获取 ITMGContext ，ITMGContext 以单例的形式提供，所有调用都从 ITMGContext 开始，由ITMGDelegate 回调回传给应用，必须首先设置。
+在 EnterRoom 函数调用之前要先获取 ITMGContext ，所有调用都从 ITMGContext 开始，由ITMGDelegate 回调回传给应用，必须首先设置。
 >示例代码
 ```
 ITMGContext* context = ITMGContextGetInstance();
@@ -125,7 +126,7 @@ context->SetAppInfo(SDKAPPID3RD, openId);
 ```
 
 ### 设置更新函数
-Cocos2d 的更新函数 Update 需要配置。
+Cocos2d 的更新函数 Update 需要配置。通过在update里面周期的调用Poll可以触发事件回调。
 >Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent事件（回调线程为Poll的调用线程）。
 
 >函数原型
@@ -228,13 +229,13 @@ context->SetLogPath(logDir);
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* strOpenID, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | authId    		|int  		|要加入的房间名							|
-| account  		|char    		|用户标识								|
+| strOpenID  		|char    		|用户标识								|
 | key    			|char	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | privilegeMap   	|int    		|权限									|
@@ -251,26 +252,9 @@ unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
 unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
 
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
 
-### 设置最大混音路数
-最后是设置最大混音路数（同时听到多少人讲话），在进房前调用，不调用默认为 6 路混音。
-> 函数原型
-
-```
-ITMGContext -(void)SetRecvMixStreamCount:(int)count
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| nCount    |int   |混音路数，默认为 6|
-
-> 示例代码  
-
-```
-ITMGContext* context = ITMGContextGetInstance();
-context->SetRecvMixStreamCount(nCount);
-```
 
 ## 实时语音房间事件接口
 
@@ -279,25 +263,30 @@ context->SetRecvMixStreamCount(nCount);
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->3、关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
->4、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+>3、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
 ```
-ITMGContext virtual void EnterRoom(int relationId, const char* role, const char* authBuff, int buffLen)//普通进房接口
+ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)//普通进房接口
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId			|int   	|房间号 					|
-| role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
-| authBuffer    		|char    	|鉴权码												|
-| buffLen   			|int   	|鉴权码长度											|
+| relationId			|int   				|房间号 			|
+| roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
+| authBuffer    		|char    				|鉴权码			|
+| buffLen   			|int   				|鉴权码长度		|
+
+|ITMG_ROOM_TYPE     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
 > 示例代码  
 
 ```
 ITMGContext* context = ITMGContextGetInstance();
-context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen);//普通语音进房示例代码
+context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen);//普通语音进房示例代码
 ```
 
 
@@ -305,21 +294,26 @@ context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen);//普通语音进
 详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 > 函数原型
 ```
-ITMGContext virtual void EnterTeamRoom(int relationId, const char* role, const char* authBuff, int buffLen,int teamId, int audioMode)
+ITMGContext virtual void EnterTeamRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | relationId			|int   	|房间号 					|
-| role    				|char    	|角色名称，按照需求设置，也可以询问接入技术人员获取	|
+| roomType 		|ITMG_ROOM_TYPE	|房间音频类型							|
 | authBuffer    		|char    	|鉴权码												|
 | buffLen   			|int   	|鉴权码长度											|
 | teamId    		|int    	|加入的小队语音队伍标识码（不能为 0 ）	|
 | audioMode    	|int    	|0 代表全局语音，1 代表小队语音			|
 
+|ITMG_ROOM_TYPE     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
 > 示例代码  
 ```
 ITMGContext* context = ITMGContextGetInstance();
-context->EnterRoom(roomId, role, (char*)retAuthBuff,bufferLen,1000,0);
+context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen,1000,0);
 ```
 
 
@@ -389,61 +383,61 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 }
 ```
 
-### 角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
+### 修改用户房间音频类型
+此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
 > 函数原型  
+```
+IITMGContext TMGRoom public void ChangeRoomType((ITMG_ROOM_TYPE roomType)
+```
 
-```
-ITMGRoom virtual void ChangeRole(const char* role, const unsigned char* authBuff, int authBuffLenght)
-```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| role    				|char     	|设置角色			|
-| authBuffer    		|char    	|鉴权需要重新设置	|
-| authBuffLenght	|int    	|鉴权长度			|
+| roomType    |ITMG_ROOM_TYPE    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
 
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
-ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
-与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
+> 示例代码  
+```
+ITMGContext* context = ITMGContextGetInstance();
+ITMGContextGetInstance()->GetRoom()->ChangeRoomType(ITMG_ROOM_TYPE_FLUENCY);
+```
 
-角色分别代表的通话质量：
 
-|角色名称     | 适用场景         |关键特性|
+### 获取用户房间音频类型
+此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+
+> 函数原型  
+```
+IITMGContext TMGRoom public  int GetRoomType()
+```
+
+> 示例代码  
+```
+ITMGContext* context = ITMGContextGetInstance();
+ITMGContextGetInstance()->GetRoom()->GetRoomType();
+```
+
+
+### 房间类型完成回调
+房间类型设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE，返回的参数为 result、error_info 及 new_room_type，new_room_type 代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|事件子类型     | 代表参数   |含义|
 | ------------- |:-------------:|-------------
-| esports    		|适用于 MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost 			|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦  			|高流畅、低延时		|
-| Raudience    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦   			|高流畅、低延时		|
-| Werewolf    	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host    			|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience    	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
+| ITMG_ROOM_CHANGE_EVENT_ENTERROOM		|1 	|表示在进房的过程中，自带的音频类型与房间不符合，被修改为所进入房间的音频类型	|
+| ITMG_ROOM_CHANGE_EVENT_START			|2	|表示已经在房间内，音频类型开始切换（例如调用 ChangeRoomType 接口后切换音频类型 ）|
+| ITMG_ROOM_CHANGE_EVENT_COMPLETE		|3	|表示已经在房间，音频类型切换完成|
+| ITMG_ROOM_CHANGE_EVENT_REQUEST			|4	|表示房间成员调用 ChangeRoomType 接口，请求切换房间音频类型|	
+
 
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetRoom()->ChangeRole(role,authBuff,authBuffLenght);
-```
-
-### 角色设置完成回调
-角色设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE，在 OnEvent 函数中对事件消息进行判断。
-> 示例代码  
-```
-void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
-	switch (eventType) {
-		case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
-		{
-		//进行处理
-		break;
-	    	}
-		...
-            case ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE:
-		{
-		//进行处理
-		break;
-		}
-	}
+void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data) {
+	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE == type)
+        {
+		//对房间类型事件进行处理
+	 }
 }
 ```
+
 
 
 ### 成员状态变化
@@ -455,8 +449,6 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 |ITMG_EVENT_ID_USER_EXIT    				|有成员退出房间			|应用侧维护成员列表		|
 |ITMG_EVENT_ID_USER_HAS_AUDIO    		|有成员发送音频包		|应用侧维护通话成员列表	|
 |ITMG_EVENT_ID_USER_NO_AUDIO    			|有成员停止发送音频包	|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO	|有成员开启摄像头		|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO	|有成员关闭摄像头		|应用侧维护通话成员列表	|
 
 > 示例代码  
 
@@ -480,14 +472,6 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 			    break;
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
-			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
-		    default:
 			    break;
  		    }
 		break;

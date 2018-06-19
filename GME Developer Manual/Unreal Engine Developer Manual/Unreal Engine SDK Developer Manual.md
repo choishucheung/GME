@@ -125,7 +125,7 @@ ITMGContextGetInstance()->SetAppInfo(appid.c_str(), userId.c_str());
 ```
 
 ### 设置更新函数
-Unreal Engine 的更新函数 Tick 需要配置。
+Unreal Engine 的更新函数 Tick 需要配置。通过在 Tick 里面周期的调用Poll可以触发事件回调。
 >Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent 事件(回调线程为Poll的调用线程)。
 
 >函数原型
@@ -223,7 +223,7 @@ context->SetLogPath(logDir);
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* account, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, unsigned int dwRoomID, const char* strOpenID, const char* strKey, unsigned int nExpTime, unsigned int nAuthBits, unsigned char* strAuthBuffer, unsigned int bufferLength)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
@@ -258,7 +258,7 @@ QAVSDK_AuthBuffer_GenAuthBuffer(appId, roomId, "10001", strKey, expTime, ITMG_AU
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
 >2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->3、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+>3、如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
