@@ -124,6 +124,7 @@ context->Init(SDKAPPID3RD, openId);
 ### 设置更新函数
 通过在 Tick 里面周期的调用 Poll 可以触发事件回调。
 >Poll 为回调触发函数，触发SDK回调，ITMGDelegate::OnEvent 事件(回调线程为Poll的调用线程)。
+
 >函数原型
 ```
 class ITMGContext {
@@ -131,8 +132,6 @@ protected:
     virtual ~ITMGContext() {}
     
 public:
-	//Destroy TMGSDK, make sure to release SDK after use.
-    	virtual void Destroy() = 0;
 	//Poll
     	virtual void Poll()= 0;
 	//Pause
