@@ -46,3 +46,11 @@ Bitcode 需要工程依赖的所有类库同时支持，SDK 暂时还不支持 B
 如下图：  
 
 ![image](Image/i5.png)
+
+### 4.权限申请
+腾讯音视频引擎 iOS 平台所需要的隐私权限如下：
+
+|key     | 意义   
+| ------------- |:-------------:|
+|Required background modes    				       |允许后台运行
+|Microphone Usaeg Description   				|允许麦克风权限
