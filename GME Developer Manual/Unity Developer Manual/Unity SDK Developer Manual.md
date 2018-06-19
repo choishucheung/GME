@@ -21,7 +21,7 @@
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 > 函数原型
 ```
-IQAVContext SetAppInfo(string sdkAppID, string openID)
+IQAVContext Init(string sdkAppID, string openID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
@@ -29,7 +29,7 @@ IQAVContext SetAppInfo(string sdkAppID, string openID)
 | openID    |string  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于10000的数字类型|
 > 示例代码  
 ```
-int ret = IQAVContext.GetInstance().SetAppInfo(str_appId, str_userId);
+int ret = IQAVContext.GetInstance().Init(str_appId, str_userId);
 	if (ret != QAVError.OK) {
 		return;
 	}
