@@ -5,21 +5,27 @@
 用生成的鉴权数据进房。
 >注意:加入房间默认不打开麦克风及扬声器。
 
-关于角色的设置，在[游戏实时语音角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
 
 #### 实时语音房间
 > 函数原型
 ```
-ITMGContext EnterRoom(int relationId, string controlRole, byte[] authBuffer)
+ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    	|房间号，大于等于六位的整数	|
-| controlRole    	|string 	|角色名称，按照需求设置		|
-| authBuffer    	|Byte[]  	|鉴权数据					|
+| relationId		|int    		|房间号，大于等于六位的整数	|
+| roomType 			|ITMG_ROOM_TYPE	|房间音频类型				|
+| authBuffer    	|Byte[]  		|鉴权数据					|
+
+|ITMG_ROOM_TYPE     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+
 > 示例代码  
 ```
-ITMGContext.GetInstance().EnterRoom(roomId, role, authBuffer);
+ITMGContext.GetInstance().EnterRoom(roomId,ITMG_ROOM_TYPE_FLUENCY, authBuffer);
 ```
 
 #### 小队语音房间
@@ -60,19 +66,19 @@ ITMGContext.GetInstance().EnterRoom(roomId, role, authBuffer);
 
 > 函数原型
 ```
-ITMGContext  EnterTeamRoom(int relationId, string controlRole, byte[] authBuffer,int teamId, int audioMode)
+ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    	|房间号									|
-| controlRole    	|string 	|角色名称，按照需求设置					|
-| authBuffer    	|Byte[] 	|鉴权数据								|
-| teamId    		|int    	|加入的小队语音队伍标识码（不能为 0 ）	|
-| audioMode    	|int    	|0 代表全局语音，1 代表小队语音			|
+| relationId		|int    		|房间号									|
+| roomType 			|ITMG_ROOM_TYPE	|房间音频类型							|
+| authBuffer    	|Byte[] 		|鉴权数据								|
+| teamId    		|int    		|加入的小队语音队伍标识码（不能为 0 ）	|
+| audioMode    		|int    		|0 代表全局语音，1 代表小队语音			|
 
 > 示例代码  
 ```
-ITMGContext.GetInstance().EnterTeamRoom(roomId, role, authBuffer,1000,1);
+ITMGContext.GetInstance().EnterTeamRoom(roomId,ITMG_ROOM_TYPE_FLUENCY, authBuffer,1000,1);
 ```
 
 
