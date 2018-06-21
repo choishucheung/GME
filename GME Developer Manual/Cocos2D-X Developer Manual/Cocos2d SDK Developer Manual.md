@@ -29,6 +29,7 @@
 |EnterRoom	 						|进房 
 |EnableMic	 						|开麦克风
 |EnableSpeaker	 					|开扬声器
+
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
 
@@ -42,7 +43,7 @@
 |Uninit    				       		|反初始化 GME 
 |GenAuthBuffer    					|初始化鉴权
 
-|SetDefaultAudienceAudioCategory 	|设置后台
+
 ### 准备工作
 接入 GME 首先需要引入头文件 tmg_sdk.h，头文件类继承 ITMGDelegate 以进行消息的传递及回调。
 > 示例代码  
@@ -76,7 +77,7 @@ context->TMGDelegate(this);
 class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
 {
 public:
-	void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data);
+	void OnEvent(ITMG_MAIN_EVENT_TYPE eventType, const char* data);
 ｝
 
 //TMGTestScene.cpp:
@@ -132,6 +133,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 | ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id	|{"file_id":"","filepath":"","result":0}
 
 ### 初始化 SDK
+
 参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md)。
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 初始化 SDK 之后才可以进房。
@@ -152,10 +154,11 @@ ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 #define SDKAPPID3RD "1400035750"
 cosnt char* openId="10000";
 ITMGContext* context = ITMGContextGetInstance();
-context->SetAppInfo(SDKAPPID3RD, openId);
+context->Init(SDKAPPID3RD, openId);
 ```
 
 ### 系统回调触发
+
 通过在 update 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
 
@@ -164,16 +167,10 @@ class ITMGContext {
 protected:
     virtual ~ITMGContext() {}
     
-public:
-	//Destroy TMGSDK, make sure to release SDK after use.
-    	virtual void Destroy() = 0;
-	//Poll
-    	virtual void Poll()= 0;
-	//Pause
-	virtual int Pause() = 0;
-	//Resume
-    	virtual int Resume() = 0;
+public:    	
+	virtual void Poll()= 0;
 }
+
 ```
 >示例代码
 ```
@@ -184,13 +181,15 @@ void update(float delta);
 }
 
 //代码实现
-void TMGTestScene::update(float delta){
+void TMGTestScene::update(float delta)
+{
     ITMGContextGetInstance()->Poll();
 }
 ```
 
 
 ### 系统暂停
+
 当系统发生 Pause 事件时，需要同时通知引擎进行 Pause。
 > 函数原型
 
@@ -205,21 +204,19 @@ ITMGContext int Pause()
 ```
 ITMGContext  int Resume()
 ```
-
-
-
-
 ### 反初始化 SDK
 反初始化 SDK，进入未初始化状态。
-> 函数原型
 
+> 函数原型 
 ```
 ITMGContext int Uninit()
+
 ```
-
-
-
-
+> 示例代码  
+```
+ITMGContext* context = ITMGContextGetInstance();
+context->Uninit();
+```
 
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
@@ -253,7 +250,6 @@ QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, exp
 ```
 
 
-
 ## 设置信息相关接口
 
 
@@ -271,8 +267,7 @@ ITMGContext virtual const char* GetSDKVersion()
 ```
 > 示例代码  
 ```
-ITMGContext* context = ITMGContextGetInstance();
-context->GetSDKVersion;
+ITMGContextGetInstance()->GetSDKVersion;
 ```
 
 ### 设置打印日志等级
@@ -319,8 +314,6 @@ ITMGContext* context = ITMGContextGetInstance();
 context->SetLogPath(logDir);
 ```
 
-
-
 ## 实时语音房间事件接口
 初始化之后，SDK 调用进房后进去了房间，才可以进行实时语音通话。
 
@@ -356,6 +349,7 @@ ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, cons
 | ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
 | ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
 | ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+
 > 示例代码  
 
 ```
@@ -365,7 +359,7 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 
 #### 小队语音房间
-详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 > 函数原型
 ```
 ITMGContext virtual void EnterTeamRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
@@ -378,6 +372,7 @@ ITMGContext virtual void EnterTeamRoom(int relationId, ITMG_ROOM_TYPE roomType, 
 | buffLen   			|int   	|鉴权码长度											|
 | teamId    		|int    	|加入的小队语音队伍标识码（不能为 0 ）	|
 | audioMode    	|int    	|0 代表全局语音，1 代表小队语音			|
+
 
 |ITMG_ROOM_TYPE     	|含义|参数|
 | ------------- |------------ | ---- |
@@ -511,8 +506,6 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data) {
 	 }
 }
 ```
-
-
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，其中 data 包含两个信息，event_id 及 user_list，在 OnEvent 函数中需要对信息 event_id 进行判断。
