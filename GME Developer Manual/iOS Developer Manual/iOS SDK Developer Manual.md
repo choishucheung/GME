@@ -118,7 +118,7 @@ _context.TMGDelegate =self;
 | ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id				|{"file_id":"","filepath":"","result":0}
 
 ### 初始化 SDK
-参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md)。
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 初始化 SDK 之后才可以进房。
 > 函数原型
@@ -165,7 +165,7 @@ ITMGContext -(void)Uninit;
 
 
 ### 实时语音鉴权信息
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 该接口返回值为 NSData 类型。
@@ -1202,7 +1202,7 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 
 
 ### 离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
 > 函数原型  
 
