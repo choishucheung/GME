@@ -28,13 +28,11 @@ SDK 支持在 iOS7.0 及以上系统上运行。
 需要根据情况在 Xcode 的 Link Binary With Libraries 里面加上下面的依赖库，并设置 Framework Search Paths 指向 SDK 所在目录，如图所示：  
 
 ![image](Image/i3.png)
-GME 里面有三个 Framework，如下：
+
+GME 里面有两个 Framework，如下：
 >TMG.framework：
 
 音视频的 SDK，必选。
->QAVSDKAuthBuffer.framework：
-
-用来生成语音房间权限加密串的 SDK，正式部署的时候可以部署在后台，则不需要这个 SDK。
 >QAVSDKTlsSig.framework：
 
 用来生成 PTT（离线语音） 加密验证串的 SDK，如果没有使用 PTT（离线语音） 可以不设置。
