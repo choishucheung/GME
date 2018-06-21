@@ -2,11 +2,50 @@
 
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Android 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Android 开发的接入技术文档。
 
-## SDK初始化  
+## 目录
+[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-### 初始化
-通过 TMGContext 完成初始化。    
+[设置信息相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E8%AE%BE%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
+[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+
+[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+
+[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[离线语音](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
+
+## 使用流程图
+![image](Image/i0.png)
+### 使用 GME 中，会有以下几个重要接口
+
+|重要接口     | 接口含义   
+| ------------- |:-------------:|
+|Init    				       			|初始化 GME 
+|GenAuthBuffer    					|初始化鉴权
+|EnterRoom	 						|进房 
+|EnableMic	 						|开麦克风
+|EnableSpeaker	 					|开扬声器
+
+
+
+## 初始化相关接口
+未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|Init    				       			|初始化 GME 
+|Poll    				       			|设置回调触发
+|Pause    				       		|系统暂停
+|Resume 				       		|系统恢复
+|Uninit    				       		|反初始化 GME 
+|GenAuthBuffer    					|初始化鉴权
+
+
+### 获取单例
+在使用语音功能时，需要首先获取 ITMGContext 对象。
 > 函数原型 
 
 ```
@@ -26,8 +65,7 @@ TMGContext.getInstance(this);
 ```
 
 ### 注册回调
-将回调函数注册给 SDK，用于接受回调的信息。
-首先需要声明一个回调函数。
+接口类采用 Delegate 方法用于向应用程序发送回调通知。将回调函数注册给 SDK，用于接受回调的信息。
 > 函数原型
 ```
 public abstract static class ITMGDelegate {
@@ -49,7 +87,7 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 | type    	|ITMGContext.ITMG_MAIN_EVENT_TYPE 	|回调的事件类型				|
 | data    	|Intent 消息类型  						|回调的相关信息，事件数据	|
 
-回调事件列表：
+>消息列表：
 
 |消息     | 消息代表的意义   
 | ------------- |:-------------:|
@@ -69,7 +107,7 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
 
-Data 列表：
+>Data 列表
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
@@ -115,64 +153,88 @@ ITMGContext public int SetTMGDelegate(ITMGDelegate delegate)
 TMGContext.GetInstance(this).SetTMGDelegate(itmgDelegate);
 ```
 
-### 设置基本信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
-此函数需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 Id，这个 Id 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
-> 函数原型 
+
+
+### 初始化 SDK
+参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md)。
+此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+初始化 SDK 之后才可以进房。
+> 函数原型
+
 ```
-ITMGContext public int SetAppInfo(String sdkAppId, String openID)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码			|
-| openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于10000的数字类型|
-> 示例代码  
-```
-ITMGContext.GetInstance(this).SetAppInfo(sdkAppId, identifier);
+ITMGContext public int Init(String sdkAppId, String openID)
 ```
 
-### 设置版本信息
-设置版本信息，用于查 Log 信息及 Bug 时使用。方便后台统计, 策略调整等（不设置不影响功能）。
-> 函数原型
-```
-ITMGContext public void SetAppVersion(String sAppVersion)
-```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| sAppVersion    |String  |版本号|
-> 示例代码  
+| sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码				|
+| openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于 10000 的数字类型|
+
+> 示例代码 
+
+
 ```
-ITMGContext.GetInstance(this).SetAppVersion(appVersion);
+ITMGContext.GetInstance(this).Init(sdkAppId, identifier);
+```
+### 系统回调触发
+通过在 update 里面周期的调用 Poll 可以触发事件回调。
+> 函数原型
+
+```
+ITMGContext int Poll()
+```
+> 示例代码
+```
+ITMGContext.GetInstance(this).Poll();
 ```
 
-### 获取版本号
-获取 SDK 版本号，用于分析。
+### 系统暂停
+当系统发生 Pause 事件时，需要同时通知引擎进行 Pause。
 > 函数原型
+
 ```
-ITMGContext public void GetSDKVersion()
+ITMGContext public int Pause()
 ```
-> 示例代码  
+
+### 系统恢复
+当系统发生 Resume 事件时，需要同时通知引擎进行 Resume。
+> 函数原型
+
 ```
-ITMGContext.GetInstance(this).GetSDKVersion();
+ITMGContext  public int Resume()
+```
+
+
+
+### 反初始化 SDK
+通过在 update 里面周期的调用 Poll 可以触发事件回调。
+> 函数原型
+
+```
+ITMGContext int Uninit()
+```
+> 示例代码
+```
+ITMGContext.GetInstance(this).Uninit();
 ```
 
 ### 实时语音鉴权信息
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
+接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
-该函数返回值为 Byte[] 类型。
+该接口返回值为 Byte[] 类型。
 > 函数原型
 ```
 AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   	|要加入的房间名							|
-| identifier    	|String   |用户标识								|
-| key    			|string   	|来自腾讯云控制台的密钥					|
-| expTime    		|int   	|authBuffer 超时时间						|
-| authBits    		|int    	|权限									|
+| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
+| roomId    		|int   	|要加入的房间名				|
+| identifier    	|String |用户标识				|
+| key    		|string |来自腾讯云控制台的密钥			|
+| expTime    		|int   	|authBuffer 超时时间			|
+| authBits    		|int    |权限					|
 
 >关于权限  
 >
@@ -185,23 +247,87 @@ long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
 byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
 ```
 
-### 设置最大混音路数
-最后是设置最大混音路数（同时听到多少人讲话），在进房前调用，不调用默认为 6 路混音。
+
+
+## 设置信息相关接口
+
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|GetSDKVersion   	|获取版本号
+|SetLogLevel   		|设置打印日志等级
+|SetLogPath 		|设置打印日志路径
+### 获取版本号
+获取 SDK 版本号，用于分析。
 > 函数原型
 ```
-ITMGContext void SetRecvMixStreamCount(int nCount)
+ITMGContext public void GetSDKVersion()
+```
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetSDKVersion();
+```
+
+### 设置打印日志等级
+用于设置打印日志等级。
+> 函数原型
+```
+ITMGContext int SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
+```
+
+
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logLevel    		|int   		|打印日志级别		|
+| enableWrite    	|bool   				|是否写文件，默认为是	|
+| enablePrint    	|bool   				|是否写控制台，默认为是	|
+
+
+>ITMG_LOG_LEVEL 对照表
+
+|ITMG_LOG_LEVEL|意义|
+| -------------------------------	|----------------------	|
+|TMG_LOG_LEVEL_NONE=0		|不打印日志			|
+|TMG_LOG_LEVEL_ERROR=1		|打印错误日志		|
+|TMG_LOG_LEVEL_INFO=2			|打印提示日志		|
+|TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志	|
+|TMG_LOG_LEVEL_VERBOSE=4		|打印高频日志		|
+> 示例代码  
+```
+ITMGContext.GetInstance(this).SetLogLevel(1,true,true);
+```
+
+
+
+### 设置打印日志路径
+用于设置打印日志路径。
+> 函数原型
+```
+ITMGContext int SetLogPath(String logDir)
 ```
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| nCount    |int   |混音路数，默认为6|
+| logDir    		|String   		|路径|
+
 > 示例代码  
 ```
-IQAVContext.GetInstance(this).SetRecvMixStreamCount(nCount);
+ITMGContext.GetInstance(this).SetLogPath(path);
 ```
 
-## 实时语音房间事件接口
 
+## 实时语音房间事件接口
+初始化之后，SDK 调用进房后进去了房间，才可以进行实时语音通话。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|EnterRoom   		|加入房间
+|IsRoomEntered   	|是否已经进入房间
+|ExitRoom 			|退出房间
+|ChangeRoomType 	|修改用户房间音频类型
+|GetRoomType 		|获取用户房间音频类型
+|GetQualityTips 		|获取诊断信息
 
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
@@ -375,12 +501,6 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
 			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
 		    default:
 			    break;
  		    }
@@ -400,12 +520,30 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 ```
 
 ## 实时语音音频接口
+初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
 
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|PauseAudio    				       	|暂停音频引擎
+|ResumeAudio    				      	|恢复音频引擎
+|AddAudioBlackList    				|音频黑名单
+|RemoveAudioBlackList    			|音频黑名单
+|EnableMic    						|开关麦克风
+|GetMicState    						|获取麦克风状态
+|GetMicLevel    						|获取实时麦克风音量
+|SetMicVolume    					|设置麦克风音量
+|GetMicVolume    					|获取麦克风音量
+|EnableSpeaker    					|开关扬声器
+|GetSpeakerState    					|获取扬声器状态
+|GetSpeakerLevel    					|获取实时扬声器音量
+|SetSpeakerVolume    				|设置扬声器音量
+|GetSpeakerVolume    				|获取扬声器音量
+|EnableLoopBack    					|开关耳返
 ### 暂停音频引擎的采集和播放
 调用此接口暂停音频引擎的采集和播放，只在进房后有效。
-在 EnterRoom 函数调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。
+在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。
 注意：调用 EnableMic(false) 无法释放麦克风占用。
-如果确实需要释放麦克风，请调用 PauseAudio 函数。调用 PauseAudio 函数后会整个暂停引擎，调用 ResumeAudio 函数可恢复音频采集。
+如果确实需要释放麦克风，请调用 PauseAudio 接口。调用 PauseAudio 接口后会整个暂停引擎，调用 ResumeAudio 接口可恢复音频采集。
 > 函数原型  
 ```
 ITMGContext ITMGAudioCtrl public int PauseAudio()
@@ -426,22 +564,37 @@ ITMGContext ITMGAudioCtrl public int ResumeAudio()
 ITMGContext.GetInstance(this).GetAudioCtrl().ResumeAudio();
 ```
 
-### 开启、关闭音频数据黑名单逻辑
-开启黑名单时每次调用黑名单函数，黑名单将被重置为新的成员列表，而不是累加。需要定制所需接收的音频数据才调用，不调用则默认接收房间内所有音频数据。返回值为 0 表示调用失败。
+### 加入音频数据黑名单
+将某个 id 加入音频数据黑名单。返回值为 0 表示调用失败。
 > 函数原型  
+
 ```
-ITMGContext TMGRoom public int SetAudioBlackList(String[] identifierList)
+ITMGContext ITMGAudioCtrl AddAudioBlackList(String openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifierList    |String[]     |黑名单列表|
+| openId    |String      |需添加黑名单的id|
 > 示例代码  
+
 ```
-ITMGContext.GetInstance(this).GetRoom().SetAudioBlackList(users);
+ITMGContext.GetInstance(this).GetAudioCtrl().AddAudioBlackList(openId);
 ```
 
+### 移除音频数据黑名单
+将某个 id 移除音频数据黑名单。返回值为 0 表示调用失败。
+> 函数原型  
 
+```
+ITMGContext ITMGAudioCtrl RemoveAudioBlackList(String openId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| openId    |String      |需移除黑名单的id|
+> 示例代码  
 
+```
+ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
+```
 
 ### 麦克风开启关闭事件
 此接口用来开启及关闭麦克风。
@@ -639,9 +792,19 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 ```
 
 ## 实时语音伴奏相关接口
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|StartAccompany    				       |开始播放伴奏
+|StopAccompany    				   	|停止播放伴奏
+|IsAccompanyPlayEnd				|伴奏是否播放完毕
+|PauseAccompany    					|暂停播放伴奏
+|ResumeAccompany					|重新播放伴奏
+|SetAccompanyVolume 				|设置伴奏音量
+|GetAccompanyVolume				|获取播放伴奏的音量
+|SetAccompanyFileCurrentPlayedTimeByMs 				|设置播放进度
 
 ### 开始播放伴奏
-调用此函数开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
+调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
 注意：1、调用此 API，音量会重置。
 2、下行权限不能启用此 API。
 > 函数原型  
@@ -721,43 +884,14 @@ ITMGContext TMGAudioEffectCtrl public int ResumeAccompany()
 ITMGContext.GetInstance(this).GetAudioEffectCtrl().ResumeAccompany();
 ```
 
-### 设置自己是否可以听到伴奏
-此接口用于设置自己是否可以听到伴奏。
-> 函数原型  
 
-```
-ITMGContext TMGAudioEffectCtrl public int EnableAccompanyPlay(boolean enable)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| enable    |BOOL             |是否能听到|
-> 示例代码  
 
-```
-ITMGContext.GetInstance(this).GetAudioEffectCtrl().EnableAccompanyPlay(true);
-```
 
-### 设置他人是否也可以听到伴奏
-设置他人是否也可以听到伴奏。
-> 函数原型  
-
-```
-ITMGContext TMGAudioEffectCtrl public int EnableAccompanyLoopBack(boolean enable)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| enable    |BOOL             |是否能听到|
-
-> 示例代码  
-
-```
-ITMGContext.GetInstance(this).GetAudioEffectCtrl().EnableAccompanyLoopBack(true);
-```
 
 
 
 ### 设置伴奏音量
-设置 DB 音量，为线性音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0到200。
+设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 到 200。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public int SetAccompanyVolume(int vol)
@@ -783,7 +917,7 @@ string currentVol = "VOL: " + ITMGContext.GetInstance(this).GetAudioEffectCtrl()
 ```
 
 ### 获得伴奏播放进度
-以下两个函数用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
+以下两个接口用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public long GetAccompanyFileTotalTimeByMs()
@@ -813,8 +947,18 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetAccompanyFileCurrentPlayed
 
 
 ## 实时语音音效相关接口
-
-
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|PlayEffect    		|播放音效
+|PauseEffect    		|暂停播放音效
+|PauseAllEffects		|暂停所有音效
+|ResumeEffect    		|重新播放音效
+|ResumeAllEffects	|重新播放所有音效
+|StopEffect 			|停止播放音效
+|StopAllEffects		|停止播放所有音效
+|SetVoiceType 		|变声特效
+|GetEffectsVolume	|获取播放音效的音量
+|SetEffectsVolume 	|设置播放音效的音量
 
 
 ### 播放音效
@@ -976,13 +1120,25 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 
 
-## 离线语音接入
+## 离线语音
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|genSig    		|离线语音鉴权
+|SetMaxMessageLength    		|限制最大语音信息时长
+|StartRecording		|启动录音
+|StopRecording    		|停止录音
+|CancelRecording	|取消录音
+|UploadRecordedFile 			|上传语音文件
+|DownloadRecordedFile		|下载语音文件
+|PlayRecordedFile 		|播放语音
+|StopPlayFile	|停止播放语音
+|GetFileSize 	|语音文件的大小
+|GetVoiceFileDuration		|语音文件的时长
+|SpeechToText 		|翻译
 
 
-
-
-### 1.离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+### 离线语音技术接入初始化
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 。
 > 函数原型  
 ```
@@ -1120,7 +1276,7 @@ ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downlo
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | fileID    			|String                      |文件的url路径	|
-| downloadFilePath 	|String                      |文件的下载路径	|
+| downloadFilePath 	|String                      |文件的本地保存路径	|
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path);

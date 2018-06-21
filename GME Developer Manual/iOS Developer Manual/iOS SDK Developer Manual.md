@@ -143,7 +143,7 @@ ITMGContext -(void)Init:(NSString*)sdkAppID openID:(NSString*)openID
 > 函数原型
 
 ```
-ITMGContext -(void)Poll;
+ITMGContext -(void)Poll
 ```
 > 示例代码
 ```
@@ -155,7 +155,7 @@ ITMGContext -(void)Poll;
 > 函数原型
 
 ```
-ITMGContext -(void)Uninit;
+ITMGContext -(void)Uninit
 ```
 > 示例代码
 ```
@@ -571,7 +571,7 @@ ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSString*)identifier
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifier    |NSString      |黑名单列表|
+| identifier    |NSString      |需添加黑名单的id|
 > 示例代码  
 
 ```
@@ -587,7 +587,7 @@ ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifier    |NSString      |黑名单列表|
+| identifier    |NSString      |需移除黑名单的id|
 > 示例代码  
 
 ```
