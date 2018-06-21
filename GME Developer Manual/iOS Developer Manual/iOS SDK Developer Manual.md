@@ -2,19 +2,19 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 iOS 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 iOS 开发的接入技术文档。
 
 ## 目录
-[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#sdk%E5%88%9D%E5%A7%8B%E5%8C%96)
+[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[设置信息相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+[设置信息相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E8%AE%BE%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
 
-[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
 
-[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[离线语音](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3%E6%8E%A5%E5%85%A5)
+[离线语音](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
 
 ## 使用流程图
 ![image](Image/i0.png)
@@ -23,6 +23,7 @@
 ### 使用 GME 中，会有以下几个重要接口：
 
 |重要接口     | 接口含义   
+| ------------- |:-------------:|
 |Init    				       			|初始化 GME 
 |GenAuthBuffer    					|初始化鉴权
 |SetDefaultAudienceAudioCategory 	|设置后台
@@ -481,14 +482,6 @@ ITMGContext GetRoom -(int)GetRoomType
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
 			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
-		    default:
-			    break;
  		    }
 		break;
 		}
@@ -808,6 +801,17 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableLoopBack:(BOOL)enable
 
 
 ## 实时语音伴奏相关接口
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|StartAccompany    				       |开始播放伴奏
+|StopAccompany    				   	|停止播放伴奏
+|IsAccompanyPlayEnd				|伴奏是否播放完毕
+|PauseAccompany    					|暂停播放伴奏
+|ResumeAccompany					|重新播放伴奏
+|SetAccompanyVolume 				|设置伴奏音量
+|GetAccompanyVolume				|获取播放伴奏的音量
+|SetAccompanyFileCurrentPlayedTimeByMs 				|设置播放进度
+
 
 ### 开始播放伴奏
 调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
@@ -998,6 +1002,18 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)SetAccompanyFileCurrentPlayedTimeB
 ```
 
 ## 实时语音音效相关接口
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|PlayEffect    		|播放音效
+|PauseEffect    		|暂停播放音效
+|PauseAllEffects		|暂停所有音效
+|ResumeEffect    		|重新播放音效
+|ResumeAllEffects	|重新播放所有音效
+|StopEffect 			|停止播放音效
+|StopAllEffects		|停止播放所有音效
+|SetVoiceType 		|变声特效
+|GetEffectsVolume	|获取播放音效的音量
+|SetEffectsVolume 	|设置播放音效的音量
 
 
 ### 播放音效
@@ -1169,6 +1185,22 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 ```
 
 ## 离线语音
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|genSig    		|离线语音鉴权
+|SetMaxMessageLength    		|限制最大语音信息时长
+|StartRecording		|启动录音
+|StopRecording    		|停止录音
+|CancelRecording	|取消录音
+|UploadRecordedFile 			|上传语音文件
+|DownloadRecordedFile		|下载语音文件
+|PlayRecordedFile 		|播放语音
+|StopPlayFile	|停止播放语音
+|GetFileSize 	|语音文件的大小
+|GetVoiceFileDuration		|语音文件的时长
+|SpeechToText 		|翻译
+
+
 ### 离线语音技术接入初始化
 初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
