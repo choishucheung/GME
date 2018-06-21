@@ -151,7 +151,7 @@ ITMGContext -(void)Poll
 ```
 
 ### 反初始化 SDK
-通过在 update 里面周期的调用 Poll 可以触发事件回调。
+反初始化 SDK，进入未初始化状态。
 > 函数原型
 
 ```
@@ -165,7 +165,7 @@ ITMGContext -(void)Uninit
 
 
 ### 实时语音鉴权信息
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 该接口返回值为 NSData 类型。
@@ -308,7 +308,7 @@ ITMGContext -(void)SetLogPath:(NSString*)logDir
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
+>2、在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 
@@ -424,9 +424,7 @@ ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
 ```
 ITMGContext GetRoom -(int)GetRoomType
 ```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| nRoomType    |int    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
+
 
 > 示例代码
 
@@ -593,6 +591,7 @@ ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 ```
 [[[ITMGContext GetInstance]GetAudioCtrl ] RemoveAudioBlackList[id]];
 ```
+
 
 
 ### 麦克风开启关闭事件

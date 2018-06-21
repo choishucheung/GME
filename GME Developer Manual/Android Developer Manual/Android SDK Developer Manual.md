@@ -207,7 +207,7 @@ ITMGContext  public int Resume()
 
 
 ### 反初始化 SDK
-通过在 update 里面周期的调用 Poll 可以触发事件回调。
+反初始化 SDK，进入未初始化状态。
 > 函数原型
 
 ```
@@ -219,7 +219,7 @@ ITMGContext.GetInstance(this).Uninit();
 ```
 
 ### 实时语音鉴权信息
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 该接口返回值为 Byte[] 类型。
@@ -237,8 +237,7 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 | authBits    		|int    |权限					|
 
 >关于权限  
->
-AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用，AUTH_BITS_RECV 代表下行权限，建议纯听众、观众使用，不能使用startAccompany。
+>ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限。
 
 > 示例代码  
 ```
@@ -333,7 +332,7 @@ ITMGContext.GetInstance(this).SetLogPath(path);
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
+>2、在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 ```
@@ -539,6 +538,7 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 |SetSpeakerVolume    				|设置扬声器音量
 |GetSpeakerVolume    				|获取扬声器音量
 |EnableLoopBack    					|开关耳返
+
 ### 暂停音频引擎的采集和播放
 调用此接口暂停音频引擎的采集和播放，只在进房后有效。
 在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。
