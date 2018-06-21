@@ -553,35 +553,35 @@ ITMGContext GetAudioCtrl -(QAVResult)ResumeAudio
 ```
 
 ### 加入音频数据黑名单
-加入音频数据黑名单。返回值为 0 表示调用失败。
+将某个 id 加入音频数据黑名单。返回值为 0 表示调用失败。
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSArray*)identifierList
+ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSString*)identifier
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifierList    |NSArray      |黑名单列表|
+| identifier    |NSString      |黑名单列表|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetAudioCtrl ] GetQualityTips];
+[[[ITMGContext GetInstance]GetAudioCtrl ] AddAudioBlackList[id]];
 ```
 
-### 加入音频数据黑名单
-加入音频数据黑名单。返回值为 0 表示调用失败。
+### 移除音频数据黑名单
+将某个 id 移除音频数据黑名单。返回值为 0 表示调用失败。
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSArray*)identifierList
+ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifierList    |NSArray      |黑名单列表|
+| identifier    |NSString      |黑名单列表|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetAudioCtrl ] GetQualityTips];
+[[[ITMGContext GetInstance]GetAudioCtrl ] RemoveAudioBlackList[id]];
 ```
 
 
@@ -940,7 +940,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyLoopBack:(BOOL)enab
 ```
 
 ### 设置伴奏音量
-设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0-200。
+设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 到 200。
 > 函数原型  
 
 ```
