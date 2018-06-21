@@ -249,8 +249,18 @@ ITMGContext  -(NSString*)GetSDKVersion
 用于设置打印日志等级。
 > 函数原型
 ```
-ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel
+ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel (BOOL)enableWrite (BOOL)enablePrint
 ```
+
+
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logLevel    		|ITMG_LOG_LEVEL   		|打印日志级别		|
+| enableWrite    	|BOOL   				|是否写文件，默认为是	|
+| enablePrint    	|BOOL   				|是否写控制台，默认为是	|
+
+
 >ITMG_LOG_LEVEL 对照表
 
 |ITMG_LOG_LEVEL|意义|
@@ -262,7 +272,7 @@ ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel
 |TMG_LOG_LEVEL_VERBOSE	|打印高频日志		|
 > 示例代码  
 ```
-[[ITMGContext GetInstance] SetLogLevel:TMG_LOG_LEVEL_NONE];
+[[ITMGContext GetInstance] SetLogLevel:TMG_LOG_LEVEL_NONE YES YES];
 ```
 
 ### 设置打印日志路径
@@ -1347,7 +1357,7 @@ ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePat
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | fileID    			|NSString                      |文件的url路径		|
-| downloadFilePath 	|NSString                      |文件的下载路径	|
+| downloadFilePath 	|NSString                      |文件的本地保存路径	|
 > 示例代码  
 
 ```
