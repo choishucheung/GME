@@ -39,8 +39,8 @@
 | ------------- |:-------------:|
 |Init    				       			|初始化 GME 
 |Poll    				       			|设置回调触发
-|Pause    				       			|系统暂停
-|Resume 				       			|系统恢复
+|Pause    				       		|系统暂停
+|Resume 				       		|系统恢复
 |Uninit    				       		|反初始化 GME 
 |GenAuthBuffer    					|初始化鉴权
 ### 初始化 SDK
@@ -113,10 +113,10 @@ QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, stri
 | ------------- |:-------------:|-------------
 | appId    	|int   	|来自腾讯云控制台的 SdkAppId 号码	|
 | roomId    	|int   	|要加入的房间名				|
-| identifier 	|string |用户标识				|
-| key    	|string |来自腾讯云控制台的密钥			|
+| identifier 	|string	|用户标识				|
+| key    		|string 	|来自腾讯云控制台的密钥			|
 | expTime   	|int  	|authBuffer 超时时间			|
-| authBits    	|uint   |权限					|
+| authBits    	|uint   	|权限					|
 
 >关于权限  
 >ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限。
@@ -153,11 +153,19 @@ IQAVContext.GetInstance().GetVersion();
 
 
 ### 设置打印日志等级
-用于设置打印日志等级。
+用于设置打印日志等级。默认级别为 LOG_LEVEL_ERROR。
 > 函数原型
 ```
-ITMGContext  SetLogLevel(int logLevel)
+ITMGContext  SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
 ```
+
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logLevel    		|int   		|打印日志级别			|
+| enableWrite    	|bool   		|是否写文件，默认为是	|
+| enablePrint    	|bool   		|是否写控制台，默认为是	|
+
 >ITMG_LOG_LEVEL 对照表
 
 |ITMG_LOG_LEVEL|意义|
@@ -165,11 +173,11 @@ ITMGContext  SetLogLevel(int logLevel)
 |TMG_LOG_LEVEL_NONE		|不打印日志			|
 |TMG_LOG_LEVEL_ERROR		|打印错误日志		|
 |TMG_LOG_LEVEL_INFO		|打印提示日志		|
-|TMG_LOG_LEVEL_DEBUG		|打印开发调试日志	|
-|TMG_LOG_LEVEL_VERBOSE		|打印高频日志		|
+|TMG_LOG_LEVEL_DEBUG	|打印开发调试日志	|
+|TMG_LOG_LEVEL_VERBOSE	|打印高频日志		|
 > 示例代码  
 ```
-IQAVContext.GetInstance().SetLogLevel(TMG_LOG_LEVEL_NONE);
+IQAVContext.GetInstance().SetLogLevel(TMG_LOG_LEVEL_NONE,true,true);
 ```
 
 ### 设置打印日志路径
@@ -1206,7 +1214,7 @@ IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath)
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | fileID    |string                       |文件的url路径|
-| downloadFilePath    |string                       |文件的下载路径|
+| downloadFilePath    |string                       |文件的本地保存路径|
 > 示例代码  
 ```
 IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath);
