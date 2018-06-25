@@ -4,15 +4,15 @@
 
 使用GME 有以下五个步骤：
 
-[1、在腾讯云后台新建 GME 服务](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E6%96%B0%E5%BB%BA%E6%9C%8D%E5%8A%A1)
+[1、在腾讯云后台新建 GME 服务](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E6%96%B0%E5%BB%BA%E6%9C%8D%E5%8A%A1)
 
-[2、下载对应版本的客户端SDK](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E4%B8%8B%E8%BD%BD-sdk)
+[2、下载对应版本的客户端SDK](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E4%B8%8B%E8%BD%BD-sdk)
 
-[3、参照接入API文档， 将SDK移植到工程](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E7%9B%B8%E5%85%B3-sdk-%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3)
+[3、参照接入API文档， 将SDK移植到工程](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E7%9B%B8%E5%85%B3-sdk-%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3)
 
-[4、查看日常运营后台统计](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
+[4、查看日常运营后台统计](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
 
-[5、接入过程中特殊问题自主排除与反馈](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E7%89%B9%E6%AE%8A%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86)
+[5、接入过程中特殊问题自主排除与反馈](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E7%89%B9%E6%AE%8A%E9%97%AE%E9%A2%98%E5%A4%84%E7%90%86)
 
 
 
@@ -60,7 +60,8 @@
 - 只有创建游戏的账号、主账号、全局协作者可以操作【重置秘钥】。
 - 页面修改密钥后，15 分钟 ~ 1 小时内生效，不建议频繁更换。
 - 点击【下载公私钥】可以下载此应用离线语音相应的公私钥。
-#### 鉴权详细使用请参考游戏多媒体引擎密钥说明文档。
+#### 详细参见[游戏多媒体引擎密钥使用文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。
+
 
 ![image](Image/j8.png)
 
@@ -79,6 +80,7 @@
 接入 SDK 需要使用腾讯云提供的 appid 及相关权限密钥。即应用管理列表中的 AppID 及 应用设置中的鉴权信息模块。
 - 接入实时语音时候会使用鉴权信息模块中的权限密钥。
 - 接入离线语音时候会使用鉴权信息模块中的下载的公私钥。
+详细参见[游戏多媒体引擎密钥使用文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。
 
 更多平台相关配置请参考各平台工程配置文档。
 
@@ -90,32 +92,32 @@ Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人
 ## 相关 SDK 技术文档
 #### Unity 引擎
 - ##### *支持平台:Android, iOS*
-- [Unity 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
+- [Unity 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
 
-- [Unity 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
+- [Unity 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
 
 #### Unreal Engine 引擎
 - ##### *支持平台:Android, iOS, Windows, MAC*
-- [Unreal Engine 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
+- [Unreal Engine 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
 
-- [Unreal Engine 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
+- [Unreal Engine 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
 
 #### Cocos2D 引擎
 - ##### *支持平台:Android, iOS*
-- [Cocos2D-X 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
+- [Cocos2D-X 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
 
-- [Cocos2D-X 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
+- [Cocos2D-X 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
 
 #### 原生应用
-- [PC（C++）开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
+- [PC（C++）开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
 
-- [iOS 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
+- [iOS 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
-- [iOS 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
+- [iOS 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
 
-- [Android 工程配置文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
+- [Android 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
 
-- [Android 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
+- [Android 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
 
 
 
@@ -153,5 +155,5 @@ Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人
 ![image](Image/j12.png)
 
 ## 特殊问题处理
-[腾讯云游戏多媒体引擎FAQ文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20FAQ%20Manual.md)    
-[错误码文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Error%20Code.md)
+[腾讯云游戏多媒体引擎FAQ文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20FAQ%20Manual.md)    
+[错误码文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Error%20Code.md)

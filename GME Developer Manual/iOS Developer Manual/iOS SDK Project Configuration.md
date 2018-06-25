@@ -13,7 +13,11 @@
 ### 3. 点击【下载】按钮。
 下载完的SDK资源解压后有以下几个部分：
 
-![image](Image/i2.png)
+|名称     | 意义   
+| ------------- |:-------------:|
+|AQVSDKTlsSig			|鉴权相关资源
+|TMGSDK_ios_audio  	|游戏多媒体引擎相关资源
+
 
 ## 系统要求
 SDK 支持在 iOS7.0 及以上系统上运行。
@@ -24,13 +28,11 @@ SDK 支持在 iOS7.0 及以上系统上运行。
 需要根据情况在 Xcode 的 Link Binary With Libraries 里面加上下面的依赖库，并设置 Framework Search Paths 指向 SDK 所在目录，如图所示：  
 
 ![image](Image/i3.png)
-GME 里面有三个 Framework，如下：
+
+GME 里面有两个 Framework，如下：
 >TMG.framework：
 
 音视频的 SDK，必选。
->QAVSDKAuthBuffer.framework：
-
-用来生成语音房间权限加密串的 SDK，正式部署的时候可以部署在后台，则不需要这个 SDK。
 >QAVSDKTlsSig.framework：
 
 用来生成 PTT（离线语音） 加密验证串的 SDK，如果没有使用 PTT（离线语音） 可以不设置。
@@ -46,3 +48,11 @@ Bitcode 需要工程依赖的所有类库同时支持，SDK 暂时还不支持 B
 如下图：  
 
 ![image](Image/i5.png)
+
+### 4.权限申请
+腾讯音视频引擎 iOS 平台所需要的隐私权限如下：
+
+|key     | 意义   
+| ------------- |:-------------:|
+|Required background modes    				       |允许后台运行
+|Microphone Usaeg Description   				|允许麦克风权限
