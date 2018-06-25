@@ -1,10 +1,49 @@
 ## 简介
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 iOS 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 iOS 开发的接入技术文档。
 
-## SDK初始化  
+## 目录
+[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[设置信息相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E8%AE%BE%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+
+[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+
+[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[离线语音](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
+
+## 使用流程图
+![image](Image/i0.png)
+
+
+### 使用 GME 中，会有以下几个重要接口：
+
+|重要接口     | 接口含义   
+| ------------- |:-------------:|
+|Init    				       			|初始化 GME 
+|GenAuthBuffer    					|初始化鉴权
+|SetDefaultAudienceAudioCategory 	|设置后台
+|EnterRoom	 						|进房 
+|EnableMic	 						|开麦克风
+|EnableSpeaker	 					|开扬声器
+
+## 初始化相关接口
+未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|Init    				       			|初始化 GME 
+|Poll    				       			|设置回调触发
+|Uninit    				       		|反初始化 GME 
+|GenAuthBuffer    					|初始化鉴权
+|SetDefaultAudienceAudioCategory 	|设置后台
 
 ### 获取单例
-GME 以单例的形式提供，所有调用都从 ITMGContext 开始。异步操作的结果或者内部状态的改变都通过 ITMGDelegate 传给应用。    
+在使用语音功能时，需要首先获取 ITMGContext 对象。
 > 函数原型
 
 ```
@@ -18,7 +57,7 @@ _context.TMGDelegate =self;
 ```
 
 ### 消息传递
-GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVENT_TYPE，消息内容为一个字典，不同的事件类型，消息内容也会不一样。
+接口类采用 Delegate 方法用于向应用程序发送回调通知，消息类型参考 ITMG_MAIN_EVENT_TYPE，消息内容为一个字典，不同的事件类型，消息内容也会不一样。
 > 函数原型
 
 ```
@@ -42,11 +81,11 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 |ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音视频房间消息
 |ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件
 |ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE				      	|切换角色消息
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			       |伴奏结束消息
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE					  	|房间成员更新消息
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		       |PTT 录音完成
@@ -59,32 +98,35 @@ GME 的消息通过 ITMGDelegate 传给应用，消息类型参考 ITMG_MAIN_EVE
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  		|{"error_info":"waiting timeout, please check your network","result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  		|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  		|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  		|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 		|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;  event_id		|{"event_id":1,"user_list":["0"]}
-| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  		|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  	|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  	|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  		|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id	|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;  event_id					|{"event_id":1,"user_list":["0"]}
+| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id				|{"file_id":"","filepath":"","result":0}
 
-### 设置 App 信息
-获取相关信息，由腾讯云控制台申请，详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+### 初始化 SDK
+参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md)。
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
+初始化 SDK 之后才可以进房。
 > 函数原型
 
 ```
-ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID openID:(NSString*)openID
+ITMGContext -(void)Init:(NSString*)sdkAppID openID:(NSString*)openID
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|NSString  |来自腾讯云控制台的 SdkAppId 号码				|
@@ -92,40 +134,38 @@ ITMGContext -(void)SetAppInfo:(NSString*)sdkAppID openID:(NSString*)openID
 > 示例代码  
 
 ```
-[[ITMGContext GetInstance] SetAppInfo:SDKAPPID3RD openID:_openId];
+[[ITMGContext GetInstance] Init:SDKAPPID3RD openID:_openId];
 ```
 
-### 设置版本信息
-设置版本信息，用于查 Log 信息及 Bug 时使用。方便后台统计, 策略调整等（不设置不影响功能）。
+
+### 系统回调触发
+通过在 update 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
 
 ```
-ITMGContext  -(void)SetAppVersion:(NSString*)appVersion
+ITMGContext -(void)Poll
 ```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| sAppVersion    |NSString  |版本号|
 > 示例代码
-
 ```
-[[ITMGContext GetInstance]SetAppVersion:appversion];
+[[ITMGContext GetInstance] Poll];
 ```
 
-### 获取版本号
-获取 SDK 版本号，用于分析。
+### 反初始化 SDK
+反初始化 SDK，进入未初始化状态。
 > 函数原型
 
 ```
-ITMGContext  -(NSString*)GetSDKVersion
+ITMGContext -(void)Uninit
 ```
-> 示例代码  
+> 示例代码
+```
+[[ITMGContext GetInstance] Uninit];
+```
 
-```
-[[ITMGContext GetInstance] GetSDKVersion];
-```
+
 
 ### 实时语音鉴权信息
-接下来是生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 >注意：在加入房间之前需要 AuthBuffer 作为参数。
 
 该接口返回值为 NSData 类型。
@@ -146,33 +186,17 @@ ITMGContext  -(NSString*)GetSDKVersion
 | authBits   	 	|uint64    	|权限									|
 
 >关于权限  
->ITMG_AUTH_BITS_ALL 代表拥有全部权限，建议实时用户、主播使用，ITMG_AUTH_BITS_RECV 代表下行权限，建议纯听众、观众使用，不能使用startAccompany。
+>ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限。
 
 > 示例代码  
 
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_ALL];
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
 ```
 
-### 设置最大混音路数
-最后是设置最大混音路数（同时听到多少人讲话），在进房前调用，不调用默认为 6 路混音。
-> 函数原型
-
-```
-ITMGContext -(void)SetRecvMixStreamCount:(int)count
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| nCount    |int   |混音路数，默认为 6|
-
-> 示例代码  
-
-```
-[[ITMGContext GetInstance]SetRecvMixStreamCount:count];
-```
 
 ### 设置后台播放声音
-设置后台播放声音，在进房前调用，进房后且处于观众状态时可用，即角色 roleType="4" "6" 或者 "audience" "Raudience" 时。
+设置后台播放声音，在进房前调用。
 同时，应用侧有如下两点需要注意：
 1、退后台时没有暂停音频引擎的采集和播放（即 PauseAudio），
 2、App 的 Info.plist 中，需要至少增加 key:Required background modes，string:App plays audio or streams audio/video using AirPlay。
@@ -195,29 +219,120 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 [[ITMGContext GetInstance]SetDefaultAudienceAudioCategory:ITMG_CATEGORY_AMBIENT];
 ```
 
+
+
+
+## 设置信息相关接口
+
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|GetSDKVersion   	|获取版本号
+|SetLogLevel   		|设置打印日志等级
+|SetLogPath 		|设置打印日志路径
+
+
+### 获取版本号
+获取 SDK 版本号，用于分析。
+> 函数原型
+
+```
+ITMGContext  -(NSString*)GetSDKVersion
+```
+> 示例代码  
+
+```
+[[ITMGContext GetInstance] GetSDKVersion];
+```
+
+### 设置打印日志等级
+用于设置打印日志等级。
+> 函数原型
+```
+ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel (BOOL)enableWrite (BOOL)enablePrint
+```
+
+
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logLevel    		|ITMG_LOG_LEVEL   		|打印日志级别		|
+| enableWrite    	|BOOL   				|是否写文件，默认为是	|
+| enablePrint    	|BOOL   				|是否写控制台，默认为是	|
+
+
+>ITMG_LOG_LEVEL 对照表
+
+|ITMG_LOG_LEVEL|意义|
+| -------------------------------	|----------------------	|
+|TMG_LOG_LEVEL_NONE		|不打印日志			|
+|TMG_LOG_LEVEL_ERROR		|打印错误日志		|
+|TMG_LOG_LEVEL_INFO		|打印提示日志		|
+|TMG_LOG_LEVEL_DEBUG	|打印开发调试日志	|
+|TMG_LOG_LEVEL_VERBOSE	|打印高频日志		|
+> 示例代码  
+```
+[[ITMGContext GetInstance] SetLogLevel:TMG_LOG_LEVEL_NONE YES YES];
+```
+
+### 设置打印日志路径
+用于设置打印日志路径。
+> 函数原型
+```
+ITMGContext -(void)SetLogPath:(NSString*)logDir
+```
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logDir    		|NSString   		|路径|
+
+> 示例代码  
+```
+[[ITMGContext GetInstance] SetLogPath:Path];
+```
+
+
 ## 实时语音房间事件接口
+初始化之后，SDK 调用进房后进去了房间，才可以进行实时语音通话。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|EnterRoom   		|加入房间
+|IsRoomEntered   	|是否已经进入房间
+|ExitRoom 			|退出房间
+|ChangeRoomType 	|修改用户房间音频类型
+|GetRoomType 		|获取用户房间音频类型
+|GetQualityTips 		|获取诊断信息
 
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 函数调用之前要先调用 SetAppInfo 函数及 SetAppVersion 函数进行相关信息的设置。
->关于角色的设置，在[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)中有介绍。
+>2、在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 
 ```
-ITMGContext   -(void)EnterRoom:(int) relationId controlRole:(NSString*)role authBuffer:(NSData*)authBuffer
+ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomID		|int    		|房间号 	|
-| controlRole    	|NSString    	|角色名称，按照需求设置，也可以询问接入技术人员获取|
+| relationId		|int    		|房间号 	|
+| roomType 		|int			|房间音频类型		|
 | authBuffer    	|NSData    	|鉴权码						|
+
+
+|音频类型     	|含义|参数|
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+
+
 > 示例代码  
 
 ```
-[[ITMGContext GetInstance] EnterRoom:_roomId controlRole:@"user" authBuffer:authBuffer];
+[[ITMGContext GetInstance] EnterRoom:_roomId roomType:_roomType authBuffer:authBuffer];
 ```
 
 ### 加入房间事件的回调
@@ -285,57 +400,61 @@ ITMGContext -(void)ExitRoom
 
 
 
-### 角色设置
-改变流控角色。该方法用于加入频道前设置用户角色，同时允许用户在加入频道后切换角色。
-默认自动建6个角色，分别为：”esports””Rhost””Raudience””Werewolf””host””audience”。详细的角色说明请见[游戏多媒体引擎角色说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual.md)。
-> 函数原型  
+### 修改用户房间音频类型
+此接口用于修改用户房间音频类型，结果参见回调事件，事件类型为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE。
 
+> 函数原型  
 ```
-ITMGContext GetRoom -(void)ChangeRole:(NSString*)role authBuffer:(NSData*)authBuffer
+ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| role    			|NSString     	|设置角色			|
-| authBuffer    	|NSData    	|鉴权需要重新设置	|
-
->注意
-流控角色意味着音视频编码参数的调整，所以需要再次调用音视频编码 API 重新设置鉴权（参考生成 AuthBuffer ）。
-ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要会影响其他人听到自己的音质,   不会改变其他人上行的音质。
-与房间无关,   房间没有角色概念,  房间可以理解为容器概念,  里面可以有各种音质的成员。
-
-角色分别代表的通话质量：
-
-|角色名称     | 适用场景         |关键特性|
-| ------------- |:-------------:|-------------
-| esports    	|适用于MOBA、竞技、射击类游戏     								|普通音质、极低延时	|
-| Rhost    	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Raudience	|适用于 MMORPG 类游戏的指挥模式，只有指挥主播可上麦     		|高流畅、低延时		|
-| Werewolf 	|适用于狼人杀、休闲游戏等										|高音质、网络抗性强	|
-| host  		|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
-| audience  	|适用于 MMORPG 类游戏的主播模式，主播可与玩家进行语音视频互动	|高音质、网络抗性强	|
+| nRoomType    |int    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
 
 > 示例代码
 
 ```
-[[[ITMGContext GetInstance]GetRoom ]ChangeRole:@"Playre"authBuffer:authBuffer];
+[[[ITMGContext GetInstance]GetRoom ]ChangeRoomType:_roomType];
 ```
 
-### 角色设置完成回调
-角色设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE，在 OnEvent 函数中对事件消息进行判断。
+### 获取用户房间音频类型
+此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+
+> 函数原型  
+```
+ITMGContext GetRoom -(int)GetRoomType
+```
+
+
+> 示例代码
+
+```
+[[[ITMGContext GetInstance]GetRoom ]GetRoomType];
+```
+
+### 房间类型完成回调
+房间类型设置完成后，回调的事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE，返回的参数为 result、error_info 及 new_room_type，new_room_type 代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|事件子类型     | 代表参数   |含义|
+| ------------- |:-------------:|-------------
+| ITMG_ROOM_CHANGE_EVENT_ENTERROOM		|1 	|表示在进房的过程中，自带的音频类型与房间不符合，被修改为所进入房间的音频类型	|
+| ITMG_ROOM_CHANGE_EVENT_START			|2	|表示已经在房间内，音频类型开始切换（例如调用 ChangeRoomType 接口后切换音频类型 ）|
+| ITMG_ROOM_CHANGE_EVENT_COMPLETE		|3	|表示已经在房间，音频类型切换完成|
+| ITMG_ROOM_CHANGE_EVENT_REQUEST			|4	|表示房间成员调用 ChangeRoomType 接口，请求切换房间音频类型|	
+
+
 > 示例代码  
-
 ```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
+-(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data {
+	NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE：
-        {
-	    //角色设置完成
-        }
-            break;
+ 		case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+			//进行处理
+	 }
     }
 }
 ```
+
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，包含两个信息，event_id 及 endpoints，在 OnEvent 函数中对事件消息进行判断。
@@ -346,8 +465,6 @@ ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要
 |ITMG_EVENT_ID_USER_EXIT    				|有成员退出房间			|应用侧维护成员列表		|
 |ITMG_EVENT_ID_USER_HAS_AUDIO    		|有成员发送音频包		|应用侧维护通话成员列表	|
 |ITMG_EVENT_ID_USER_NO_AUDIO    			|有成员停止发送音频包	|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO	|有成员开启摄像头		|应用侧维护通话成员列表	|
-|ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO	|有成员关闭摄像头		|应用侧维护通话成员列表	|
 
 > 示例代码  
 
@@ -373,14 +490,6 @@ ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员关闭麦克风
 			    break;
-		    case ITMG_EVENT_ID_USER_HAS_CAMERA_VIDEO:
-			    //有成员开启摄像头
-			    break;
-		    case ITMG_EVENT_ID_USER_NO_CAMERA_VIDEO:
-			    //有成员关闭摄像头
-			    break;
-		    default:
-			    break;
  		    }
 		break;
 		}
@@ -393,7 +502,7 @@ ChangeRole 只会改变自己的角色,  不可以改变其他人角色，主要
 > 函数原型  
 
 ```
-GetAudioEffectCtrl GetRoom -(NSString*)GetQualityTips
+ITMGContext GetRoom -(NSString*)GetQualityTips
 ```
 > 示例代码  
 
@@ -402,6 +511,25 @@ GetAudioEffectCtrl GetRoom -(NSString*)GetQualityTips
 ```
 
 ## 实时语音音频接口
+初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|PauseAudio    				       	|暂停音频引擎
+|ResumeAudio    				      	|恢复音频引擎
+|AddAudioBlackList    				|音频黑名单
+|RemoveAudioBlackList    			|音频黑名单
+|EnableMic    						|开关麦克风
+|GetMicState    						|获取麦克风状态
+|GetMicLevel    						|获取实时麦克风音量
+|SetMicVolume    					|设置麦克风音量
+|GetMicVolume    					|获取麦克风音量
+|EnableSpeaker    					|开关扬声器
+|GetSpeakerState    					|获取扬声器状态
+|GetSpeakerLevel    					|获取实时扬声器音量
+|SetSpeakerVolume    				|设置扬声器音量
+|GetSpeakerVolume    				|获取扬声器音量
+|EnableLoopBack    					|开关耳返
 
 ### 暂停音频引擎的采集和播放
 调用此接口暂停音频引擎的采集和播放，只在进房后有效。
@@ -432,21 +560,39 @@ ITMGContext GetAudioCtrl -(QAVResult)ResumeAudio
 [[[ITMGContext GetInstance] GetAudioCtrl] ResumeAudio];
 ```
 
-### 开启、关闭音频数据黑名单逻辑
-开启黑名单时每次调用黑名单接口，黑名单将被重置为新的成员列表，而不是累加。需要定制所需接收的音频数据才调用，不调用则默认接收房间内所有音频数据。返回值为 0 表示调用失败。
+### 加入音频数据黑名单
+将某个 id 加入音频数据黑名单。返回值为 0 表示调用失败。
 > 函数原型  
 
 ```
-ITMGContext GetRoom -(QAVResult)SetAudioBlackList:(NSArray*)identifierList
+ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSString*)identifier
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| identifierList    |NSArray      |黑名单列表|
+| identifier    |NSString      |需添加黑名单的id|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetRoom ] GetQualityTips];
+[[[ITMGContext GetInstance]GetAudioCtrl ] AddAudioBlackList[id]];
 ```
+
+### 移除音频数据黑名单
+将某个 id 移除音频数据黑名单。返回值为 0 表示调用失败。
+> 函数原型  
+
+```
+ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| identifier    |NSString      |需移除黑名单的id|
+> 示例代码  
+
+```
+[[[ITMGContext GetInstance]GetAudioCtrl ] RemoveAudioBlackList[id]];
+```
+
+
 
 ### 麦克风开启关闭事件
 此接口用来开启及关闭麦克风。
@@ -664,6 +810,17 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableLoopBack:(BOOL)enable
 
 
 ## 实时语音伴奏相关接口
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|StartAccompany    				       |开始播放伴奏
+|StopAccompany    				   	|停止播放伴奏
+|IsAccompanyPlayEnd				|伴奏是否播放完毕
+|PauseAccompany    					|暂停播放伴奏
+|ResumeAccompany					|重新播放伴奏
+|SetAccompanyVolume 				|设置伴奏音量
+|GetAccompanyVolume				|获取播放伴奏的音量
+|SetAccompanyFileCurrentPlayedTimeByMs 				|设置播放进度
+
 
 ### 开始播放伴奏
 调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
@@ -792,7 +949,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyLoopBack:(BOOL)enab
 ```
 
 ### 设置伴奏音量
-设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0-200。
+设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 到 200。
 > 函数原型  
 
 ```
@@ -854,6 +1011,18 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)SetAccompanyFileCurrentPlayedTimeB
 ```
 
 ## 实时语音音效相关接口
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|PlayEffect    		|播放音效
+|PauseEffect    		|暂停播放音效
+|PauseAllEffects		|暂停所有音效
+|ResumeEffect    		|重新播放音效
+|ResumeAllEffects	|重新播放所有音效
+|StopEffect 			|停止播放音效
+|StopAllEffects		|停止播放所有音效
+|SetVoiceType 		|变声特效
+|GetEffectsVolume	|获取播放音效的音量
+|SetEffectsVolume 	|设置播放音效的音量
 
 
 ### 播放音效
@@ -1025,9 +1194,24 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 ```
 
 ## 离线语音
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|genSig    		|离线语音鉴权
+|SetMaxMessageLength    		|限制最大语音信息时长
+|StartRecording		|启动录音
+|StopRecording    		|停止录音
+|CancelRecording	|取消录音
+|UploadRecordedFile 			|上传语音文件
+|DownloadRecordedFile		|下载语音文件
+|PlayRecordedFile 		|播放语音
+|StopPlayFile	|停止播放语音
+|GetFileSize 	|语音文件的大小
+|GetVoiceFileDuration		|语音文件的时长
+|SpeechToText 		|翻译
+
+
 ### 离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)
-。
+初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
 > 函数原型  
 
@@ -1172,7 +1356,7 @@ ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePat
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | fileID    			|NSString                      |文件的url路径		|
-| downloadFilePath 	|NSString                      |文件的下载路径	|
+| downloadFilePath 	|NSString                      |文件的本地保存路径	|
 > 示例代码  
 
 ```
