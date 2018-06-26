@@ -24,7 +24,7 @@
 
 |重要接口     | 接口含义   
 | ------------- |:-------------:|
-|Init    				       			|初始化 GME 
+|InitEngine    				       	|初始化 GME 
 |GenAuthBuffer    					|初始化鉴权
 |SetDefaultAudienceAudioCategory 	|设置后台
 |EnterRoom	 						|进房 
@@ -36,7 +36,7 @@
 
 |接口     | 接口含义   
 | ------------- |:-------------:|
-|Init    				       			|初始化 GME 
+|InitEngine    				       	|初始化 GME 
 |Poll    				       			|设置回调触发
 |Uninit    				       		|反初始化 GME 
 |GenAuthBuffer    					|初始化鉴权
@@ -124,7 +124,7 @@ _context.TMGDelegate =self;
 > 函数原型
 
 ```
-ITMGContext -(void)Init:(NSString*)sdkAppID openID:(NSString*)openID
+ITMGContext -(void)InitEngine:(NSString*)sdkAppID openID:(NSString*)openID
 ```
 
 |参数     | 类型         |意义|
@@ -134,7 +134,7 @@ ITMGContext -(void)Init:(NSString*)sdkAppID openID:(NSString*)openID
 > 示例代码  
 
 ```
-[[ITMGContext GetInstance] Init:SDKAPPID3RD openID:_openId];
+[[ITMGContext GetInstance] InitEngine:SDKAPPID3RD openID:_openId];
 ```
 
 
@@ -308,7 +308,7 @@ ITMGContext -(void)SetLogPath:(NSString*)logDir
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 >注意:
 >1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 接口调用之前要先调用 Init 接口。
+>2、在 EnterRoom 接口调用之前要先调用 InitEngine 接口。
 
 > 函数原型
 
