@@ -5,7 +5,7 @@
 
 ### 1.下载相关文件
 
-[点击这里](https://github.com/vcaisxcai/GME_Authbuffer)下载 GME Authbuffer 相关文件。
+[点击这里](https://github.com/vcaisxcai/GME_Authbuffer/tree/master/authbuffer)下载 GME Authbuffer 相关文件。
 
 ### 2.相关文件传到 Linux
 
