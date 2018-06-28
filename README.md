@@ -11,6 +11,8 @@
 #### [接入指引文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)
 #### [控制台用量统计文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
 #### [密钥技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)
+#### [小队语音文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)
+#### [3D音效文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Spatializer%20Manual.md)
 
 ## 各平台接入文档
 
@@ -46,6 +48,23 @@
 
 
 ## SDK更新说明
+### GME2.0（2018-06-22）
+#### 新增功能
+1、GME 上架 PC Native、PC Unity 版本；
+
+2、GME 支持 Unreal 引擎；
+
+3、GME 离线语音转文本提供多语言支持，最多支持 120 种语言；
+
+4、GME PC 端支持 3D 实时语音；
+
+#### 优化能力
+1、提升通话音量下的高音质体验；
+
+2、降低接入门槛，提供流畅音质、普通音质，高清音质多种选择；
+
+3、稳定性提升；
+
 ### GME1.2（2018-03-20）
 #### 新增功能
 1、GME 支持 Cocos 引擎；
@@ -65,6 +84,7 @@
  3、优化了 Moba 场景下语音延迟，小队语音延迟更低；
 
  4、优化杂音消除算法，语音音质更纯净；
+
 ### GME1.1（2017-10-18）
 #### 新增功能
 1、狼人杀场景下支持视频；
