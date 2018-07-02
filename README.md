@@ -13,6 +13,7 @@
 #### [密钥技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)
 #### [小队语音文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)
 #### [3D音效文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Spatializer%20Manual.md)
+#### [错误码文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Error%20Code.md)
 
 ## 各平台接入文档
 
@@ -87,13 +88,10 @@
 
 ### GME1.1（2017-10-18）
 #### 新增功能
-1、狼人杀场景下支持视频；
+1、游戏 SDK 支持多种格式的伴奏和音效；
 
-2、游戏 SDK 支持多种格式的伴奏和音效；
+2、新增游戏场景下离线语音及语音转文本能力；
 
-3、新增游戏场景下离线语音及语音转文本能力；
-
-4、支持房间内上麦前视频画面预览；
 #### 优化
 1、提供进房鉴权的客户端实现模块，降低 SDK 接入门；
 
