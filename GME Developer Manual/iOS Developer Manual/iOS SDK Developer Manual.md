@@ -20,7 +20,7 @@
 ![image](Image/i0.png)
 
 
-### 使用 GME 中，会有以下几个重要接口：
+### 使用GME 重要事项：
 
 |重要接口     | 接口含义   
 | ------------- |:-------------:|
@@ -30,6 +30,10 @@
 |EnterRoom	 						|进房 
 |EnableMic	 						|开麦克风
 |EnableSpeaker	 					|开扬声器
+
+
+#### GME 的接口调用成功后返回值为 QAVError.OK，数值为0。
+#### GME 的接口调用要在同一个线程下。
 
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
@@ -266,7 +270,7 @@ ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel (BOOL)enableWrite (BOOL)
 |ITMG_LOG_LEVEL|意义|
 | -------------------------------	|----------------------	|
 |TMG_LOG_LEVEL_NONE		|不打印日志			|
-|TMG_LOG_LEVEL_ERROR		|打印错误日志		|
+|TMG_LOG_LEVEL_ERROR=1		|打印错误日志（默认）	|
 |TMG_LOG_LEVEL_INFO		|打印提示日志		|
 |TMG_LOG_LEVEL_DEBUG	|打印开发调试日志	|
 |TMG_LOG_LEVEL_VERBOSE	|打印高频日志		|
@@ -276,7 +280,7 @@ ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel (BOOL)enableWrite (BOOL)
 ```
 
 ### 设置打印日志路径
-用于设置打印日志路径。
+用于设置打印日志路径。默认路径为： Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Documents。
 > 函数原型
 ```
 ITMGContext -(void)SetLogPath:(NSString*)logDir
