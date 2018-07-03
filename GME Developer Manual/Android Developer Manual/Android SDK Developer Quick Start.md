@@ -22,7 +22,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 #### GME 的接口调用成功后返回值为 QAVError.OK，数值为0。
 #### GME 的接口调用要在同一个线程下。
-#### GME 加入房间需要鉴权，请参考接口文档。
+#### GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。
 
 ## 快速接入步骤
 
@@ -157,4 +157,30 @@ ITMGContext public void EnableSpeaker(boolean isEnabled)
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(false);
+```
+
+
+## 关于鉴权
+### 实时语音鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
+该接口返回值为 Byte[] 类型。
+
+> 函数原型
+```
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
+| roomId    		|int   	|要加入的房间名				|
+| identifier    	|String |用户标识				|
+| key    		|string |来自腾讯云控制台的密钥			|
+| expTime    		|int   	|authBuffer 超时时间			|
+| authBits    		|int    |权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
+
+
+> 示例代码  
+```
+long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
+byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
 ```
