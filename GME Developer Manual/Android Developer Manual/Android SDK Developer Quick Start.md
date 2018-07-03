@@ -9,20 +9,20 @@
 
 ### 使用GME 重要事项：
 
-GME快速入门文档只提供最主要的接入接口，更多详细接口请参考相关接口文档。
+GME 快速入门文档只提供最主要的接入接口，更多详细接口请参考相关接口文档。
 
 
 |重要接口     | 接口含义|
 | ------------- |-------------|
 |Init    				|初始化 GME 	|
-|GenAuthBuffer  	|初始化鉴权 		|
+|Poll    				|触发事件回调	|
 |EnterRoom	 		|进房  			|
 |EnableMic	 		|开麦克风 		|
 |EnableSpeaker		|开扬声器 		|
 
 #### GME 的接口调用成功后返回值为 QAVError.OK，数值为0。
 #### GME 的接口调用要在同一个线程下。
-
+#### GME 加入房间需要鉴权，请参考接口文档。
 
 ## 快速接入步骤
 
@@ -62,44 +62,26 @@ ITMGContext public int Init(String sdkAppId, String openID)
 | openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于 10000 的数字类型|
 
 > 示例代码 
-
-
 ```
 ITMGContext.GetInstance(this).Init(sdkAppId, identifier);
 ```
 
-### 3、实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
->注意：在加入房间之前需要 AuthBuffer 作为参数。
-
-该接口返回值为 Byte[] 类型。
+### 3、系统回调触发
+通过在 update 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
-```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int   	|要加入的房间名				|
-| identifier    	|String	|用户标识				|
-| key    			|string 	|来自腾讯云控制台的密钥			|
-| expTime    		|int   	|authBuffer 超时时间			|
-| authBits    		|int    	|权限					|
 
->关于权限  
->ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限。
-
-> 示例代码  
 ```
-long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
-byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
+ITMGContext int Poll()
+```
+> 示例代码
+```
+ITMGContext.GetInstance(this).Poll();
 ```
 
 ### 4、加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
->注意:
->1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 接口调用之前要先调用 Init 接口。
+- 1、加入房间默认不打开麦克风及扬声器。
+- 2、在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 ```
@@ -123,32 +105,29 @@ ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, a
 ```
 
 ### 加入房间事件的回调
-加入房间完成后会判断是否有注册回调函数，如果有，通讯管理器 TMGContext 会调用相应事件的回调函数。例如加入房间事件就会调用 onEnterRoomComplete 函数，退出房间会调用 onExitRoomComplete 函数。
-> 代码说明
+加入房间完成后会有回调，消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM。
+设置回调相关参考代码。
 ```
-public void onEnterRoomComplete(int nRet, String strErrMsg) {         
-            if(TMGContext.this.mTmgDelegate != null) {
-                Intent it= TMGCallbackHelper.GetCallBackIntent(nRet, strErrMsg);
-                TMGContext.this.mTmgDelegate.OnEvent(ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENTER_ROOM, it);
-            } else {
-                TMGContext.this.HandleUnExceptionEnd(nRet, strErrMsg);
-            }
-        }
+private ITMGContext.ITMGDelegate itmgDelegate = null;
+itmgDelegate= new ITMGContext.ITMGDelegate() {
+            @Override
+ 			public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
+                }
+        };
 ```
+回调处理相关参考代码。
 > 示例代码  
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-	int nErrCode =data.getIntExtra("result" , -1);
-	if (nErrCode == AVError.AV_OK)
-		{
-			//进入房间成功
-		}
+	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENTER_ROOM == type)
+        {
+           	 //收到进房成功事件
+        }
 	}
 ```
 
 ### 5、开启关闭麦克风
-此接口用来开启关闭麦克风。
->注意:加入房间默认不打开麦克风及扬声器。
+此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型  
 ```
@@ -166,6 +145,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(false);
 
 ### 6、开启关闭扬声器
 此接口用于开启关闭扬声器。
+
 > 函数原型  
 ```
 ITMGContext public void EnableSpeaker(boolean isEnabled)
