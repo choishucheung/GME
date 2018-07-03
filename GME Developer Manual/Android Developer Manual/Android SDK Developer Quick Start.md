@@ -57,7 +57,7 @@ ITMGContext public int Init(String sdkAppId, String openID)
 ```
 
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
+| ------------- |:-------------:|-------------|
 | sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码				|
 | openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于 10000 的数字类型|
 
@@ -88,16 +88,16 @@ ITMGContext.GetInstance(this).Poll();
 ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
+| ------------- |:-------------:|-------------|
 | relationId 	|int		|房间号				|
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
 |音频类型     	|含义|参数|
 | ------------- |------------ | ---- |
-| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
-| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
-| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1|
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2|
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3|
 
 > 示例代码  
 ```
@@ -134,7 +134,7 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 ITMGContext public void EnableMic(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
+| ------------- |:-------------:|-------------|
 | isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 false，如果打开麦克风，则参数为 true|
 > 示例代码  
 ```
@@ -151,7 +151,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(false);
 ITMGContext public void EnableSpeaker(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
+| ------------- |:-------------:|-------------|
 | isEnabled    |boolean       |如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true|
 > 示例代码  
 ```
@@ -170,7 +170,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(false);
 AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
+| ------------- |:-------------:|-------------|
 | appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
 | roomId    		|int   	|要加入的房间名				|
 | identifier    	|String |用户标识				|
