@@ -21,7 +21,9 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 |EnableSpeaker		|开扬声器 		|
 
 **GME 的接口调用成功后返回值为 QAVError.OK，数值为0。**
+
 **GME 的接口调用要在同一个线程下。**
+
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
 ## 快速接入步骤
@@ -80,8 +82,8 @@ ITMGContext.GetInstance(this).Poll();
 
 ### 4、加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
-- 1、加入房间默认不打开麦克风及扬声器。
-- 2、在 EnterRoom 接口调用之前要先调用 Init 接口。
+- 加入房间默认不打开麦克风及扬声器。
+- 在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 ```
