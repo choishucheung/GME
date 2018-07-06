@@ -169,8 +169,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 
 ## 关于鉴权
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
-该接口返回值为 NSData 类型。
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 
 > 函数原型
 ```
@@ -180,15 +179,20 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | authId    		|int  		|要加入的房间名							|
-| strOpenID  	|char    		|用户标识								|
+| strOpenID  		|char    		|用户标识								|
 | key    			|char	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
-| privilegeMap   	|int    		|权限									|
+| privilegeMap   	|int    		|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
 | retAuthBuff   	|char    		|返回的 authbuff							|
-| buffLenght   	|int    		|返回的 authbuff 的长度					|
+| buffLenght   	|int    		|返回的authbuff的长度					|
+
 
 
 > 示例代码  
 ```
+unsigned int bufferLen = 512;
+unsigned char retAuthBuff[512] = {0};
+unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
+
 QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
