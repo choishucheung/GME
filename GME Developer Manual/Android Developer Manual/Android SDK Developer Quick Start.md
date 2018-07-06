@@ -7,7 +7,7 @@
 ![image](Image/i0.png)
 
 
-### 使用GME 重要事项：
+### 使用GME 重要事项
 
 GME 快速入门文档只提供最主要的接入接口，更多详细接口请参考相关接口文档。
 
@@ -20,6 +20,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 |EnableMic	 		|开麦克风 		|
 |EnableSpeaker		|开扬声器 		|
 
+**说明**
 **GME 的接口调用成功后返回值为 QAVError.OK，数值为0。**
 
 **GME 的接口调用要在同一个线程下。**
@@ -65,10 +66,10 @@ ITMGContext public int Init(String sdkAppId, String openID)
 
 > 示例代码 
 ```
-ITMGContext.GetInstance(this).Init(sdkAppId, identifier);
+ITMGContext.GetInstance(this).Init(sdkAppId, openId);
 ```
 
-### 3、系统回调触发
+### 3、触发事件回调
 通过在 update 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
 
@@ -91,7 +92,7 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId 	|int		|房间号				|
+| relationId 	|int		|房间号，只支持32位|
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
@@ -106,7 +107,7 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, authBuffer);    
 ```
 
-### 加入房间事件的回调
+### 5、加入房间事件的回调
 加入房间完成后会有回调，消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM。
 设置回调相关参考代码。
 ```
@@ -128,7 +129,7 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	}
 ```
 
-### 5、开启关闭麦克风
+### 6、开启关闭麦克风
 此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型  
@@ -141,11 +142,10 @@ ITMGContext public void EnableMic(boolean isEnabled)
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(true);
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(false);
 ```
 
 
-### 6、开启关闭扬声器
+### 7、开启关闭扬声器
 此接口用于开启关闭扬声器。
 
 > 函数原型  
@@ -158,7 +158,6 @@ ITMGContext public void EnableSpeaker(boolean isEnabled)
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(false);
 ```
 
 
@@ -174,7 +173,7 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int   	|要加入的房间名				|
+| roomId    		|int   	|房间号，只支持32位			|
 | identifier    	|String |用户标识				|
 | key    		|string |来自腾讯云控制台的密钥			|
 | expTime    		|int   	|authBuffer 超时时间			|

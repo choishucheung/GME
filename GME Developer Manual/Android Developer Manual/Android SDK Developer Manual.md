@@ -5,7 +5,6 @@
 ## 目录
 [初始化相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[设置信息相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E8%AE%BE%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
 [实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
 
@@ -17,21 +16,31 @@
 
 [离线语音](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
 
+[高级接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
+
+
+[回调消息列表](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8)
+
 ## 使用流程图
 ![image](Image/i0.png)
 
-### 使用GME 重要事项：
+### 使用GME 重要事项
 
-|重要接口     | 接口含义   
-| ------------- |:-------------:|
-|Init    				       			|初始化 GME 
-|GenAuthBuffer    					|初始化鉴权
-|EnterRoom	 						|进房 
-|EnableMic	 						|开麦克风
-|EnableSpeaker	 					|开扬声器
+|重要接口     | 接口含义|
+| ------------- |-------------|
+|Init    		|初始化 GME 	|
+|Poll    				|触发事件回调	|
+|EnterRoom	 		|进房  			|
+|EnableMic	 		|开麦克风 		|
+|EnableSpeaker		|开扬声器 		|
 
-#### GME 的接口调用成功后返回值为 QAVError.OK，数值为0。
-#### GME 的接口调用要在同一个线程下。
+**说明**
+
+**GME 的接口调用成功后返回值为 QAVError.OK，数值为0。**
+
+**GME 的接口调用要在同一个线程下。**
+
+**GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
 
 ## 初始化相关接口
@@ -40,11 +49,10 @@
 |接口     | 接口含义   
 | ------------- |:-------------:|
 |Init    				       			|初始化 GME 
-|Poll    				       			|设置回调触发
+|Poll    				       			|触发事件回调
 |Pause    				       		|系统暂停
 |Resume 				       		|系统恢复
 |Uninit    				       		|反初始化 GME 
-|GenAuthBuffer    					|初始化鉴权
 
 
 ### 获取单例
@@ -69,16 +77,7 @@ TMGContext.getInstance(this);
 
 ### 注册回调
 接口类采用 Delegate 方法用于向应用程序发送回调通知。将回调函数注册给 SDK，用于接受回调的信息。
-> 函数原型
-```
-public abstract static class ITMGDelegate {
-        public ITMGDelegate() {
-        }
 
-        public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-        }
-}
-```
 > 示例代码 
 ```
 private ITMGContext.ITMGDelegate itmgDelegate = null;
@@ -90,48 +89,6 @@ private ITMGContext.ITMGDelegate itmgDelegate = null;
 | type    	|ITMGContext.ITMG_MAIN_EVENT_TYPE 	|回调的事件类型				|
 | data    	|Intent 消息类型  						|回调的相关信息，事件数据	|
 
->消息列表：
-
-|消息     | 消息代表的意义   
-| ------------- |:-------------:|
-|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音视频房间消息
-|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音视频房间消息
-|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息
-|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			       |伴奏结束消息
-|ITMG_MAIN_EVNET_TYPE_USER_UPDATE					  	|房间成员更新消息
-|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		       |PTT 录音完成
-|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE		       |上传 PTT 完成
-|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	       |下载 PTT 完成
-|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
-|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
-
->Data 列表
-
-|消息     | Data         |例子|
-| ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}
-| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
-| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;event_id					|{"event_id":1,"user_list":["0"]}
-| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  					|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  					|{"filepath":"","result":0}
-| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id				|{"file_id":"","filepath":"","result":0}
 
 > 示例代码  
 ```
@@ -141,7 +98,7 @@ itmgDelegate= new ITMGContext.ITMGDelegate() {
                 }
         };
 ```
-**即所有回调函数都会通过 OnEvent 函数进行处理。**  
+
 
 将回调函数注册给 SDK，要在进房之前设置。
 > 函数原型 
@@ -171,15 +128,15 @@ ITMGContext public int Init(String sdkAppId, String openID)
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码				|
-| openID    		|String  |唯一标识一个用户，规则由 App 开发者自行制定，目前只支持大于 10000 的数字类型|
+| openID    	|String  |OpenID 只支持 Int64 类型（转为string传入），必须大于 10000，用于标识用户 	|
 
 > 示例代码 
 
+```
+ITMGContext.GetInstance(this).Init(sdkAppId, openID);
+```
 
-```
-ITMGContext.GetInstance(this).Init(sdkAppId, identifier);
-```
-### 系统回调触发
+### 触发事件回调
 通过在 update 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
 
@@ -196,7 +153,7 @@ ITMGContext.GetInstance(this).Poll();
 > 函数原型
 
 ```
-ITMGContext public int Pause()
+ITMGContext int Pause()
 ```
 
 ### 系统恢复
@@ -204,7 +161,7 @@ ITMGContext public int Pause()
 > 函数原型
 
 ```
-ITMGContext  public int Resume()
+ITMGContext int Resume()
 ```
 
 
@@ -221,26 +178,41 @@ ITMGContext int Uninit()
 ITMGContext.GetInstance(this).Uninit();
 ```
 
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
->注意：在加入房间之前需要 AuthBuffer 作为参数。
 
+
+
+
+
+## 实时语音房间相关接口
+初始化之后，SDK 调用进房后进去了房间，才可以进行实时语音通话。
+
+|接口     | 接口含义   
+| ------------- |:-------------:|
+|GenAuthBuffer    	|初始化鉴权
+|EnterRoom   		|加入房间
+|IsRoomEntered   	|是否已经进入房间
+|ExitRoom 		|退出房间
+|ChangeRoomType 	|修改用户房间音频类型
+|GetRoomType 		|获取用户房间音频类型
+
+
+### 实时语音鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
 该接口返回值为 Byte[] 类型。
+
 > 函数原型
 ```
 AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int   	|要加入的房间名				|
-| identifier    	|String |用户标识				|
-| key    		|string |来自腾讯云控制台的密钥			|
-| expTime    		|int   	|authBuffer 超时时间			|
-| authBits    		|int    |权限					|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码	|
+| roomId    		|int   		|房间号，只支持32位			|
+| identifier    	|String 	|用户标识				|
+| key    		|string 	|来自腾讯云控制台的密钥			|
+| expTime    		|int   		|authBuffer 超时时间			|
+| authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
 
->关于权限  
->ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限。
 
 > 示例代码  
 ```
@@ -249,93 +221,8 @@ long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
 byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
 ```
 
-
-
-## 设置信息相关接口
-
-
-|接口     | 接口含义   
-| ------------- |:-------------:|
-|GetSDKVersion   	|获取版本号
-|SetLogLevel   		|设置打印日志等级
-|SetLogPath 		|设置打印日志路径
-### 获取版本号
-获取 SDK 版本号，用于分析。
-> 函数原型
-```
-ITMGContext public void GetSDKVersion()
-```
-> 示例代码  
-```
-ITMGContext.GetInstance(this).GetSDKVersion();
-```
-
-### 设置打印日志等级
-用于设置打印日志等级。
-> 函数原型
-```
-ITMGContext int SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
-```
-
-
-
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| logLevel    		|int   		|打印日志级别		|
-| enableWrite    	|bool   				|是否写文件，默认为是	|
-| enablePrint    	|bool   				|是否写控制台，默认为是	|
-
-
->ITMG_LOG_LEVEL 对照表
-
-|ITMG_LOG_LEVEL|意义|
-| -------------------------------	|----------------------	|
-|TMG_LOG_LEVEL_NONE=0		|不打印日志			|
-|TMG_LOG_LEVEL_ERROR=1		|打印错误日志（默认）	|
-|TMG_LOG_LEVEL_INFO=2			|打印提示日志		|
-|TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志	|
-|TMG_LOG_LEVEL_VERBOSE=4		|打印高频日志		|
-> 示例代码  
-```
-ITMGContext.GetInstance(this).SetLogLevel(1,true,true);
-```
-
-
-
-### 设置打印日志路径
-用于设置打印日志路径。默认路径为： /sdcard/Android/data/xxx.xxx.xxx/files。
-> 函数原型
-```
-ITMGContext int SetLogPath(String logDir)
-```
-
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| logDir    		|String   		|路径|
-
-> 示例代码  
-```
-ITMGContext.GetInstance(this).SetLogPath(path);
-```
-
-
-## 实时语音房间事件接口
-初始化之后，SDK 调用进房后进去了房间，才可以进行实时语音通话。
-
-|接口     | 接口含义   
-| ------------- |:-------------:|
-|EnterRoom   		|加入房间
-|IsRoomEntered   	|是否已经进入房间
-|ExitRoom 			|退出房间
-|ChangeRoomType 	|修改用户房间音频类型
-|GetRoomType 		|获取用户房间音频类型
-|GetQualityTips 		|获取诊断信息
-
 ### 加入房间
-用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
->注意:
->1、加入房间默认不打开麦克风及扬声器。
->2、在 EnterRoom 接口调用之前要先调用 Init 接口。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型
 ```
@@ -347,11 +234,15 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
-|音频类型     	|含义|参数|
-| ------------- |------------ | ---- |
-| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1
-| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2
-| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3
+|音频类型     	|含义|参数|适用场景|音量类型|控制台推荐采样率设置|
+| ------------- |------------ | ---- |---- |---- |---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1|流畅优先、超低延迟实时语音，应用在游戏内开黑场景，适用于FPS、MOBA等类型的游戏；								|扬声器：通话音量；耳机：媒体音量	|如对音质无特殊需求，16K采样率即可；					|
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2|音质较好，延时适中，适用于狼人杀、棋牌等休闲游戏的实时通话场景；													|扬声器：通话音量；耳机：媒体音量	|根据对音质的需求，可以选择16k/48k采样率				|
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3|超高音质，延时相对大一些，适用于音乐舞蹈类游戏以及语音社交类APP；适用于播放音乐、线上K歌等有高音质要求的场景；	|扬声器：媒体音量；耳机：媒体音量	|为了保证最佳效果，建议控制台设置48k采样率的高音质配置	|
+
+- 如对音量类型或场景有特殊需求，请联系一线客服反馈；
+- 控制台采样率设置会直接影响游戏语音效果，请在[控制台](https://console.cloud.tencent.com/gamegme)上再次确认采样率设置是否符合项目使用场景。
+
 
 > 示例代码  
 ```
@@ -359,26 +250,15 @@ ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, a
 ```
 
 ### 加入房间事件的回调
-加入房间完成后会判断是否有注册回调函数，如果有，通讯管理器 TMGContext 会调用相应事件的回调函数。例如加入房间事件就会调用 onEnterRoomComplete 函数，退出房间会调用 onExitRoomComplete 函数。
-> 代码说明
-```
-public void onEnterRoomComplete(int nRet, String strErrMsg) {         
-            if(TMGContext.this.mTmgDelegate != null) {
-                Intent it= TMGCallbackHelper.GetCallBackIntent(nRet, strErrMsg);
-                TMGContext.this.mTmgDelegate.OnEvent(ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENTER_ROOM, it);
-            } else {
-                TMGContext.this.HandleUnExceptionEnd(nRet, strErrMsg);
-            }
-        }
-```
+加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
+
 > 示例代码  
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-	int nErrCode =data.getIntExtra("result" , -1);
-	if (nErrCode == AVError.AV_OK)
-		{
-			//进入房间成功
-		}
+	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENTER_ROOM == type)
+        {
+           	 //收到进房成功事件
+        }
 	}
 ```
 
@@ -406,7 +286,7 @@ ITMGContext.GetInstance(this).ExitRoom();
 ```
 
 ### 退出房间回调
-退出房间事件调用完成后，会调用函数 OnEvent，事件消息为ITMG_MAIN_EVENT_TYPE_EXIT_ROOM，在 OnEvent 函数中对事件消息进行判断。
+加入房间完成后会有回调，消息为 ITMG_MAIN_EVENT_TYPE_EXIT_ROOM。
 > 示例代码  
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
@@ -472,7 +352,7 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，参数 intent 包含两个信息，event_id 及 user_list，在 OnEvent 函数中对事件消息进行判断。
-
+音频事件的通知有一个阈值，超过这个阈值才会发送通知。
 
 |event_id     | 含义         |应用侧维护内容|
 | ------------- |:-------------:|-------------|
@@ -498,10 +378,10 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
   			    //有成员退出房间
 			    break;
 		    case ITMG_EVENT_ID_USER_HAS_AUDIO:
-			    //有成员开启麦克风
+			    //有成员发送音频包
 			    break;
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
-			    //有成员关闭麦克风
+			    //有成员停止发送音频包
 			    break;
 		    default:
 			    break;
@@ -510,16 +390,24 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 }
 ```
 
-### 获取诊断信息
-获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以忽略。
-> 函数原型  
-```
-IITMGContext TMGRoom public String GetQualityTips() 
-```
-> 示例代码  
-```
-ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
-```
+### 消息详情
+
+|消息     | 消息代表的意义   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音视频房间消息|
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音视频房间消息|
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息|
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件|
+
+### 消息对应的Data详情
+|消息     | Data         |例子|
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}|
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
+
+
 
 ## 实时语音音频接口
 初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
@@ -528,8 +416,6 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 | ------------- |:-------------:|
 |PauseAudio    				       	|暂停音频引擎
 |ResumeAudio    				      	|恢复音频引擎
-|AddAudioBlackList    				|音频黑名单
-|RemoveAudioBlackList    			|音频黑名单
 |EnableMic    						|开关麦克风
 |GetMicState    						|获取麦克风状态
 |GetMicLevel    						|获取实时麦克风音量
@@ -544,8 +430,7 @@ ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
 
 ### 暂停音频引擎的采集和播放
 调用此接口暂停音频引擎的采集和播放，只在进房后有效。
-在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。
-注意：调用 EnableMic(false) 无法释放麦克风占用。
+在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。调用 EnableMic(false) 无法释放麦克风占用。
 如果确实需要释放麦克风，请调用 PauseAudio 接口。调用 PauseAudio 接口后会整个暂停引擎，调用 ResumeAudio 接口可恢复音频采集。
 > 函数原型  
 ```
@@ -567,41 +452,10 @@ ITMGContext ITMGAudioCtrl public int ResumeAudio()
 ITMGContext.GetInstance(this).GetAudioCtrl().ResumeAudio();
 ```
 
-### 加入音频数据黑名单
-将某个 id 加入音频数据黑名单。返回值为 0 表示调用失败。
-> 函数原型  
 
-```
-ITMGContext ITMGAudioCtrl AddAudioBlackList(String openId)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| openId    |String      |需添加黑名单的id|
-> 示例代码  
 
-```
-ITMGContext.GetInstance(this).GetAudioCtrl().AddAudioBlackList(openId);
-```
-
-### 移除音频数据黑名单
-将某个 id 移除音频数据黑名单。返回值为 0 表示调用失败。
-> 函数原型  
-
-```
-ITMGContext ITMGAudioCtrl RemoveAudioBlackList(String openId)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| openId    |String      |需移除黑名单的id|
-> 示例代码  
-
-```
-ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
-```
-
-### 麦克风开启关闭事件
-此接口用来开启及关闭麦克风。
->注意:加入房间默认不打开麦克风及扬声器。
+### 开启关闭麦克风
+此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型  
 ```
@@ -609,15 +463,14 @@ ITMGContext public void EnableMic(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 false，如果打开麦克风，则参数为 true|
+| isEnabled    |boolean     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false|
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(true);
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(false);
 ```
 
 ### 麦克风事件的回调
-麦克风事件的回调调用函数 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_MIC， ITMG_MAIN_EVENT_TYPE_DISABLE_MIC，在 OnEvent 函数中对事件消息进行判断。
+麦克风事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了麦克风，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_MIC， ITMG_MAIN_EVENT_TYPE_DISABLE_MIC，在 OnEvent 函数中对事件消息进行判断。
 传递的参数 intent 包含两个信息，一个是 audio_state，另一个是 audio_errcode。
 > 示例代码  
 ```
@@ -686,8 +539,8 @@ ITMGContext TMGAudioCtrl public int GetMicVolume()
 ITMGContext.GetInstance(this).GetAudioCtrl().GetMicVolume();
 ```
 
-### 扬声器开启关闭事件
-此接口用于设置扬声器开启关闭。
+### 开启关闭扬声器
+此接口用于开启关闭扬声器。
 > 函数原型  
 ```
 ITMGContext public void EnableSpeaker(boolean isEnabled)
@@ -698,11 +551,10 @@ ITMGContext public void EnableSpeaker(boolean isEnabled)
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(false);
 ```
 
 ### 扬声器事件的回调
-扬声器事件的回调调用函数 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
+扬声器事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
 传递的参数 intent 包含两个信息，一个是 audio_state，另一个是 audio_errcode。
 > 示例代码  
 ```
@@ -794,6 +646,26 @@ ITMGContext TMGAudioCtrl public int EnableLoopBack(boolean enable)
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 ```
 
+### 消息详情
+
+|消息     | 消息代表的意义   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息|
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息|
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息|
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息|
+
+### 消息对应的Data详情
+|消息     | Data         |例子|
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+
+
+
+
 ## 实时语音伴奏相关接口
 |接口     | 接口含义   
 | ------------- |:-------------:|
@@ -807,9 +679,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 |SetAccompanyFileCurrentPlayedTimeByMs 				|设置播放进度
 
 ### 开始播放伴奏
-调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。
-注意：1、调用此 API，音量会重置。
-2、下行权限不能启用此 API。
+调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。调用此 API，音量会重置。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public int StartAccompany(String filePath, boolean loopBack, int loopCount) 
@@ -825,7 +695,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().StartAccompany(filePath,true,
 ```
 
 ### 播放伴奏的回调
-开始播放伴奏完成后，回调函数调用 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH，在 OnEvent 函数中对事件消息进行判断。
+开始播放伴奏完成后，回调函数调用 OnEvent，事件消息为 ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH。
 传递的参数 intent 包含两个信息，一个是 result，另一个是 file_path。
 > 示例代码  
 ```
@@ -1359,7 +1229,7 @@ ITMGContext.GetInstance(this).GetPTT().GetFileSize(path);
 ```
 
 ### 获取语音文件的时长
-此接口用于获取语音文件的时长。。
+此接口用于获取语音文件的时长，单位毫秒。
 > 函数原型  
 ```
 ITMGContext TMGPTT public int GetVoiceFileDuration(String filePath)
@@ -1398,3 +1268,157 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	 }
 }
 ```
+
+
+
+## 高级 API
+
+### 获取版本号
+获取 SDK 版本号，用于分析。
+> 函数原型
+```
+ITMGContext public void GetSDKVersion()
+```
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetSDKVersion();
+```
+
+### 设置打印日志等级
+用于设置打印日志等级。
+> 函数原型
+```
+ITMGContext int SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
+```
+
+
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logLevel    		|int   		|打印日志级别		|
+| enableWrite    	|bool   				|是否写文件，默认为是	|
+| enablePrint    	|bool   				|是否写控制台，默认为是	|
+
+
+>ITMG_LOG_LEVEL 对照表
+
+|ITMG_LOG_LEVEL|意义|
+| -------------------------------	|----------------------	|
+|TMG_LOG_LEVEL_NONE=0		|不打印日志			|
+|TMG_LOG_LEVEL_ERROR=1		|打印错误日志（默认）	|
+|TMG_LOG_LEVEL_INFO=2			|打印提示日志		|
+|TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志	|
+|TMG_LOG_LEVEL_VERBOSE=4		|打印高频日志		|
+> 示例代码  
+```
+ITMGContext.GetInstance(this).SetLogLevel(1,true,true);
+```
+
+
+
+### 设置打印日志路径
+用于设置打印日志路径。默认路径为： /sdcard/Android/data/xxx.xxx.xxx/files。
+> 函数原型
+```
+ITMGContext int SetLogPath(String logDir)
+```
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| logDir    		|String   		|路径|
+
+> 示例代码  
+```
+ITMGContext.GetInstance(this).SetLogPath(path);
+```
+
+
+### 获取诊断信息
+获取音视频通话的实时通话质量的相关信息。该函数主要用来查看实时通话质量、排查问题等，业务侧可以忽略。
+> 函数原型  
+```
+IITMGContext TMGRoom public String GetQualityTips() 
+```
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetRoom().GetQualityTips();
+```
+
+### 加入音频数据黑名单
+将某个 id 加入音频数据黑名单。返回值为 0 表示调用失败。
+> 函数原型  
+
+```
+ITMGContext ITMGAudioCtrl AddAudioBlackList(String openId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| openId    |String      |需添加黑名单的id|
+> 示例代码  
+
+```
+ITMGContext.GetInstance(this).GetAudioCtrl().AddAudioBlackList(openId);
+```
+
+### 移除音频数据黑名单
+将某个 id 移除音频数据黑名单。返回值为 0 表示调用失败。
+> 函数原型  
+
+```
+ITMGContext ITMGAudioCtrl RemoveAudioBlackList(String openId)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------
+| openId    |String      |需移除黑名单的id|
+> 示例代码  
+
+```
+ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
+```
+
+
+## 回调消息
+
+>消息列表：
+
+|消息     | 消息代表的意义   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |进入音频房间消息
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|退出音频房间消息
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |房间因为网络等原因断开消息
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|房间类型变化事件
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息
+|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH			       |伴奏结束消息
+|ITMG_MAIN_EVNET_TYPE_USER_UPDATE					  	|房间成员更新消息
+|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE		       |PTT 录音完成
+|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE		       |上传 PTT 完成
+|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	       |下载 PTT 完成
+|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE			       |播放 PTT 完成
+|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	   	|语音转文字完成
+
+>Data 列表
+
+|消息     | Data         |例子|
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    		|result; error_info  					|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    			|result; error_info  					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    			|result; error_info 					|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}
+| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    				|user_list;event_id					|{"event_id":1,"user_list":["0"]}
+| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 		|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 		|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  				|{"file_id":"","filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 			|result; file_path  					|{"filepath":"","result":0}
+| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id				|{"file_id":"","filepath":"","result":0}
+
