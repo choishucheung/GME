@@ -37,7 +37,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 ```
 ITMGContext* context = ITMGContextGetInstance();
-context->TMGDelegate(this);
+context->SetTMGDelegate(this);
 ```
 
 
