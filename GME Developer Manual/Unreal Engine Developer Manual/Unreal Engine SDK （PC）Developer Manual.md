@@ -192,7 +192,7 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| authId    		|int  		|要加入的房间名							|
+| authId    		|int  		|房间号，只支持32位						|
 | strOpenID  		|char*    		|用户标识								|
 | key    			|char*	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
@@ -222,7 +222,7 @@ ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, cons
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId			|int   				|房间号 			|
+| relationId			|int   				|房间号，只支持32位|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
 | authBuffer    		|char*     				|鉴权码			|
 | buffLen   			|int   				|鉴权码长度		|
@@ -254,7 +254,7 @@ ITMGContext virtual void EnterTeamRoom(int relationId, ITMG_ROOM_TYPE roomType, 
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId			|int   	|房间号 					|
+| relationId			|int   	|房间号，只支持32位 					|
 | roomType 		|ITMG_ROOM_TYPE	|房间音频类型							|
 | authBuffer    		|char*    	|鉴权码												|
 | buffLen   			|int   	|鉴权码长度											|
