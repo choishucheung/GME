@@ -22,7 +22,7 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 | ITMG_ROOM_TYPE_HIGHQUALITY		|High sound quality		|3|Speaker: media volumeheadset: media volume	|For best performance, it is recommended that the console set a high-quality configuration with a 48k sample rate.	|High sound quality, relatively laggy, suitable for music and dance games and voice social apps; suitable for playing music, online karaoke and other scenes with high sound quality requirements;|
 
 - If you have special needs for volume type or scene, please contact the frontline customer service;
-- The console sample rate setting directly affects the game's voice performance. Please check again on the [console](https://console.cloud.tencent.com/gamegme)that the sample rate setting is consistent with the project usage scenario.
+- The console sample rate setting directly affects the game's voice performance. Please check again on the [console](https://console.cloud.tencent.com/gamegme) that the sample rate setting is consistent with the project usage scenario.
 
 
 
