@@ -3,9 +3,8 @@
 
 
 ## 3D音效接入
-### 1.开关 3D 音效
-此函数用于开关 3D 音效。在使用 3D 音效之前必须先调用此函数。
->注意：只接收 3D 音效而不发出 3D 音效的用户也需要调用此函数。
+### 1、开关 3D 音效
+此函数用于开关 3D 音效。在使用 3D 音效之前必须先调用此接口，只接收 3D 音效而不发出 3D 音效的用户也需要调用此接口。
 
 > 函数原型  
 ```
@@ -17,7 +16,7 @@ QAVAudioCtrl virtual int EnableSpatializer(bool enable)
 
 
 
-### 2.获取当前 3D 音效状态
+### 2、获取当前 3D 音效状态
 此函数获取当前 3D 音效的状态，返回值为 bool 类型数值。
 
 > 函数原型  
@@ -26,20 +25,20 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 ```
 |返回值	|意义	|
 | ------- |---------|
-| true    	|开启状态     
-| false    	|关闭状态         
+| true    	|开启状态    	|
+| false    	|关闭状态	|  
 
-### 3.更新声源方位（包含朝向）
+### 3、更新声源方位（包含朝向）
 此函数用于更新声源方位角信息，传入用户 openID 后每帧调用便可实现 3D 音效效果。
 
->距离与声音衰减的关系
+#### 距离与声音衰减的关系
 
 3D 音效中，音源音量的大小与音源距离有一定的衰减关系。单位距离超过500之后，音量衰减到几乎为零。
 
 |距离范围（引擎单位）|衰减公式	|
 | ------- |---------|
-| 0< N <40  	|衰减系数：1.0 （音量无衰减）
-| N≥40  |衰减系数：40/N          
+| 0< N <40  	|衰减系数：1.0 （音量无衰减）	|
+| N≥40  |衰减系数：40/N          			|
 
 ![](https://github.com/TencentMediaLab/GME/blob/master/Image/t1.jpg)
 
@@ -52,7 +51,7 @@ QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float
 | identifier   		|string	|传入一个 identifier，以识别用户（identifier 在进房时候已经确定）	|
 | azimuth    		|float	|方位参数（需要计算）											|
 | elevation    	|float 	|角度参数（需要计算）											|
-| distance_cm    	|float  	|距离参数（需要计算）							|
+| distance_cm    	|float  	|距离参数（需要计算）											|
 
 >函数原理
 
@@ -140,9 +139,9 @@ private void CalculatePosition()
 ## 音效距离效果接入
 ### 设置接收语音距离范围
 此函数用于设置接收的语音范围（距离以游戏引擎为准）。
->注意：1、调用此函数需要每帧调用
->2、进房的前提下调用。
->3、游戏中每个用户都需要调用。
+- 调用此函数需要每帧调用。
+- 进房的前提下调用。
+- 游戏中每个用户都需要调用。
 
 > 函数原型  
 ```

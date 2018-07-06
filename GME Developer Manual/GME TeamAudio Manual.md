@@ -13,7 +13,7 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    		|房间号，大于等于六位的整数	|
+| relationId		|int    		|房间号，只支持32位|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型				|
 | authBuffer    	|Byte[]  		|鉴权数据					|
 
@@ -29,12 +29,12 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 
 
 #### 小队语音房间
-> 小队语音简介：
+小队语音简介：
 小队语音：玩家在游戏开始前组队，小队语音仅队友可以听到；
 全体语音：玩家在游戏开始前和游戏过程中可设置全体语音模式，设置后玩家附近一定范围的人都能听到该玩家讲话。
 游戏过程中可随时切换语音模式。
 
-> 假设 A 玩家状态为全局语音，对应 B 玩家在不同的语音情况下声音的模式：
+#### 假设 A 玩家状态为全局语音，对应 B 玩家在不同的语音情况下声音的模式：
 
 |是否同一小队	|是否范围内	|语音状态	|A 能不能听到 B 的声音	|B 能不能听到 A 的声音	|
 | -----------------	| ------------ | ------------ |--------------------------	|--------------------------	|
@@ -47,7 +47,7 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 |不同小队		|否		 	|全局语音	|A 不可以听到 B 的声音	|B 不可以听到 A 的声音	|
 |不同小队		|否			|小队语音	|A 不可以听到 B 的声音	|B 不可以听到 A 的声音	|
 
-> 假设 A 玩家状态为小队语音，对应 B 玩家在不同的语音情况下声音的模式：
+#### 假设 A 玩家状态为小队语音，对应 B 玩家在不同的语音情况下声音的模式：
 
 |是否同一小队	|是否范围内	|语音状态	|A 能不能听到 B 的声音	|B 能不能听到 A 的声音	|
 | -----------------	| ------------ | ------------ |--------------------------	|--------------------------	|
@@ -60,9 +60,9 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 |不同小队		|否		 	|全局语音	|A 不可以听到 B 的声音	|B 不可以听到 A 的声音	|
 |不同小队		|否			|小队语音	|A 不可以听到 B 的声音	|B 不可以听到 A 的声音	|
 
->对语音距离范围的补充
->1、是否在语音距离范围内，不影响同一小队成员互相通话。
->2、设置接收语音距离范围参考 API：UpdateCoordinate
+对语音距离范围的补充：
+- 是否在语音距离范围内，不影响同一小队成员互相通话。
+- 设置接收语音距离范围参考 API：UpdateCoordinate
 
 > 函数原型
 ```
@@ -70,7 +70,7 @@ ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBu
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    		|房间号									|
+| relationId		|int    		|房间号，只支持32位									|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型							|
 | authBuffer    	|Byte[] 		|鉴权数据								|
 | teamId    		|int    		|加入的小队语音队伍标识码（不能为 0 ）	|
@@ -98,9 +98,9 @@ ITMGContext.GetInstance().GetRoom().ChangeTeamAudioMode(1);
 
 ### 3.设置接收语音距离范围
 此函数用于设置接收的语音范围（距离以游戏引擎为准）。
->注意：1、调用此函数需要每帧调用
->2、进房的前提下调用。
->3、游戏中每个用户都需要调用。
+- 调用此函数需要每帧调用
+- 进房的前提下调用。
+- 游戏中每个用户都需要调用。
 
 > 函数原型  
 ```
