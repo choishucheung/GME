@@ -162,7 +162,7 @@ ITMGContext int Pause()
 ITMGContext  int Resume()
 ```
 ### 反初始化 SDK
-反初始化 SDK，进入未初始化状态
+反初始化 SDK，进入未初始化状态。
 
 > 函数原型 
 ```
@@ -184,13 +184,13 @@ context->Uninit();
 |GenAuthBuffer    	|初始化鉴权
 |EnterRoom   		|加入房间
 |IsRoomEntered   	|是否已经进入房间
-|ExitRoom 			|退出房间
+|ExitRoom 		|退出房间
 |ChangeRoomType 	|修改用户房间音频类型
 |GetRoomType 		|获取用户房间音频类型
 
 
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 
 > 函数原型
 ```
@@ -220,7 +220,7 @@ QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, exp
 
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
-如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音说明](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
+如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
@@ -386,7 +386,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data) {
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，其中 data 包含两个信息，event_id 及 user_list，在 OnEvent 函数中需要对信息 event_id 进行判断。
-
+音频事件的通知有一个阈值，超过这个阈值才会发送通知。
 |event_id     | 含义         |应用侧维护内容|
 | ------------- |:-------------:|-------------|
 |ITMG_EVENT_ID_USER_ENTER    				|有成员进入房间			|应用侧维护成员列表		|
@@ -417,7 +417,9 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员停止发送音频包
 			    break;
- 		    }
+ 		    default:
+			    break;
+		    }
 		break;
 		}
 	}
@@ -708,7 +710,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 ```
 
 ### 扬声器事件的回调
-扬声器事件回调，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
+扬声器事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
 > 示例代码  
 ```
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
@@ -734,7 +736,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 ```
 
 ### 扬声器状态获取
-此接口用于扬声器状态获取。返回值为 int 类型数值。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 3 为扬声器设备不存在，返回值 2 为扬声器设备正在操作中，返回值 4 为设备没初始化好。
+此接口用于扬声器状态获取。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 3 为扬声器设备不存在，返回值 4 为设备没初始化好。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetSpeakerState()
@@ -1593,7 +1595,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->RemoveAudioBlackList(openId);
 ```
 
 
-## 消息列表
+## 回调消息
 
 >消息列表：
 
