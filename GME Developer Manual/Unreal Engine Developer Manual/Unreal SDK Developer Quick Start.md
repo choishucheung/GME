@@ -101,7 +101,7 @@ ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, cons
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId			|int   				|房间号 			|
+| relationId			|int   				|房间号，只支持32位|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
 | authBuffer    		|char*    				|鉴权码			|
 | buffLen   			|int   				|鉴权码长度		|
