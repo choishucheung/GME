@@ -18,37 +18,3 @@
 重新打开 Unreal Engine 引擎，点击编辑按钮，点击 Plugins 按钮，可以看到 GME 插件。
 
 ![image](Image/ue4.png)
-## Android 预备工作
-
-### 初始化
-在AUEDemoLevelScriptActor 的 onLogin 函数中进行初始化。
->实例代码
-
-```
-//AUEDemoLevelScriptActor.cpp
-void AUEDemoLevelScriptActor::onLogin()
-{
-    TryInitEnv();
-}
-
-static void TryInitEnv()
-{
-#if PLATFORM_ANDROID
-    JNIEnv* JEnv = AndroidJavaEnv::GetJavaEnv();
-    if (nullptr != JEnv)
-    {
-        jclass Class = AndroidJavaEnv::FindJavaClass("com/epicgames/ue4/GameActivity");
-        if (nullptr != Class)
-        {
-            jmethodID getAppPackageNameMethodId = JEnv->GetStaticMethodID(Class, "OnInitGMEJnv", "()Ljava/lang/String;");
-            jstring JPackageName = (jstring)JEnv->CallStaticObjectMethod(Class, getAppPackageNameMethodId, nullptr);
-            const char * NativePackageNameString = JEnv->GetStringUTFChars(JPackageName, 0);
-            FString PackageName = FString(NativePackageNameString);
-            JEnv->ReleaseStringUTFChars(JPackageName, NativePackageNameString);
-            JEnv->DeleteLocalRef(JPackageName);
-            JEnv->DeleteLocalRef(Class);
-        }
-    }
-#endif
-}
-```
