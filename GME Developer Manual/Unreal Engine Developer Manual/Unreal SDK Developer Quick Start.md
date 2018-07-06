@@ -14,7 +14,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 |重要接口     | 接口含义|
 | ------------- |-------------|
-|InitEngine    		|初始化 GME 	|
+|Init   				|初始化 GME 	|
 |Poll    				|触发事件回调	|
 |EnterRoom	 		|进房  			|
 |EnableMic	 		|开麦克风 		|
@@ -54,19 +54,18 @@ ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| sdkAppId    	|char  	|来自腾讯云控制台的 SdkAppId 号码					|
-| openID    		|char  	|OpenID 为 Int32 类型，必须大于 10000，用于标识用户 	|
+| sdkAppId    	|char*  	|来自腾讯云控制台的 SdkAppId 号码					|
+| openID    		|char*   	|OpenID 只支持 Int64 类型（转为string传入），必须大于 10000，用于标识用户 	|
 
 > 示例代码 
 ```
-#define SDKAPPID3RD "1400035750"
-cosnt char* openId="10000";
-ITMGContext* context = ITMGContextGetInstance();
-context->Init(SDKAPPID3RD, openId);
+std::string appid = TCHAR_TO_UTF8(CurrentWidget->editAppID->GetText().ToString().operator*());
+std::string userId = TCHAR_TO_UTF8(CurrentWidget->editUserID->GetText().ToString().operator*());
+ITMGContextGetInstance()->Init(appid.c_str(), userId.c_str());
 ```
 
 ### 3、触发事件回调
-通过在 update 里面周期的调用 Poll 可以触发事件回调。
+通过在 Tick 里面周期的调用 Poll 可以触发事件回调。
 > 函数原型
 
 ```
@@ -77,10 +76,18 @@ protected:
 public:    	
 	virtual void Poll()= 0;
 }
+
 ```
-> 示例代码
+>示例代码
 ```
+//头文件中的声明
+virtual void Tick(float DeltaSeconds);
+
+//代码实现
+void AUEDemoLevelScriptActor::Tick(float DeltaSeconds) 
+{   
 ITMGContextGetInstance()->Poll();
+}
 ```
 
 ### 4、加入房间
@@ -96,14 +103,17 @@ ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, cons
 | ------------- |:-------------:|-------------|
 | relationId			|int   				|房间号 			|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
-| authBuffer    		|char    				|鉴权码			|
+| authBuffer    		|char*    				|鉴权码			|
 | buffLen   			|int   				|鉴权码长度		|
 
-|音频类型     	|含义|参数|
-| ------------- |------------ | ---- |
-| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1|
-| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2|
-| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3|
+|音频类型     	|含义|参数|适用场景|音量类型|控制台推荐采样率设置|
+| ------------- |------------ | ---- |---- |---- |---- |
+| ITMG_ROOM_TYPE_FLUENCY			|流畅音质	|1|流畅优先、超低延迟实时语音，应用在游戏内开黑场景，适用于FPS、MOBA等类型的游戏；								|扬声器：通话音量；耳机：媒体音量	|如对音质无特殊需求，16K采样率即可；					|
+| ITMG_ROOM_TYPE_STANDARD			|标准音质	|2|音质较好，延时适中，适用于狼人杀、棋牌等休闲游戏的实时通话场景；													|扬声器：通话音量；耳机：媒体音量	|根据对音质的需求，可以选择16k/48k采样率				|
+| ITMG_ROOM_TYPE_HIGHQUALITY		|高清音质	|3|超高音质，延时相对大一些，适用于音乐舞蹈类游戏以及语音社交类APP；适用于播放音乐、线上K歌等有高音质要求的场景；	|扬声器：媒体音量；耳机：媒体音量	|为了保证最佳效果，建议控制台设置48k采样率的高音质配置	|
+
+- 如对音量类型或场景有特殊需求，请联系一线客服反馈；
+- 控制台采样率设置会直接影响游戏语音效果，请在[控制台](https://console.cloud.tencent.com/gamegme)上再次确认采样率设置是否符合项目使用场景。
 
 > 示例代码  
 ```
@@ -112,17 +122,9 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 ```
 
 ### 5、加入房间事件的回调
-加入房间完成后会有回调，消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM。
+加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
 > 示例代码  
 ```
-//在头文件中继承了 ITMGDelegate，并进行声明。
-class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
-{
-public:
-    void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data);
-    ...	
-}
-
 //实现代码
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 	switch (eventType) {
@@ -179,11 +181,11 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 | ------------- |:-------------:|-------------
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | authId    		|int  		|要加入的房间名							|
-| strOpenID  		|char    		|用户标识								|
-| key    			|char	    	|来自腾讯云控制台的密钥					|
+| strOpenID  		|char*    		|用户标识								|
+| key    			|char*	    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | privilegeMap   	|int    		|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
-| retAuthBuff   	|char    		|返回的 authbuff							|
+| retAuthBuff   	|char*    		|返回的 authbuff							|
 | buffLenght   	|int    		|返回的authbuff的长度					|
 
 
