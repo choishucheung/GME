@@ -1,6 +1,6 @@
 ## 简介
 
-欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 iOS 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 iOS 开发的快速接入文档。
+欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 C++ 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 C++ 开发的快速接入文档。
 
 
 ## 使用流程图
@@ -14,7 +14,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 |重要接口     | 接口含义|
 | ------------- |-------------|
-|InitEngine    		|初始化 GME 	|
+|Init   				|初始化 GME 	|
 |Poll    				|触发事件回调	|
 |EnterRoom	 		|进房  			|
 |EnableMic	 		|开麦克风 		|
@@ -32,16 +32,12 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 ### 1、获取单例
 在使用语音功能时，需要首先获取 ITMGContext 对象。
-> 函数原型
 
-```
-ITMGContext ITMGDelegate <NSObject>
-```
 > 示例代码  
 
 ```
-ITMGContext* _context = [ITMGContext GetInstance];
-_context.TMGDelegate =self;
+ITMGContext* context = ITMGContextGetInstance();
+context->SetTMGDelegate(this);
 ```
 
 
@@ -53,17 +49,20 @@ _context.TMGDelegate =self;
 > 函数原型
 
 ```
-ITMGContext -(void)InitEngine:(NSString*)sdkAppID openID:(NSString*)openID
+ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 ```
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| sdkAppId    	|NSString  |来自腾讯云控制台的 SdkAppId 号码				|
-| openID    		|NSString  |OpenID 只支持 Int64 类型（转为string传入），必须大于 10000，用于标识用户 |
+| sdkAppId    	|char*  	|来自腾讯云控制台的 SdkAppId 号码					|
+| openID    		|char*   	|OpenID 只支持 Int64 类型（转为string传入），必须大于 10000，用于标识用户 	|
 
 > 示例代码 
 ```
-[[ITMGContext GetInstance] InitEngine:SDKAPPID3RD openID:_openId];
+#define SDKAPPID3RD "1400035750"
+cosnt char* openId="10000";
+ITMGContext* context = ITMGContextGetInstance();
+context->Init(SDKAPPID3RD, openId);
 ```
 
 ### 3、触发事件回调
@@ -71,27 +70,34 @@ ITMGContext -(void)InitEngine:(NSString*)sdkAppID openID:(NSString*)openID
 > 函数原型
 
 ```
-ITMGContext -(void)Poll
+class ITMGContext {
+protected:
+    virtual ~ITMGContext() {}
+    
+public:    	
+	virtual void Poll()= 0;
+}
 ```
 > 示例代码
 ```
-[[ITMGContext GetInstance] Poll];
+ITMGContextGetInstance()->Poll();
 ```
 
 ### 4、加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。
 - 加入房间默认不打开麦克风及扬声器。
-- 在 EnterRoom 接口调用之前要先调用 InitEngine 接口。
+- 在 EnterRoom 接口调用之前要先调用 Init 接口。
 
 > 函数原型
 ```
-ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
+ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId 	|int		|房间号，只支持32位|
-| roomType 	|int		|房间音频类型		|
-| authBuffer	|NSData	|鉴权码				|
+| relationId			|int   				|房间号，只支持32位|
+| roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
+| authBuffer    		|char*    				|鉴权码			|
+| buffLen   			|int   				|鉴权码长度		|
 
 |音频类型     	|含义|参数|音量类型|控制台推荐采样率设置|适用场景|
 | ------------- |------------ | ---- |---- |---- |---- |
@@ -101,31 +107,34 @@ ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuff
 
 - 如对音量类型或场景有特殊需求，请联系一线客服反馈；
 - 控制台采样率设置会直接影响游戏语音效果，请在[控制台](https://console.cloud.tencent.com/gamegme)上再次确认采样率设置是否符合项目使用场景。
+
 > 示例代码  
 ```
-[[ITMGContext GetInstance] EnterRoom:_roomId roomType:_roomType authBuffer:authBuffer];
+ITMGContext* context = ITMGContextGetInstance();
+context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen);
 ```
 
 ### 5、加入房间事件的回调
-加入房间完成后会有回调，消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM。
-设置回调相关参考代码。
-```
-- (void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary*)data
-```
-回调处理相关参考代码。
+加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
 > 示例代码  
 ```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
-    switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
-        {
-            int result = ((NSNumber*)[data objectForKey:@"result"]).intValue;
-            NSString* error_info = [data objectForKey:@"error_info"];
-            //收到进房成功事件
-        }
-            break;
-     }
+//在头文件中继承了 ITMGDelegate，并进行声明。
+class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
+{
+public:
+    void OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data);
+    ...	
+}
+
+//实现代码
+void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
+	switch (eventType) {
+            case ITMG_MAIN_EVENT_TYPE_ENTER_ROOM:
+		{
+		//进行处理
+		break;
+		}
+	}
 }
 ```
 
@@ -134,14 +143,14 @@ ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuff
 
 > 函数原型  
 ```
-ITMGContext GetAudioCtrl -(void)EnableMic:(BOOL)enable
+ITMGAudioCtrl virtual void EnableMic(bool bEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 NO，如果打开麦克风，则参数为 YES|
+| bEnabled    |bool     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false		|
 > 示例代码  
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableMic:YES];
+ITMGContextGetInstance()->GetAudioCtrl()->EnableMic(true);
 ```
 
 
@@ -150,39 +159,38 @@ ITMGContext GetAudioCtrl -(void)EnableMic:(BOOL)enable
 
 > 函数原型  
 ```
-ITMGContext GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
+ITMGAudioCtrl virtual void EnableSpeaker(bool enabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean       |如果需要关闭扬声器，则传入的参数为 NO，如果打开扬声器，则参数为 YES|
+| enable   		|bool       	|如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true	|
 > 示例代码  
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:YES];
+ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 ```
 
 
 ## 关于鉴权
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。    
-该接口返回值为 NSData 类型。
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[游戏多媒体引擎密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 
 > 函数原型
 ```
-@interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
-@end
+QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* strOpenID, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int  	|房间号，只支持32位			|
-| identifier    	|NSString|用户标识				|
-| key    			|NSString|来自腾讯云控制台的密钥			|
-| expTime    		|int   	|authBuffer 超时时间			|
-| authBits    		|uint64   |权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
+| ------------- |:-------------:|-------------
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| authId    		|int  		|要加入的房间名							|
+| strOpenID  		|char*    		|用户标识								|
+| key    			|char*	    	|来自腾讯云控制台的密钥					|
+| expTime    		|int   		|authBuffer 超时时间						|
+| privilegeMap   	|int    		|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
+| retAuthBuff   	|char*    		|返回的 authbuff							|
+| buffLenght   	|int    		|返回的authbuff的长度					|
 
 
 > 示例代码  
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
