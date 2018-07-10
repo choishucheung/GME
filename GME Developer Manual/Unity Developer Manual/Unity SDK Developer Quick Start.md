@@ -61,7 +61,6 @@ ITMGContext public abstract int Poll();
 
 ### 3、加入房间
 用生成的鉴权信息进房。加入房间默认不打开麦克风及扬声器。
-小队语音详细接入细节请查阅[小队语音接入文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)。
 
 
 > 函数原型
@@ -89,7 +88,7 @@ IQAVContext.GetInstance().EnterRoom(roomId, ITMG_ROOM_TYPE_FLUENCY, authBuffer
 
 ### 4、加入房间事件的回调
 加入房间后，需要通过委托函数进行回调。其中包含两个信息：result 及 error_info。
->函数原型
+> 函数原型
 ```
 委托函数：
 public delegate void QAVEnterRoomComplete(int result, string error_info);
@@ -128,8 +127,6 @@ ITMGAudioCtrl EnableMic(bool isEnabled)
 ```
 打开麦克风
 IQAVContext.GetInstance().GetAudioCtrl().EnableMic(true);
-关闭麦克风
-IQAVContext.GetInstance().GetAudioCtrl().EnableMic(false);
 ```
 
 
@@ -146,8 +143,6 @@ ITMGAudioCtrl EnableSpeaker(bool isEnabled)
 ```
 打开扬声器
 IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
-关闭扬声器
-IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(false);
 ```
 
 
