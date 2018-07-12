@@ -114,7 +114,7 @@ ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 
 ```
 #define SDKAPPID3RD "1400035750"
-cosnt char* openId="10000";
+cosnt char* openId="10001";
 ITMGContext* context = ITMGContextGetInstance();
 context->Init(SDKAPPID3RD, openId);
 ```
