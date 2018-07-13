@@ -4,19 +4,19 @@
 ## 目录
 [初始化相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音房间相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+[实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
 
-[实时语音伴奏相关接口（只支持移动端）](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音伴奏相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
 
-[实时语音音效相关接口（只支持移动端）](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音音效相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
 
-[离线语音](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
+[离线语音](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
 
-[高级接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
+[高级接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
 
-[回调消息列表](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8)
+[回调消息列表](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
 
 ## 使用流程图
 ![image](Image/i0.png)
@@ -110,7 +110,7 @@ ITMGContext virtual void Init(const char* sdkAppId, const char* openId)
 
 ```
 #define SDKAPPID3RD "1400035750"
-cosnt char* openId="10000";
+cosnt char* openId="10001";
 ITMGContext* context = ITMGContextGetInstance();
 context->Init(SDKAPPID3RD, openId);
 ```
@@ -134,11 +134,6 @@ public:
 >示例代码
 ```
 //头文件中的声明
-class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
-{
-void update(float delta); 
-}
-
 //代码实现
 void TMGTestScene::update(float delta)
 {
@@ -218,7 +213,6 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 ```
 unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
-unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
 
 QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
 ```
@@ -838,7 +832,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableLoopBack(true);
 | ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
 
 
-## 实时语音伴奏相关接口（只支持移动端）
+## 实时语音伴奏相关接口
 |接口     | 接口含义   |
 | ------------- |:-------------:|
 |StartAccompany    				       |开始播放伴奏|
@@ -1023,7 +1017,7 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->SetAccompanyFileCurrentPlayedTim
 
 
 
-## 实时语音音效相关接口（只支持移动端）
+## 实时语音音效相关接口
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
@@ -1235,7 +1229,7 @@ ITMGPTT virtual int ApplyAccessToken(const char* accessToken)
 | accessToken    |char*                        |QAVSDK_CALL QAVSDK_SIG_GenSig 函数返回的 accessToken|
 > 示例代码  
 ```
-char openID = 10000;
+char openID = 10001;
 int buffLength = 1024;
 char* sigBuff = new char[buffLength];
 const char* privateKey  = @"自己在官网的 key";
@@ -1635,7 +1629,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->RemoveAudioBlackList(openId);
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|播放 PTT 完成			|
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|语音转文字完成			|
 
-> Data 列表
+> Data 列表：
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
