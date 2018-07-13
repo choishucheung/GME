@@ -135,22 +135,4 @@ private void CalculatePosition()
 ```
 
 
-## Sound effect distance effect 
-### Set the range of received voice distance
-This function is used to set the range of voice received (the distance is based on the game engine).
-- Calling this function requires a call per frame.
-- Called on the premise of entering the room.
-- Every user in the game needs to be called.
-
-> Function Prototype
-```
-ITMGRoom int UpdateCoordinate(int pos_x, int pos_y, int pos_z, int range)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| pos_x    |int         |The x coordinate of the user					|
-| pos_y    |int         |The y coordinate of the user			|
-| pos_z    |int         |The z coordinate of the user						|
-| range 	 |int 	  |The range of incoming listeners, in units of distances of the game engine.	|
-
 
