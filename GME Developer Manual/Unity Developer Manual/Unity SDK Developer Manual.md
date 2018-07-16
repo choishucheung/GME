@@ -392,7 +392,9 @@ void OnEndpointsUpdateInfo(int eventID, int count, string[] identifierList)
 初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
 调用场景举例：
 - 当用户界面点击打开/关闭麦克风/扬声器按钮时，建议如下方式：
+
 Option 1: 在进房的时候调用 EnableAudioCaptureDevice(true) && EnabledAudioPlayDevice(true) 一次，点击时只调用 EnableAudioSend/Recv 来控制音频流是否发送/接收
+
 Option 2: 也可以和EnableAudioSend/Recv组合调用
 - 如目的是互斥（释放录音权限给其他模块使用），建议使用 PauseAudio/ResumeAudio。
 
