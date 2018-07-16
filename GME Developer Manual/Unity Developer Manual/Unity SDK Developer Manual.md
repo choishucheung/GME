@@ -29,8 +29,10 @@
 |Init    		|初始化 GME 	|
 |Poll    		|触发事件回调	|
 |EnterRoom	 	|进房  		|
-|EnableMic	 	|开麦克风 	|
-|EnableSpeaker		|开扬声器 	|
+|EnableAudioCaptureDevice	 	|开关采集设备 	|
+|EnableAudioSend		|打开关闭音频上行 	|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|EnableAudioRecv    					|打开关闭音频下行	|
 
 **说明**
 
@@ -396,19 +398,23 @@ Option 2: 也可以和EnableAudioSend/Recv组合调用
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|PauseAudio    				       	|暂停音频引擎|
-|ResumeAudio    				      	|恢复音频引擎|
-|EnableAudioCaptureDevice    		|开关采集设备|
-|GetMicState    						|获取麦克风状态|
-|GetMicLevel    						|获取实时麦克风音量|
-|SetMicVolume    					|设置麦克风音量|
-|GetMicVolume    					|获取麦克风音量|
-|EnableSpeaker    					|开关扬声器|
-|GetSpeakerState    					|获取扬声器状态|
-|GetSpeakerLevel    					|获取实时扬声器音量|
-|SetSpeakerVolume    				|设置扬声器音量|
-|GetSpeakerVolume    				|获取扬声器音量|
-|EnableLoopBack    					|开关耳返|
+|PauseAudio    				       	|暂停音频引擎		|
+|ResumeAudio    				      	|恢复音频引擎		|
+|EnableAudioCaptureDevice    		|开关采集设备		|
+|IsAudioCaptureDeviceEnabled    	|获取采集设备状态	|
+|EnableAudioSend    				|打开关闭音频上行	|
+|IsAudioSendEnabled    				|获取音频上行状态	|
+|GetMicLevel    						|获取实时麦克风音量	|
+|SetMicVolume    					|设置麦克风音量		|
+|GetMicVolume    					|获取麦克风音量		|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|IsAudioPlayDeviceEnabled    		|获取播放设备状态	|
+|EnableAudioRecv    					|打开关闭音频下行	|
+|IsAudioRecvEnabled    				|获取音频下行状态	|
+|GetSpeakerLevel    					|获取实时扬声器音量	|
+|SetSpeakerVolume    				|设置扬声器音量		|
+|GetSpeakerVolume    				|获取扬声器音量		|
+|EnableLoopBack    					|开关耳返			|
 
 
 ### 暂停音频引擎的采集和播放
