@@ -3,7 +3,7 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Unity 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Unity 开发的接入技术文档。
 
 ## 目录
-[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[初始化相关接口](https://github.com/TencentMediaLab/GME/blob/GME_2.1_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
 [实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.1_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
@@ -41,6 +41,8 @@
 **GME 的接口调用要在同一个线程下。**
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
+
+**GME 需要调用 Poll 接口触发事件回调。**
 
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
@@ -136,13 +138,13 @@ ITMGContext public abstract int Uninit()
 > 函数原型
 
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, string key, int expTime, uint authBits)
+QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key, int expTime, uint authBits)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int   		|房间号，只支持32位				|
-| identifier    	|String 	|用户标识					|
+| openId    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云控制台的密钥				|
 | expTime    		|int   		|authBuffer 超时时间				|
 | authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
@@ -165,11 +167,11 @@ byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly 
 > 函数原型
 
 ```
-ITMGContext EnterRoom(int relationId, int roomType, byte[] authBuffer)
+ITMGContext EnterRoom(int roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId		|int    	|房间号，只支持32位					|
+| roomId		|int    	|房间号，只支持32位					|
 | roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
@@ -350,14 +352,14 @@ void OnRoomTypeChangedEvent(){
   
 ```
 委托函数：
-public delegate void QAVEndpointsUpdateInfo(int eventID, int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]string[] identifierList);
+public delegate void QAVEndpointsUpdateInfo(int eventID, int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]string[] openIdList);
 事件函数：
 public abstract event QAVEndpointsUpdateInfo OnEndpointsUpdateInfoEvent;
 
 对事件进行监听：
 IQAVContext.GetInstance().OnEndpointsUpdateInfoEvent += new QAVEndpointsUpdateInfo(OnEndpointsUpdateInfo);
 监听处理：
-void OnEndpointsUpdateInfo(int eventID, int count, string[] identifierList)
+void OnEndpointsUpdateInfo(int eventID, int count, string[] openIdList)
 {
     //进行处理
 		//开发者对参数进行解析，得到信息 event_id及 user_list
@@ -667,6 +669,12 @@ public abstract event QAVOnDeviceStateChangedEvent OnDeviceStateChangedEvent;
 | deviceType    	|int       	|1 代表采集设备，2 代表播放设备							|
 | deviceId   	 	|string 	|设备GUID，用于标记设备，仅在 Windows 端和 Mac 端有效	|
 | openOrClose    |bool  	|采集设备/播放设备占用或者释放							|
+
+
+|参数     | 数值         |意义|
+| ------------- |:-------------:|-------------|
+| AUDIODEVICE_CAPTURE    	|1       	|代表采集设备|
+| AUDIODEVICE_PLAYER   	 	|2 			|代表播放设备|
 
 > 示例代码  
 
@@ -1041,7 +1049,6 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 ## 离线语音
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|ApplyAuthBuffer    |传入鉴权	|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1054,22 +1061,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|翻译			|
 
-### 离线语音技术接入初始化
-初始化需要鉴权，鉴权获取详细流程见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/GME_2.1_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
 
-> 函数原型  
-```
-ITMGPTT ApplyAuthBuffer(byte[] authBuffer,int authBufferLen)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| authBuffer 	|Byte[] 	|鉴权码，与实时语音所需鉴权相同，参见接口 GenAuthBuffer|
-| authBufferLen 	|int 	|鉴权码长度|
-
-> 示例代码  
-```
-IQAVContext.GetInstance().GetPttCtrl().ApplyAuthBuffer(authBuffer,authBufferLen);
-```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1150,17 +1142,19 @@ IQAVContext.GetInstance().GetPttCtrl().CancelRecording();
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。
+此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
-IQAVPTT int UploadRecordedFile (string filePath)
+IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |string                      |上传的语音路径|
+| authBuffer 	|Byte[] 	|鉴权码					|
+
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath); 
+IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath，authBuffer); 
 ```
 
 
@@ -1190,18 +1184,20 @@ void mInnerHandler(int code, string filepath, string fileid){
 
 
 ### 下载语音文件
-此接口用于下载语音文件。
+此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
-IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath)
+IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |string                       |文件的url路径|
 | downloadFilePath    |string                       |文件的本地保存路径|
+| authBuffer 	|Byte[] 	|鉴权码					|
+
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath);
+IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath，authBuffer);
 ```
 
 
@@ -1317,18 +1313,19 @@ int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuratio
 
 
 ### 将指定的语音文件翻译成文字
-此接口用于将指定的语音文件翻译成文字。
+此接口用于将指定的语音文件翻译成文字。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
-IQAVPTT int SpeechToText(String fileID)
+IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |string                      |语音文件 url|
+| authBuffer 	|Byte[] 	|鉴权码					|
 
 > 示例代码  
 ```
-IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID);
+IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID，authBuffer);
 ```
 
 ### 翻译回调
@@ -1438,11 +1435,11 @@ string tips = IQAVContext.GetInstance().GetRoom().GetQualityTips();
 > 函数原型  
 
 ```
-ITMGContext ITMGAudioCtrl AddAudioBlackList(string identifier)
+ITMGContext ITMGAudioCtrl AddAudioBlackList(string openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| identifier    |NSString      |需添加黑名单的id|
+| openId    |NSString      |需添加黑名单的id|
 > 示例代码  
 
 ```
@@ -1454,11 +1451,11 @@ IQAVContext.GetInstance().GetAudioCtrl ().AddAudioBlackList (id);
 > 函数原型  
 
 ```
-ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string identifier)
+ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string openId)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| identifier    |NSString      |需移除黑名单的id|
+| openId    |NSString      |需移除黑名单的id|
 > 示例代码  
 
 ```
