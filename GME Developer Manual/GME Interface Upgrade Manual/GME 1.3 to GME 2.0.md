@@ -104,14 +104,14 @@ TMGAudioEffectCtrl int setVoiceType(int type)
 |类型参数     |参数代表|意义|
 | ------------- |-------------|------------- |
 |VOICE_TYPE_ORIGINAL_SOUND  	|0	|原声			|
-|VOICE_TYPE_LOLITA    		|1	|萝莉			|
-|VOICE_TYPE_UNCLE  		|2	|大叔			|
-|VOICE_TYPE_INTANGIBLE    	|3	|空灵			|
+|VOICE_TYPE_LOLITA    			|1	|萝莉			|
+|VOICE_TYPE_UNCLE  			|2	|大叔			|
+|VOICE_TYPE_INTANGIBLE    		|3	|空灵			|
 |VOICE_TYPE_KINDER_GARTEN    	|4	|幼稚园			|
 |VOICE_TYPE_HEAVY_GARTEN    	|5	|重机器			|
 |VOICE_TYPE_OPTIMUS_PRIME    	|6	|擎天柱			|
 |VOICE_TYPE_CAGED_ANIMAL    	|7	|困兽			|
-|VOICE_TYPE_DIALECT    		|8	|土掉渣/歪果仁/方言	|
+|VOICE_TYPE_DIALECT    			|8	|土掉渣/歪果仁/方言	|
 |VOICE_TYPE_METAL_ROBOT    	|9	|金属机器人		|
 |VOICE_TYPE_DEAD_FATBOY    	|10	|死肥仔			|
 
