@@ -455,7 +455,7 @@ ITMGAudioCtrl int EnableAudioPlayDevice(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开采集设备，则传入的参数为 true，如果关闭采集设备，则参数为 false|
+| isEnabled    |bool     |如果需要打开采集设备，则传入的参数为 true，如果关闭采集设备，则参数为 false|
 > 示例代码  
 ```
 打开采集设备
@@ -482,7 +482,7 @@ ITMGAudioCtrl int EnableAudioSend(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
+| isEnabled    |bool     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
 
 > 示例代码  
 ```
@@ -567,7 +567,7 @@ bool IsAudioPlayDevice = IQAVContext.GetInstance().GetAudioCtrl().IsAudioPlayDev
 ```
 
 ### 打开关闭音频下行
-此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。采集设备的打开关闭参见接口 参见EnableAudioPlayDevice。
+此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。播放设备的打开关闭参见接口 参见EnableAudioPlayDevice。
 
 > 函数原型  
 ```
@@ -575,7 +575,7 @@ ITMGAudioCtrl int EnableAudioRecv(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
+| isEnabled    |bool     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
 
 > 示例代码  
 ```
