@@ -96,9 +96,37 @@ ITMGAudioCtrl bool IsAudioPlayDeviceEnabled()
 ITMGAudioCtrl bool IsAudioRecvEnabled()
 ```
 
+### 增加回调：设备占用和释放事件回调（Unity）
+在房间内，占用设备和释放设备时会回调，通过委托传递事件的相关消息。
+
+```
+委托函数：
+public delegate void QAVOnDeviceStateChangedEvent(int deviceType, string deviceId, bool openOrClose);
+事件函数：
+public abstract event QAVOnDeviceStateChangedEvent OnDeviceStateChangedEvent;
+```
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| deviceType    	|int       	|1 代表采集设备，2 代表播放设备							|
+| deviceId   	 	|string 	|设备GUID，用于标记设备，仅在 Windows 端和 Mac 端有效	|
+| openOrClose    |bool  	|采集设备/播放设备占用或者释放							|
+
+
+|参数     | 数值         |意义|
+| ------------- |:-------------:|-------------|
+| AUDIODEVICE_CAPTURE    	|1       	|代表采集设备|
+| AUDIODEVICE_PLAYER   	 	|2 			|代表播放设备|
+
 
 
 ## 其他接口更新
+### 离线语音删除 TLS 鉴权相关接口。
+QAVSig GenSig
+
+IQAVPTT ApplyAccessToken
+
+删除之后在以下接口中增加 authBuffer 参数，客户端生成的 authBuffer 最长有效期为24小时，需开发者自行维护，详情参考离线语音鉴权文档。
 
 ### 离线语音上传语音文件
 #### 增加参数 authBuffer。
@@ -126,3 +154,18 @@ IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] aut
 | fileID    |string                       |文件的url路径|
 | downloadFilePath    |string                       |文件的本地保存路径|
 | authBuffer 	|Byte[] 	|鉴权码					|
+
+
+### 将指定的语音文件识别为文字
+此接口用于将指定的语音文件识别为文字。鉴权码的生成参考接口 GenAuthBuffer。
+> 函数原型  
+```
+IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| fileID    |string                      |语音文件 url|
+| authBuffer 	|Byte[] 	|鉴权码					|
+
+
+
