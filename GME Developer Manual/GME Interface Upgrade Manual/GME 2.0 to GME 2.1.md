@@ -4,7 +4,7 @@
 
 ## 主要接口更新
 
-### 修改接口：开启关闭采集设备
+- ### 修改接口：开启关闭采集设备
 #### 原接口：ITMGContext ITMGAudioCtrl public int EnableMic
 #### 现接口：ITMGContext ITMGAudioCtrl public int EnableAudioCaptureDevice
 #### 现接口：ITMGContext ITMGAudioCtrl public int EnableAudioSend
@@ -35,7 +35,7 @@ ITMGAudioCtrl int EnableAudioSend(bool isEnabled)
 | isEnabled    |bool     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
 
 
-### 修改接口：采集设备状态
+- ### 修改接口：采集设备状态
 #### 原接口：ITMGContext ITMGAudioCtrl public int GetMicState
 #### 现接口：ITMGContext ITMGAudioCtrl public bool IsAudioCaptureDeviceEnabled
 #### 现接口：ITMGContext ITMGAudioCtrl public bool IsAudioSendEnabled
@@ -53,7 +53,7 @@ ITMGAudioCtrl bool IsAudioCaptureDeviceEnabled()
 ITMGAudioCtrl bool IsAudioSendEnabled()
 ```
 
-### 修改接口：开启关闭播放设备
+- ### 修改接口：开启关闭播放设备
 #### 原接口：ITMGContext ITMGAudioCtrl public int EnableSpeaker
 #### 现接口：ITMGContext ITMGAudioCtrl public int EnableAudioPlayDevice
 #### 现接口：ITMGContext ITMGAudioCtrl public int EnableAudioRecv
@@ -78,7 +78,7 @@ ITMGAudioCtrl int EnableAudioRecv(bool isEnabled)
 | ------------- |:-------------:|-------------|
 | isEnabled    |bool     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
 
-### 修改接口：播放设备状态
+- ### 修改接口：播放设备状态
 #### 原接口：ITMGContext ITMGAudioCtrl public int GetSpeakerState
 #### 现接口：ITMGContext ITMGAudioCtrl public bool IsAudioPlayDeviceEnabled
 #### 现接口：ITMGContext ITMGAudioCtrl public bool IsAudioRecvEnabled
@@ -96,7 +96,7 @@ ITMGAudioCtrl bool IsAudioPlayDeviceEnabled()
 ITMGAudioCtrl bool IsAudioRecvEnabled()
 ```
 
-### 增加回调：设备占用和释放事件回调（Unity）
+- ### 增加回调：设备占用和释放事件回调（Unity）
 在房间内，占用设备和释放设备时会回调，通过委托传递事件的相关消息。
 
 ```
@@ -121,14 +121,14 @@ public abstract event QAVOnDeviceStateChangedEvent OnDeviceStateChangedEvent;
 
 
 ## 其他接口更新
-### 离线语音删除 TLS 鉴权相关接口。
+- ### 离线语音删除 TLS 鉴权相关接口。
 QAVSig GenSig
 
 IQAVPTT ApplyAccessToken
 
 删除之后在以下接口中增加 authBuffer 参数，客户端生成的 authBuffer 最长有效期为24小时，需开发者自行维护，详情参考离线语音鉴权文档。
 
-### 离线语音上传语音文件
+- ### 离线语音上传语音文件
 #### 增加参数 authBuffer。
 
 此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
@@ -142,7 +142,7 @@ IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
 | authBuffer 	|Byte[] 	|鉴权码			|
 
 
-### 离线语音下载语音文件
+- ### 离线语音下载语音文件
 #### 增加参数 authBuffer。
 此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
@@ -156,7 +156,8 @@ IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] aut
 | authBuffer 	|Byte[] 	|鉴权码					|
 
 
-### 将指定的语音文件识别为文字
+- ### 将指定的语音文件识别为文字
+#### 增加参数 authBuffer。
 此接口用于将指定的语音文件识别为文字。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
