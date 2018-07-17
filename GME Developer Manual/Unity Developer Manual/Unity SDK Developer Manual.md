@@ -990,7 +990,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|翻译			|
+|SpeechToText 		|识别			|
 
 ### 离线语音技术接入初始化
 初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
@@ -1273,8 +1273,8 @@ int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuratio
 ```
 
 
-### 将指定的语音文件翻译成文字
-此接口用于将指定的语音文件翻译成文字。
+### 将指定的语音文件识别成文字
+此接口用于将指定的语音文件识别成文字。
 > 函数原型  
 ```
 IQAVPTT int SpeechToText(String fileID)
@@ -1288,8 +1288,8 @@ IQAVPTT int SpeechToText(String fileID)
 IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID);
 ```
 
-### 翻译回调
-将指定的语音文件翻译成文字，通过委托传递消息。
+### 识别回调
+将指定的语音文件识别成文字，通过委托传递消息。
 > 函数原型  
 ```
 委托函数：
@@ -1308,7 +1308,7 @@ public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 IQAVContext.GetInstance().GetPttCtrl().OnSpeechToTextComplete += mInnerHandler;
 监听处理：
 void mInnerHandler(int code, string fileid, string result){
-    //播放语音的回调
+    //识别回调
 }
 ```
 ## 高级 API
@@ -1421,49 +1421,5 @@ ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string identifier)
 ```
 IQAVContext.GetInstance().GetAudioCtrl ().RemoveAudioBlackList (id);
 ```
-## 回调消息
-
-> 消息列表：
-
-|消息     | 消息代表的意义   
-| ------------- |:-------------:|
-|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		|进入音频房间消息		|
-|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|退出音频房间消息		|
-|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT		|房间因为网络等原因断开消息	|
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE		|房间类型变化事件		|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|打开麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|关闭麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER		|打开扬声器消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER		|关闭扬声器消息			|
-|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH		|伴奏结束消息			|
-|ITMG_MAIN_EVNET_TYPE_USER_UPDATE		|房间成员更新消息		|
-|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE	|PTT 录音完成			|
-|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE	|上传 PTT 完成			|
-|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|下载 PTT 完成			|
-|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|播放 PTT 完成			|
-|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|语音转文字完成			|
-
-> Data 列表
-
-|消息     | Data         |例子|
-| ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		|result; error_info			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    	|result; error_info  			|{"error_info":"waiting timeout, please check your network","result":0}|
-| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    	|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    	|result; error_info 			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}|
-| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    		|user_list;  event_id			|{"event_id":1,"user_list":["0"]}|
-| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
-| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
-| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
-| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
-| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id		|{"file_id":"","filepath":"","result":0}|
 
 
