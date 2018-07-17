@@ -990,7 +990,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|翻译			|
+|SpeechToText 		|识别			|
 
 ### 离线语音技术接入初始化
 初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
