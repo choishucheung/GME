@@ -41,7 +41,9 @@ Voice Change：Select voice type. 10 kinds of voice type are supported.
 
 - Userid: The user id using 3D voice, you can select any speaking members except yourself in the room.
 
-- Azimuth: The angle of the horizontal direction relative to yourself, which will be 0 at the front, 90 at the right, -90 at the left and 180 or -180 at the back Elevation: The angle of the vertical direction relative to yourself. On a horizontal plane with yourself, the angle will be 0, directly below will be -90, and directly above will be 90.
+- Azimuth: The angle of the horizontal direction relative to yourself, which will be 0 at the front, 90 at the right, -90 at the left and 180 or -180 at the back.
+
+- Elevation: The angle of the vertical direction relative to yourself. On a horizontal plane with yourself, the angle will be 0, directly below will be -90, and directly above will be 90.
 
 - Distance: Relative distance from yourself.
 
