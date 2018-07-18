@@ -13,7 +13,7 @@
 [콜백 메시지 리스트](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
 
 ## 사용 계통도
-![image](Image/i0.png)
+![image](Image/i1.png)
 
 
 ### GME 사용 시 중요 사항
