@@ -69,7 +69,7 @@ ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBu
 |Parameter     | Type         |Description|
 | ------------- |:-------------:|-------------
 | relationId		|int    		|Room number, 32 bits supported only.									|
-| roomType 			|ITMG_ROOM_TYPE	|Audio room type.							|
+| roomType 			|ITMG_ROOM_TYPE	|Audio room type,only can be 1|
 | authBuffer    	|Byte[] 		|Authentication code.								|
 | teamId    		|int    		|Joined team voice team identification code (cannot be 0)|
 | audioMode    		|int    		|0 for global voice and 1 for team voice|
