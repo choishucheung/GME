@@ -1,6 +1,9 @@
 ## 개요
 텐센트의 클라우드 게임 멀티미디어 엔진 SDK를 사용해 주셔서 감사합니다. 개발자들의 디버그 및 텐센트의 클라우드 게임 멀티미디어 엔진 제품인 API의 접속에 편의를 제공하기 위해 GME 3D 음향효과의 접속 기술 문서를 소개해 드립니다.
 
+[GME3D音效文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Spatializer%20Manual.md)
+
+[GME Spatializer Manual](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Spatializer%20Manual_intl.md)
 ## 3D 효과음 접속
 ### 1、1.스위치 3D 효과
 이 함수는 스위치 3D 효과음에 사용됩니다. 3D 효과음을 사용하기 전에 반드시 이 함수를 호출해야 합니다.

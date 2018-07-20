@@ -2,6 +2,8 @@
 
 텐센트의 클라우드 게임 멀티미디어 엔진 SDK를 사용해 주셔서 감사합니다. 개발자들의 디버그 및 텐센트의 클라우드 게임 멀티미디어 엔진 제품의 접속에 편의를 제공하기 위해 모든 플랫폼에 적용되는 KEY 관련 기술 문서를 소개해 드립니다.
 
+[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)
+
 ## 실시간 음성 KEY
 텐센트의 클라우드 게임 멀티미디어 엔진은 A-KEY를 제공하여 관련 기능의 암호화 및 인증(authentication)에 사용합니다. 인증에 사용되는 서명 생성 과정은 평문, KEY 및 프로토콜과 관련이 있습니다. 
 
