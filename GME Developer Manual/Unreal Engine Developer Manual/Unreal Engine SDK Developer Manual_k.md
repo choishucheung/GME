@@ -1,6 +1,10 @@
 ## 개요
 텐센트의 클라우드 게임 멀티미디어 엔진 SDK를 사용해 주셔서 감사합니다. Unreal Engine 개발자들의 디버그 및 텐센트의 클라우드 게임 멀티미디어 엔진 제품인 API의 접속에 편의를 제공하기 위해 Unreal Engine 개발에 적용되는 접속 기술 문서를 소개해 드립니다.
 
+[Unreal Engine 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
+
+[Unreal Engine SDK Developer Manual](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual_intl.md)
+
 ## 목차
 [초기화 관련 인터페이스](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
