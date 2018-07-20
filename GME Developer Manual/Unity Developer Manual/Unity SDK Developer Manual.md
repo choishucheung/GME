@@ -502,7 +502,7 @@ IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
 ```
 
 ### 获取麦克风的软件音量
-此接口用于获取麦克风的软件音量。返回值为一个int类型数值。
+此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型  
 ```
 ITMGAudioCtrl GetMicVolume()
@@ -572,7 +572,7 @@ IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol);
 ```
 
 ### 获取扬声器的软件音量
-此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量。
+此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
 Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
 > 函数原型  
