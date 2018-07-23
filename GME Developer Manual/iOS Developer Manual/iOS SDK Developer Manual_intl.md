@@ -1,4 +1,4 @@
-Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access technologies for iOS development so that iOS developers can easily debug and access APIs for Tencent Cloud GME.
+Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access to technologies for iOS development so that iOS developers can easily debug and access to APIs for Tencent Cloud GME.
 
 ## Main Process Flowchart
 ![image](Image/i6.png)
@@ -17,7 +17,7 @@ Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document des
 **Note：**
 **All of the interfaces of GME returns QAVResult, AV_OK which is 0 indicates success。**
 **All of the interfaces of GME should be call in a same thread. And Callback will trigger in the same thread where Poll() function is called.**
-**GME need authentication. you can see QAVAuthBuffer.GenAuthBuffer. and see the [GME KEY Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual_intl.md).**
+**GME need authentication, you can see QAVAuthBuffer.GenAuthBuffer,and see the [GME KEY Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual_intl.md).**
 
 
 
