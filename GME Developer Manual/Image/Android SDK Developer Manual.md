@@ -7,7 +7,7 @@
 
 [设置信息相关接口](./Android%20SDK%20Developer%20Manual.md#%E8%AE%BE%E7%BD%AE%E4%BF%A1%E6%81%AF%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音房间事件接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E4%BA%8B%E4%BB%B6%E6%8E%A5%E5%8F%A3)
+[实时语音房间事件接口](../GME%20FAQ%20Manual.md#sdk%E5%8A%9F%E8%83%BD%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98)
 
 [实时语音音频接口](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
 
