@@ -7,15 +7,17 @@ Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describ
 
 |Important Interface     | Description|
 |:-------------|:-------------:|
-|InitEngine    |Initialize 	|
+|Init    |Initialize 	|
 |Poll    		|Trigger Callback Message	|
 |EnterRoom	 	|Enter a room for communication  		|
 |EnableMic	 	|Open microphone capture and send audio data captured 	|
 |EnableSpeaker	|Receive audio data and play it	|
 
 **Note：**
-**All of the interfaces of GME returns QAVResult, AV_OK which is 0 indicates success。**
+**All of the interfaces of GME returns QAVResult, AV_OK which is 0 indicates success**
+
 **All of the interfaces of GME should be call in a same thread. And Callback will trigger in the same thread where Poll() function is called.**
+
 **GME need authentication, you can see QAVAuthBuffer.GenAuthBuffer,and see the [GME KEY Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual_intl.md).**
 
 
