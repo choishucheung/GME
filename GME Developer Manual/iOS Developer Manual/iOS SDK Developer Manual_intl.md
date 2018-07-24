@@ -1069,7 +1069,6 @@ As a callback for converting specified speech into text, the ITMG_MAIN_EVNET_TYP
 | ITMG_MAIN_EVENT_TYPE_DISABLE_MIC        |Microphone disabled.
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    |Speaker enabled.
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    |Speaker disabled.
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE    |Role changed.
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH   |Accompaniment ended.
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE     |Room member updated.
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE  |PTT recorded.
