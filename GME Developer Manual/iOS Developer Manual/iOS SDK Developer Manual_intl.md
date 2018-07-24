@@ -21,27 +21,6 @@ Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document des
 
 
 
-## Main Process Flowchart
-![image](Image/i6.png)
-
-### Important!!!
-
-|Important Interface     | Description|
-|:-------------|:-------------:|
-|InitEngine    |Initialize 	|
-|Poll    		|Trigger Callback Message	|
-|SetDefaultAudienceAudioCategory 	|SetDefault Catetegory|
-|EnterRoom	 	|Enter a room for communication  		|
-|EnableMic	 	|Open microphone capture and send audio data captured 	|
-|EnableSpeaker	|Receive audio data and play it	|
-
-**Note：**
-**All of the interfaces of GME returns QAVResult, AV_OK which is 0 indicates success。**
-**All of the interfaces of GME should be call in a same thread. And Callback will trigger in the same thread where Poll() function is called.**
-**GME need authentication. you can see QAVAuthBuffer.GenAuthBuffer. and see the [GME KEY Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual_intl.md).**
-
-
-
 ## SDK Initialization
 
 ### Get a Singleton
@@ -125,11 +104,7 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 ## Real-Time Voice Access
 
 ### Set Relevant Information
-<<<<<<< HEAD
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
-=======
 Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction_intl.md).
->>>>>>> GME_2.0_Dev
 The SetAppInfo function contains the **sdkAppId**, and **openID** parameters. The values of **sdkAppId** are obtained from Tencent Cloud Console. The value of **OpenID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. Currently, the ID can be only of the int64 type.
 > Function Prototype
 ```
@@ -1094,10 +1069,6 @@ As a callback for converting specified speech into text, the ITMG_MAIN_EVNET_TYP
 | ITMG_MAIN_EVENT_TYPE_DISABLE_MIC        |Microphone disabled.
 |ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    |Speaker enabled.
 |ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    |Speaker disabled.
-<<<<<<< HEAD
-|ITMG_MAIN_EVENT_TYPE_CHANGE_ROLE    |Role changed.
-=======
->>>>>>> GME_2.0_Dev
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH   |Accompaniment ended.
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE     |Room member updated.
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE  |PTT recorded.
