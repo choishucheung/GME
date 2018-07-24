@@ -1,4 +1,4 @@
-﻿Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes project configuration for Android development so that Android developers can easily debug and access APIs for Tencent Cloud GME.
+Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes project configuration for Android development so that Android developers can easily debug and access APIs for Tencent Cloud GME.
 
 ## SDK Acquisition
 You can obtain the SDK as follows.
@@ -37,10 +37,13 @@ sourceSets {
 ### Configure application permissions.  
 Add the following permissions to the **AndroidManifest.xml** file of the Android project.
 ```
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.BLUETOOTH"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 ```

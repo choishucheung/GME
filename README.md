@@ -8,45 +8,70 @@
 
 
 ## 接入通用文档
-#### [接入指引文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md)
-#### [角色配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Role%20Manual.md)
-#### [控制台用量统计文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
-#### [密钥技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual.md)
+#### [接入指引文档](./GME%20Introduction.md)
+#### [控制台用量统计文档](./GME%20Introduction.md#%E6%8E%A7%E5%88%B6%E5%8F%B0%E7%94%A8%E9%87%8F%E7%BB%9F%E8%AE%A1%E4%BD%BF%E7%94%A8)
+#### [密钥技术文档](./GME%20Developer%20Manual/GME%20Key%20Manual.md)
+#### [小队语音文档](./GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md)
+#### [3D音效文档](./GME%20Developer%20Manual/GME%20Spatializer%20Manual.md)
+#### [错误码文档](./GME%20Developer%20Manual/GME%20Error%20Code.md)
 
 ## 各平台接入文档
 
 #### Unity 引擎
-- ##### *支持平台:Android, iOS*
-- [Unity 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
-
-- [Unity 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
+- ##### *支持平台:Android, iOS, Windows, MAC*
+- [Unity 工程配置文档](./GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration.md)
+- [Unity 快速接入文档](./GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Quick%20Start.md)
+- [Unity 开发接入技术文档](./GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual.md)
 
 #### Unreal Engine 引擎
 - ##### *支持平台:Android, iOS, Windows, MAC*
-- [Unreal Engine 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
-
-- [Unreal Engine 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
+- [Unreal Engine 工程配置文档](./GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration.md)
+- [Unreal Engine 快速接入文档](./GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20SDK%20Developer%20Quick%20Start.md)
+- [Unreal Engine 开发接入技术文档](./GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual.md)
 
 #### Cocos2D 引擎
 - ##### *支持平台:Android, iOS*
-- [Cocos2D-X 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
-
-- [Cocos2D-X 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
+- [Cocos2D-X 工程配置文档](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration.md)
+- [Cocos2D-X 快速接入文档](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Quick%20Start.md)
+- [Cocos2D-X 开发接入技术文档](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
 
 #### 原生应用
-- [PC（C++）开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
+- [PC（C++）快速接入文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Quick%20Start.md)
 
-- [iOS 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
+- [PC（C++）开发接入技术文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
 
-- [iOS 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
+- [iOS 工程配置文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
-- [Android 工程配置文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
+- [iOS 快速接入文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Quick%20Start.md)
 
-- [Android 开发接入技术文档](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
+- [iOS 开发接入技术文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual.md)
+
+- [Android 工程配置文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Project%20Configuration.md)
+
+- [Android 快速接入文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Quick%20Start.md)
+
+- [Android 开发接入技术文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
 
 
 
 ## SDK更新说明
+### GME2.0（2018-06-22）
+#### 新增功能
+1、GME 上架 PC Native、PC Unity 版本；
+
+2、GME 支持 Unreal 引擎；
+
+3、GME 离线语音转文本提供多语言支持，最多支持 120 种语言；
+
+4、GME PC 端支持 3D 实时语音；
+
+#### 优化能力
+1、提升通话音量下的高音质体验；
+
+2、降低接入门槛，提供流畅音质、普通音质，高清音质多种选择；
+
+3、稳定性提升；
+
 ### GME1.2（2018-03-20）
 #### 新增功能
 1、GME 支持 Cocos 引擎；
@@ -66,15 +91,13 @@
  3、优化了 Moba 场景下语音延迟，小队语音延迟更低；
 
  4、优化杂音消除算法，语音音质更纯净；
+
 ### GME1.1（2017-10-18）
 #### 新增功能
-1、狼人杀场景下支持视频；
+1、游戏 SDK 支持多种格式的伴奏和音效；
 
-2、游戏 SDK 支持多种格式的伴奏和音效；
+2、新增游戏场景下离线语音及语音转文本能力；
 
-3、新增游戏场景下离线语音及语音转文本能力；
-
-4、支持房间内上麦前视频画面预览；
 #### 优化
 1、提供进房鉴权的客户端实现模块，降低 SDK 接入门；
 
@@ -91,4 +114,4 @@ QQ：1558615124
 邮箱：terryzuo@tencent.com;garyzeng@tencent.com;v_caisxcai@tencent.com
 
 ## Documentation
-[GME Documentation(English)](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/README_intl.md)
+[GME Documentation(English)](./README_intl.md)
