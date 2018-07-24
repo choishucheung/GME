@@ -1,1 +1,0 @@
-GME Interface Upgrade Manual
