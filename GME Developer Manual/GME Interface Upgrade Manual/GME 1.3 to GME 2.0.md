@@ -122,4 +122,6 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().setVoiceType(0);
 
 
 ### 新增 3D 音效能力
-详细使用方法见[3D音效文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Spatializer%20Manual.md)。
+
+详细使用方法见[3D音效文档](../GME%20Spatializer%20Manual.md)。
+
