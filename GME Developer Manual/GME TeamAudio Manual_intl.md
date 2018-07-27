@@ -1,117 +1,126 @@
-## Introduction
-Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access to technologies for development so that developers can easily debug and access to Real-time team APIs for Tencent Cloud GME.
+## Overview
+Thank you for using Tencent Cloud Game Multimedia Engine (GME) SDK. This document provides a detailed description that makes it easy for developers to debug and integrate the GME APIs for team voice chat.
 
-### 1.Enter a Room
-The AuthBuffer parameter is required to allow a user to enter a room.
+### Join a room
+This function is used to enter a room with the generated authentication data.
+>**Note:**
+>Microphone and speaker are not enabled by default after a user enters the room.
 
-#### Real Time Room
-> Function Prototype
+
+### Voice chat room
+#### Function prototype
 ```
-ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
+ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
 ```
-|Parameter     | Type         |Description|
+| Parameter | Type | Description |
 | ------------- |:-------------:|-------------
-| relationId		|int    		|Room number,32 bits supported only.|
-| roomType 			|ITMG_ROOM_TYPE	|Audio room type.|
-| authBuffer    	|Byte[]  		|Authentication code.|
+| relationId		|int    		| Room number, which is an integer made up of 6 or more digits |
+| roomType 			|ITMG_ROOM_TYPE	| Audio type of the room |
+| authBuffer    	|Byte[]  		| Authentication data |
 
-|ITMG_ROOM_TYPE     	|Description|Parameter|Console recommended sample rate setting|Applicable scene|Applicable scene|
-| ------------- |------------ | ---- |---- |---- |---- |
-| ITMG_ROOM_TYPE_FLUENCY			|Low sound quality		|1|Speaker: call volume; headset: media volume	|If there is no special demand for sound quality, the 16K sampling rate can be used;									|Smooth priority, ultra-low latency real-time voice, applied in the game to open team play scenes, suitable for FPS, MOBA and other types of games;|
-| ITMG_ROOM_TYPE_STANDARD			|Standard sound quality	|2|Speaker: call volume; headset: media volume	|According to the demand for sound quality, you can choose the sampling rate of 16k/48k							|The sound quality is good, the lag is moderate, suitable for real-time call scenes of casual games such as  table games, chess and so on;|
-| ITMG_ROOM_TYPE_HIGHQUALITY		|High sound quality		|3|Speaker: media volumeheadset: media volume	|For best performance, it is recommended that the console set a high-quality configuration with a 48k sample rate.	|High sound quality, relatively laggy, suitable for music and dance games and voice social apps; suitable for playing music, online karaoke and other scenes with high sound quality requirements;|
+|ITMG_ROOM_TYPE     	| Description (sound quality) | Parameter |
+| ------------- |------------ | ---- |
+| ITMG_ROOM_TYPE_FLUENCY			| Fluent | 1|
+| ITMG_ROOM_TYPE_STANDARD			| Standard | 2|
+| ITMG_ROOM_TYPE_HIGHQUALITY		| High-Quality | 3|
 
-- If you have special needs for volume type or scene, please contact the frontline customer service;
-- The console sample rate setting directly affects the game's voice performance. Please check again on the [console](https://console.cloud.tencent.com/gamegme) that the sample rate setting is consistent with the project usage scenario.
+#### Sample code  
+```
+ITMGContext.GetInstance().EnterRoom(roomId,ITMG_ROOM_TYPE_FLUENCY, authBuffer);
+```
 
-
-
-#### Real-Time Team Room
-Real-time team chatting introduction:
-Team voice :Players team up before the game starts, team voice can only be heard by teammates.
-Global voice:The player can set the global voice mode before the game starts and during the game. After setting, a certain range of people near the player can hear the player's voice.
+### Team voice chat room
+#### Description:
+Team voice chat: Players form a team before the game starts, and the team voice can only be heard by team members;
+Global voice chat: A player can set this mode before the game starts and during the game. After setting, this player can be heard by all the players within a certain range of his/her voice.
 The voice mode can be switched at any time during the game.
 
-#### Assume that the A player state is global voice, corresponding to the mode of the B player's voice type in different situations:
+#### Suppose player A is in a global voice chat mode, the interaction status between player A and player B varies with the scenario and player B's voice chat mode, as shown below:
 
-|Whether in the same team	|Whether within range	|Voice Type	|Can A hear the sound of B？|Can B hear the sound of A？|
+| In the Same Team | Within the Range | B's Voice Chat Mode | A can hear B | B can hear A |
 | -----------------	| ------------ | ------------ |--------------------------	|--------------------------	|
-|Y		|Y		 	|Global voice	|Y	|Y	|
-|Y		|Y		 	|Team voice		|Y	|Y	|
-|Y		|N		 	|Global voice	|Y	|Y	|
-|Y		|N		 	|Team voice		|Y	|Y	|
-|N		|Y		 	|Global voice	|Y	|Y	|
-|N		|Y			|Team voice		|N	|N	|
-|N		|N		 	|Global voice	|N	|N	|
-|N		|N			|Team voice		|N	|N	|
+| Yes | Yes | Global | Yes | Yes |
+| Yes | Yes | Team | Yes | Yes |
+| Yes | No | Global | Yes | Yes |
+| Yes | No | Team | Yes | Yes |
+| No | Yes | Global | Yes | Yes |
+| No | Yes | Team | No | No |
+| No | No | Global | No | No |
+| No | No | Team | No | No |
 
-#### Suppose the A player status is the team voice, corresponding to the mode of the B player's voice in different situations:
+#### Suppose player A is in a team voice chat mode, the interaction status between player A and player B varies with the scenario and player B's voice chat mode, as shown below:
 
-|Whether in the same team	|Whether within range	|Voice Type	|Can A hear the sound of B？|Can B hear the sound of A？|
+| In the Same Team | Within the Range | B's Voice Chat Mode | A can hear B | B can hear A |
 | -----------------	| ------------ | ------------ |--------------------------	|--------------------------	|
-|Y		|Y		 	|Global voice	|Y		|Y		|
-|Y		|Y		 	|Team voice		|Y		|Y		|
-|Y		|N		 	|Global voice	|Y		|Y		|
-|Y		|N		 	|Team voice		|Y		|Y		|
-|N		|Y		 	|Global voice	|N		|N		|
-|N		|Y			|Team voice		|N		|N		|
-|N		|N		 	|Global voice	|N		|N		|
-|N		|N			|Team voice		|N		|N		|
+| Yes | Yes | Global | Yes | Yes |
+| Yes | Yes | Team | Yes | Yes |
+| Yes | No | Global | Yes | Yes |
+| Yes | No | Team | Yes | Yes |
+| No | Yes | Global | No | No |
+| No | Yes | Team | No | No |
+| No | No | Global | No | No |
+| No | No | Team | No | No |
 
-Supplement to the range of speech distance:
-- Whether it is within the range of voice distance does not affect the team members to talk to each other.
-- Set the range of received speech distance API：UpdateCoordinate.
+### Notes about range of voice
+**Notes:**
+>- Whether a member is within the range of voice does not affect the interactions between the team members in the same team.
+>- To set the range for receiving voice, refer to API: UpdateCoordinate.
 
-> Function Prototype
+#### Function prototype
 ```
 ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
 ```
-|Parameter     | Type         |Description|
+| Parameter | Type | Description |
 | ------------- |:-------------:|-------------
-| relationId		|int    		|Room number, 32 bits supported only.									|
-| roomType 			|ITMG_ROOM_TYPE	|Audio room type,only can be 1|
-| authBuffer    	|Byte[] 		|Authentication code.								|
-| teamId    		|int    		|Joined team voice team identification code (cannot be 0)|
-| audioMode    		|int    		|0 for global voice and 1 for team voice|
+| relationId		|int    		|Room number	|
+| roomType 			|ITMG_ROOM_TYPE	| Audio type of the room (only 1 is allowed) |
+| authBuffer    	|Byte[] 		| Authentication data |
+| teamId    		|int    		| The ID of the team that enters the room (0 is not allowed) |
+| audioMode    		|int    		| 0 is for global voice chat, and 1 for team voice chat |
+
+#### Sample code  
+```
+ITMGContext.GetInstance().EnterTeamRoom(roomId,ITMG_ROOM_TYPE_FLUENCY, authBuffer,1000,1);
+```
 
 
 
 
-
-
-### 2.Modify team voice chatting mode
-Use this function to modify the team voice chatting mode.
-> Function Prototype
+### Modify team voice chat mode
+This function is used to modify the team voice chat mode.
+#### Function prototype  
 ```
 ITMGRoom int ChangeTeamAudioMode(int audioMode)
 ```
-|Parameter     | Type         |Description|
-| ------------- |:-------------:|-------------
-| audioMode    |int     |0 for global voice and 1 for team voice|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| audioMode    |int     | 0 is for global voice chat, and 1 for team voice chat |
 
-> Sample Code  
+#### Sample code  
 ```
 ITMGContext.GetInstance().GetRoom().ChangeTeamAudioMode(1);
 ```
 
-### 3.Set the range of received voice distance
-This function is used to set the range of speech received (the distance is based on the game engine).
-- Calling this function requires a call per frame.
-- Called on the premise of entering the room.
-- Every user in the game needs to be called.
+### Set range for receiving voice
+This function is used to set the range for receiving voice (the unit depends on the distance unit of the game engine).
 
-> Function Prototype  
+>**Note:**
+>- This function needs to be called for each frame.
+>- This function can only be called after a user enters a room.
+>- This function is required for each user in the game.
+
+#### Function prototype  
 ```
 ITMGRoom int UpdateCoordinate(int pos_x, int pos_y, int pos_z, int range)
 ```
-|Parameter     | Type         |Description|
+| Parameter | Type | Description |
 | ------------- |-------------|-------------
-| pos_x    |int         |The x coordinate of the user					|
-| pos_y    |int         |The y coordinate of the user					|
-| pos_z    |int         |The z coordinate of the user				|
-| range 	 |int 	  |The range of incoming listeners, in units of distances of the game engine.|
+| pos_x    |int         | The x coordinate of the user |
+| pos_y    |int         | The y coordinate of the user |
+| pos_z    |int         | The z coordinate of the user |
+| range 	 |int 	  | The range for receiving voice (the unit depends on the distance unit of the game engine) |
 
-> Sample Code
+#### Sample code  
 ```
 ITMGContext.GetInstance().GetRoom().UpdateCoordinate(pos_x,pos_y,pos_z,10);
 ```

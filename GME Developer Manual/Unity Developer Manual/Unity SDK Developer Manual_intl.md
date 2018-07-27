@@ -1,107 +1,179 @@
-Welcome to Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access technologies for Unity development so that Unity developers can easily debug and access APIs for Tencent Cloud GME.
-## SDK Initialization
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
-The SetAppInfo function contains the **sdkAppId**, **accountType**, and **openID** parameters. The values of **sdkAppId** and **accountType** are obtained from Tencent Cloud Console. The value of **openID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. Currently, the ID can be only of the int64 type.
-#### Function Prototype
+## Overview
+
+Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document provides a detailed description that makes it easy for Unity developers to debug and integrate the APIs for Game Multimedia Engine (GME).
+
+## How to Use
+![](https://main.qcloudimg.com/raw/810d0404638c494d9d5514eb5037cd37.png)
+
+
+### Key considerations for using GME
+
+| Important API | Description |
+| ------------- |:-------------:|
+|Init    		|Initializes GME 	|
+|Poll    		|Triggers event callback	|
+|EnterRoom	 	|Enters a room  		|
+|EnableMic	 	|Enables the microphone 	|
+|EnableSpeaker		|Enables the speaker 	|
+
+**Note:**
+**When a GME API is called successfully, QAVError.OK is returned, and the value is 0.**
+**GME APIs are called in the same thread.**
+**The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
+
+## Initialization-related APIs
+For an uninitialized SDK, you must initialize it via initialization authentication to enter a room.
+
+| API | Description |
+| ------------- |:-------------:|
+|Init    	|Initializes GME 	| 
+|Poll    	|Triggers event callback	|
+|Pause   	|Pauses the system	|
+|Resume 	|Resumes the system	|
+|Uninit    	|Initializes GME 	|
+
+
+### Initialize the SDK
+For more information on how to obtain parameters, please see [GME Integration Guide](https://cloud.tencent.com/document/product/607/10782).
+This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
+SDK must be initialized before a user can enter a room.
+
+#### Function prototype
 ```
-IQAVContext SetAppInfo(string sdkAppID, string accountType, string openID)
+IQAVContext Init(string sdkAppID, string openID)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| sdkAppId    |string  |The value is obtained from Tencent Cloud Console.|
-| accountType    |string  |The value is obtained from Tencent Cloud Console.|
-| openID    |string  |The value indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers. Currently, the value must be greater than **10000**.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| sdkAppId    	|String  |The SdkAppId obtained from Tencent Cloud console |
+| openID    	|String  |The OpenID supports Int64 type (which is passed after being converted to a string) only. It is used to identify users and must be greater than 10000. 	|
+#### Sample code  
 ```
-int ret = IQAVContext.GetInstance().SetAppInfo(str_appId, str_accountType, str_userId);
-	if (ret != QAVError.OK) {
+int ret = IQAVContext.GetInstance().Init(str_appId, str_userId);
+	if (ret != QAVError.OK) {
 		return;
 	}
 ```
-## Real-Time Voice Access
-### Set Relevant Information
-The SetAppVersion function is used to set version information that is used during log query and debugging. No functions are affected if version information is not set.
-#### Function Prototype
-```
-IQAVContext abstract void SetAppVersion(string sAppVersion)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| sAppVersion    |NSString  |Version number.|
-#### Sample Code
-```
-IQAVContext.GetInstance().SetAppVersion(sAppVersion);
-```
-The GetSDKVersion function is used to obtain the SDK version number.
-#### Function Prototype
-```
-ITMGContext  abstract string GetVersion()
-```
-#### Sample Code
-```
-IQAVContext.GetInstance().GetVersion();
-```
-Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
 
-The return value of this function is of the NSData type.
-#### Function Prototype
-```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, int accountType, string key, int expTime, uint authBits)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| appId    |int   |The value is the same as the value of **sdkAppId** on Tencent Cloud Console.|
-| roomId    |int   |Name of the room to be entered.|
-| identifier    |string     |User identifier.|
-| accountType    |int   |The value is obtained from Tencent Cloud Console.|
-| key    |string     |The value is the key provided by Tencent Cloud Console.|
-| expTime    |int   |Timeout interval for entering a room.|
-| authBits    |uint     |Permissions.|
+### Trigger event callback
+This API is used to trigger the event callback via periodic Poll call in update.
+#### Function prototype
 
->About permissions
-The value **ITMG_AUTH_BITS_ALL** indicates all permissions. It is recommended that this parameter be set to **ITMG_AUTH_BITS_ALL** for real-time users and VJs. The value **ITMG_AUTH_BITS_RECV** indicates downstream permissions. It is recommended that this parameter be set to **ITMG_AUTH_BITS_RECV** for listening- or watching-only audiences. 
-
-#### Sample Code
 ```
-byte[] GetAuthBuffer(string appId, string accountType, string userId, int roomId, uint authBits)
+ITMGContext public abstract int Poll();
+```
+### Pause the system
+This API is used to notify the engine for Pause at the same time the system Pause occurs.
+#### Function prototype
+
+```
+ITMGContext public abstract int Pause()
+```
+
+### Resume the system
+This API is used to notify the engine for Resume at the same time the system Resume occurs.
+#### Function prototype
+
+```
+ITMGContext  public abstract int Resume()
+```
+
+
+
+
+
+
+### Deinitialize the SDK
+Deinitializes an SDK to make it uninitialized.
+#### Function prototype
+
+```
+ITMGContext public abstract int Uninit()
+```
+
+
+
+
+
+## Voice Chat Room-Related APIs
+You must initialize and call the SDK to enter a room before Voice Chat can start.
+
+| API | Description |
+| ------------- |:-------------:|
+|GenAuthBuffer    	|Initialization authentication |
+|EnterRoom   		|Joins a room |
+|EnterTeamRoom   	|Enters a team voice chat room |
+|IsRoomEntered   	|Indicates whether any member has entered a room |
+|ExitRoom 		|Exits the room |
+|ChangeRoomType 	|Modifies the audio type of the user's room |
+|GetRoomType 		|Obtains the audio type of the user's room |
+
+
+
+### Voice chat authentication
+AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](https://cloud.tencent.com/document/product/607/12218).    
+A value of type Byte[] is returned by this API.
+#### Function prototype
+```
+QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, string key, int expTime, uint authBits)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| appId    		|int   		|The SdkAppId obtained from Tencent Cloud console |
+| roomId    		|int   		|Room number. 32-bit is supported.									|
+| identifier    	|String 	|User ID											|
+| key    		|string 	|The key obtained from Tencent Cloud console								|
+| expTime    		|int   		|authBuffer timeout									|
+| authBits    		|int    	|Permission (ITMG_AUTH_BITS_DEFAULT indicates full access)	|
+#### Sample code  
+```
+byte[] GetAuthBuffer(string appId, string userId, int roomId, uint authBits)
     {
-	TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-	double timeStamp = t.TotalSeconds;
-	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, int.Parse(accountType), "a495dca2482589e9", (int)timeStamp + 1800, authBits);
+	TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+	double timeStamp = t.TotalSeconds;
+	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9", (int)timeStamp + 1800, authBits);
 }
-byte[] authBuffer = this.GetAuthBuffer(str_appId, str_accountType, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
+byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
 ```
 
-### Enter a Room
-A user enters a room with a generated **AuthBuffer** value.
->Note: The microphone and speakers are disabled by default when a user enters a room.
+### Join a room
+This API is used to enter a room with the generated authentication information. Microphone and speaker are not enabled by default after a user enters the room.
+For more information on how to integrate team voice chat, please see relevant [integration document](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20TeamAudio%20Manual.md).
 
-For more information about role settings, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
-#### Function Prototype
+
+#### Function prototype
 ```
-IQAVContext EnterRoom(int relationId, string controlRole, byte[] authBuffer)
+ITMGContext EnterRoom(int relationId, int roomType, byte[] authBuffer)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| relationId|int   |Room number, which is an integer of six or more digits.|
-| controlRole    |string     |Role name. Set the parameter based on the requirements.|
-| authBuffer |Byte[] |The value is used for authentication.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| relationId		|int   				| Room number. 32-bit is supported. |
+| roomType 	|ITMGRoomType		|Audio type of the room		|
+| authBuffer 	|Byte[] 	| Authentication key					|
+
+| Audio Type | Meaning | Parameter | Volume Type | Recommended Sampling Rate on the Console | Application Scenarios |
+| ------------- |------------ | ---- |---- |---- |---- |
+| ITMG_ROOM_TYPE_FLUENCY			|Fluent	|1|Speaker: chat volume; headset: media volume 	| 16k sampling rate is recommended if there is no special requirement for sound quality					| With fluent sound and ultra-low latency, it allows voice chat and is suitable for team speak scenario in such games as FPS and MOBA.	|							
+| ITMG_ROOM_TYPE_STANDARD			|Standard	|2|Speaker: chat volume; headset: media volume	| Choose 16k or 48k sampling rate depending on different requirements for sound quality				| With good sound quality and medium latency, it is suitable for real time chat scenarios in casual games such as Werewolf, chess and card games.	|												
+| ITMG_ROOM_TYPE_HIGHQUALITY		|High-quality	|3|Speaker: media volume; headset: media volume	| To ensure optimum effect, it is recommended to enable HQ configuration with 48k sampling rate	| With ultra-high sound quality and high latency, it is suitable for scenarios demanding high sound quality, such as music playback and online karaoke.	|
+
+- If you have special requirement for audio type or scenarios, contact the customer service.
+- The sound effect in a game depends directly on the sampling rate set on the console. Please confirm whether the sampling rate you set on the [console](https://console.cloud.tencent.com/gamegme) is suitable for the project's application scenario.
+#### Sample code  
 ```
-IQAVContext.GetInstance().EnterRoom(roomId, role, authBuffer);
+IQAVContext.GetInstance().EnterRoom(roomId, ITMG_ROOM_TYPE_FLUENCY, authBuffer);
 ```
 
-### Callback for Entering a Room
-The delegate function is used for callback after a user enters a room. The function contains **result** and **error_info**.
-#### Function Prototype
+### Callback for entering a room
+The delegate function is used for callback after a user enters a room. The passed parameter includes result and error_info.
+#### Function prototype
 ```
 Delegate function:
-public delegate void QAVEnterRoomComplete(int result, string error_info);
+public delegate void QAVEnterRoomComplete(int result, string error_info);
 Event function:
 public abstract event QAVEnterRoomComplete OnEnterRoomCompleteEvent;
 ```
 
-#### Sample Code
+#### Sample code
 ```
 Listen for an event:
 IQAVContext.GetInstance().OnEnterRoomCompleteEvent += new QAVEnterRoomComplete(OnEnterRoomComplete);
@@ -113,913 +185,1094 @@ void OnEnterRoomComplete(int err, string errInfo)
 	    ShowWarnning (string.Format ("join room failed, err:{0}, errInfo:{1}", err, errInfo));
 	    return;
 	}else{
-	    ShowWarnning (string.Format ("Current voice room ID: {0}, please enter the room from another terminal to chat",roomId ));
+	    ShowWarnning (string.Format ("The current audio room id:{0}. Please enter this room from another device for an audio chat.",roomId ));
     }
 }
 ```
 
-### Check Whether a User Has Entered a Room
-The IsRoomEntered function is used to check whether a user has entered a room. The return value of this function is of the bool type.
-#### Function Prototype
+### Identify whether any member has entered a room
+This API is called to identify whether any member has entered a room. A BOOL value is returned.
+#### Function prototype  
 ```
-IQAVContext abstract bool IsRoomEntered()
+ITMGContext abstract bool IsRoomEntered()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().IsRoomEntered();
 ```
 
-### Exit from a Room
-The ExitRoom function is used to exit from a room.
-#### Function Prototype
+### Exit a room
+This API is called to exit the current room.
+#### Function prototype  
 ```
-IQAVContext ExitRoom()
+ITMGContext ExitRoom()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().ExitRoom();
 ```
 
-### Callback for Exiting from a Room
-Callback is executed after a user has exited from a room, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Callback for exiting a room
+Callback is executed after a user exits the room, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
-public delegate void QAVExitRoomComplete();
+public delegate void QAVExitRoomComplete();
 Event function:
-public abstract event QAVExitRoomComplete OnExitRoomCompleteEvent;
+public abstract event QAVExitRoomComplete OnExitRoomCompleteEvent; 
 ```
-#### Sample Code
+#### Sample code  
 ```
 Listen for an event:
-IQAVContext.GetInstance().OnExitRoomCompleteEvent += new QAVExitRoomComplete(OnExitRoomComplete);
+IQAVContext.GetInstance().OnExitRoomCompleteEvent += new QAVExitRoomComplete(OnExitRoomComplete);
 Process the event after listening:
 void OnExitRoomComplete(){
-    //Processing after exit from a room
+    //Send a callback after a user exits the room
 }
 ```
-### Suspend Acquisition and Playback by the Audio Engine
-The PauseAudio function is used to suspend acquisition and playback by the audio engine and is effective only after a user enters a room.
-After the EnterRoom function is successfully called, the microphone is occupied and other programs cannot acquire data from the microphone.
-Note: Calling of EnableMic(false) cannot release the microphone.
-To release a microphone, call the PauseAudio function that can suspend the audio engine. To resume audio acquisition, call the ResumeAudio function.
-#### Function Prototype
+
+### Obtain the audio type of the user's room
+This API is used to obtain the audio type of the user's room. The returned value is the audio type of the room. Value 0 means that an error occurred while obtaining the audio type of the user's room. See the API EnterRoom for the audio type of the user's room.
+
+#### Function prototype  
 ```
-IQAVAudioCtrl abstract int PauseAudio()
-```
-#### Sample Code
-```
-IQAVContext.GetInstance ().GetAudioCtrl ().PauseAudio();
-```
-### Resume Acquisition and Playback by the Audio Engine
-The ResumeAudio function is used to resume acquisition and playback by the audio engine and is effective only after a user enters a room.
-#### Function Prototype
-```
-IQAVAudioCtrl abstract int ResumeAudio()
-```
-#### Sample Code
-```
-IQAVContext.GetInstance ().GetAudioCtrl ().ResumeAudio();
+ITMGContext ITMGRoom public  int GetRoomType()
 ```
 
-### Role Setting
-Change a flow control role. The ChangeRole method is used to set a user role before a user joins a channel. The user is allowed to change the role after the user joins a channel.
-The following six roles are automatically established by default: esports, Rhost, Raudience, Werewolf, host, and audience. For more information about role descriptions, see the [GME Voice Role Description](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Role%20Manual_intl.md).
-#### Function Prototype
+#### Sample code  
 ```
-IQAVRoom ChangeRole(string role, byte[] authBuffer)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| role    |NSString     |Role.|
-| authBuffer    |NSData    |The parameter must be reset each time.|
-
->Note:
-Changing a flow control role means modifying audio and video encoding parameters. Therefore, the audio and video encoding API needs to be called to reset **AuthBuffer**. For more information, see how to generate **AuthBuffer**.
-
-The following table lists the speech quality corresponding to each role.
-
-|Role Name     | Applicable Scenario         |Key Features|
-| ------------- |-------------|-------------
-| esports    	|MOBA, competitive, and shooting games.     								|Ordinary sound quality and ultra-low latency.	|
-| Rhost    	|Commander mode of MMORPGs. Only a commander can join broadcasting.     		|High fluency and low latency.		|
-| Raudience	|Commander mode of MMORPGs. Only a commander can join broadcasting.     		|High fluency and low latency.		|
-| Werewolf 	|Werewolf, casual games, and other games.										|Good sound quality and high anti packet loss rate.	|
-| host  		|VJ mode of MMORPGs. A VJ can interact with players in voice and video mode.	|Good sound quality and high anti packet loss rate.	|
-| audience  	|VJ mode of MMORPGs. A VJ can interact with players in voice and video mode.	|Good sound quality and high anti packet loss rate.	|
-
-#### Sample Code
-```
-IQAVContext.GetInstance().GetRoom().ChangeRole(role, authBuffer);
+IQAVContext.GetInstance().GetRoom().GetRoomType();
 ```
 
-### Callback for a Role Setting
-Callback is executed after the role setting, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Modify the audio type of the user's room
+This API is used to modify the audio type of the user's room.
+#### Function prototype  
+```
+ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
+```
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| roomtype    |ITMGRoomType    |The room type to be switched to. See the API EnterRoom for the audio type of the user's room. |
+
+#### Sample code  
+```
+IQAVContext.GetInstance().GetRoom().ChangeRoomType(ITMG_ROOM_TYPE_FLUENCY);
+```
+
+
+
+### Callback for modifying the audio type of the room
+This API is used to set the room type, and the delegate function is used to pass the modified information.
+
+| Returned Parameter | Description |
+| ------------- |:-------------:|
+| result    |Value 0 represents the function is successfully called |
+| error_info    |In case of failure, an error message will be passed |
+
 ```
 Delegate function:
-public delegate void QAVAudioRouteChangeCallback(int code);
+public delegate void QAVOnChangeRoomtypeCallback(int result, string error_info);
+
 Event function:
-public abstract event QAVCallback OnChangeRoleCallback;
+public abstract event QAVCallback OnChangeRoomtypeCallback; 
 ```
-#### Sample Code
+#### Sample code  
 ```
 Listen for an event:
-IQAVContext.GetInstance().GetAudioCtrl().OnAudioRouteChangeComplete += new QAVAudioRouteChangeCallback(OnAudioRouteChange);
-void OnAudioRouteChange(int code){
-    //Callback for a role setting
+IQAVContext.GetInstance().OnChangeRoomtypeCallback += new QAVOnChangeRoomtypeCallback(OnChangeRoomtypeCallback);
+Process the event after listening:
+void OnChangeRoomtypeCallback(){
+    //Send a callback after the room type has been set
 }
 ```
 
-### Member State Change
-The member state change event is triggered to send notifications only when the state of a member changes. To allow real-time member state query, cache the state each time the upper layer receives a notification.
-#### Sample Code
+### Notification of room type change
+This API is used to allow you or other users in a room to modify the room type. This callback function is called whenever the room type changes, which is used to notify the business layer of such change. The returned value is room type. See the API EnterRoom.
+```
+Delegate function:
+public delegate void QAVOnRoomTypeChangedEvent(int roomtype);
+
+Event function:
+public abstract event QAVOnRoomTypeChangedEvent OnRoomTypeChangedEvent;	
+```
+#### Sample code  
+```
+Listen for an event:
+IQAVContext.GetInstance().OnRoomTypeChangedEvent += new QAVOnRoomTypeChangedEvent(OnRoomTypeChangedEvent);
+Process the event after listening:
+void OnRoomTypeChangedEvent(){
+    //Send a callback after the room type has been changed
+}
+```
+
+
+	
+### Member status change
+Notification about this event is sent only when the status changes. To obtain member status in real time, cache the notification when receiving it at a higher layer. The event message ITMG_MAIN_EVNET_TYPE_USER_UPDATE is returned. The parameter "intent" includes event_id and user_list. Identify the event message in the OnEvent function.
+Audio events are subject to a threshold above which a notification is sent.
+
+|event_id     | Description | What is maintained at the App side |
+| ------------- |:-------------:|-------------|
+|ITMG_EVENT_ID_USER_ENTER    				|A member enters the room			| Member list		|
+|ITMG_EVENT_ID_USER_EXIT    				|A member exits the room			| Member list		|
+|ITMG_EVENT_ID_USER_HAS_AUDIO    		|A member sends audio packages		| Chat member list	|
+|ITMG_EVENT_ID_USER_NO_AUDIO    			|A member stops sending audio packages		| Chat member list	|
+
+#### Sample code  
 ```
 Delegate function:
 public delegate void QAVEndpointsUpdateInfo(int eventID, int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]string[] identifierList);
 Event function:
 public abstract event QAVEndpointsUpdateInfo OnEndpointsUpdateInfoEvent;
-```
-#### Sample Code
-```
+
 Listen for an event:
 IQAVContext.GetInstance().OnEndpointsUpdateInfoEvent += new QAVEndpointsUpdateInfo(OnEndpointsUpdateInfo);
 Process the event after listening:
 void OnEndpointsUpdateInfo(int eventID, int count, string[] identifierList)
 {
-    //Maintain member information
+    //Processing
+		//The developer parses the parameter to obtain vent_id and user_list.
+		    switch (eventID)
+ 		    {
+ 		    case ITMG_EVENT_ID_USER_ENTER:
+  			    //A member enters the room
+  			    break;
+ 		    case ITMG_EVENT_ID_USER_EXIT:
+  			    //A member exits the room
+			    break;
+		    case ITMG_EVENT_ID_USER_HAS_AUDIO:
+			    //A member sends audio packages
+			    break;
+		    case ITMG_EVENT_ID_USER_NO_AUDIO:
+			    //A member stops sending audio packages
+			    break;
+		  
+		    default:
+			    break;
+ 		    }
+		break;
 }
 
 ```
-### Enable or Disable an Audio Data Blacklist
-The blacklist is reset to a new member list each time the SetAudioBlackList function is called to enable the blacklist. The function is called only when audio data to be received needs to be customized. If the function is not called, all audio data in a room is received by default. If the function returns **0**, the call fails.
-#### Function Prototype
+
+### Message details
+
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |Enters the audio/video room |
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|Exits the audio/video room |
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |Room disconnection due to network or other reasons |
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|Room type change event |
+
+### Details of Data corresponding to the message
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}|
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
+
+
+
+
+
+## Audio APIs for Voice Chat
+The audio APIs for Voice Chat can only be called after the SDK is initialized and there are members in the room.
+
+
+| API | Description |
+| ------------- |:-------------:|
+|PauseAudio    				       	|Pauses audio engine |
+|ResumeAudio    				      	|Resumes audio engine |
+|EnableMic    						|Enables/disables the microphone |
+|GetMicState    						|Obtains the microphone status |
+|GetMicLevel    						|Obtains real-time microphone volume |
+|SetMicVolume    					|Sets microphone volume |
+|GetMicVolume    					|Obtains microphone volume |
+|EnableSpeaker    					|Enables/disables the speaker |
+|GetSpeakerState    					|Obtains the speaker status |
+|GetSpeakerLevel    					|Obtains real-time speaker volume |
+|SetSpeakerVolume    				|Sets speaker volume |
+|GetSpeakerVolume    				|Obtains speaker volume |
+|EnableLoopBack    					|Enables/disables in-ear monitoring |
+### Pause the capture and playback features of the audio engine
+This API is called to pause the capture and playback features of the audio engine, and only works when members have entered the room.
+You can get the microphone permission after calling the EnterRoom API successfully, and other programs cannot capture audio data from the microphone during your use of microphone. Calling EnableMic(false) does not release the microphone.
+If you really need to release the microphone, call PauseAudio, which can cause the engine to be paused entirely. To resume audio capturing, call ResumeAudio.
+#### Function prototype  
 ```
-IQAVContext GetRoom UnrequestAudioList(string[] identifierList)
+ITMGAudioCtrl abstract int PauseAudio()
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| identifierList    |string[]      |Blacklist.|
-#### Sample Code
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetRoom ().UnrequestAudioList (identifierList);
+IQAVContext.GetInstance ().GetAudioCtrl ().PauseAudio();
 ```
 
-### Enable or Disable a Microphone
-The EnableMic function is used to enable or disable a microphone.
->Note: The microphone and speakers are disabled by default when a user enters a room.
+### Resume the capture and playback features of the audio engine
+This API is called to resume the capture and playback features of the audio engine, and only works when members have entered the room.
+#### Function prototype  
+```
+ITMGAudioCtrl abstract int ResumeAudio()
+```
+#### Sample code  
+```
+IQAVContext.GetInstance ().GetAudioCtrl ().ResumeAudio();
+```
 
-#### Function Prototype
+### Enable/disable the microphone
+This API is used to enable/disable the microphone. Microphone and speaker are not enabled by default after a user enters a room.
+
+#### Function prototype  
 ```
-IQAVAudioCtrl EnableMic(bool isEnabled)
+ITMGAudioCtrl EnableMic(bool isEnabled)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| isEnabled    |boolean     |To enable a microphone, set the input parameter to **YES**. To disable a microphone, set the input parameter to **NO**.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| isEnabled    |boolean     |To enable the microphone, set this parameter to true, otherwise, set it to false. |
+#### Sample code  
 ```
-Enable a microphone
+Enable microphone
 IQAVContext.GetInstance().GetAudioCtrl().EnableMic(true);
-Disable a microphone
-IQAVContext.GetInstance().GetAudioCtrl().EnableMic(false);
 ```
 
-### Obtain the Status of a Microphone
-The GetMicState function is used to obtain the status of a microphone.
-#### Function Prototype
+### Obtain the microphone status
+This API is used to obtain the microphone status. If "0" is returned, the microphone is off. If "1" is returned, the microphone is on. If "2" is returned, the microphone is being worked on. If "3" is returned, no microphone exists. If "4" is returned, the microphone is not initialized well.
+#### Function prototype  
 ```
-IQAVAudioCtrl GetMicState()
+ITMGAudioCtrl GetMicState()
 ```
-#### Sample Code
+#### Sample code  
 ```
-micToggle.isOn = IQAVContext.GetInstance().GetAudioCtrl().GetMicState() != 0;
+micToggle.isOn = IQAVContext.GetInstance().GetAudioCtrl().GetMicState();
 ```
 
-### Obtain the Real-Time Volume of a Microphone
-IQAVAudioCtrl GetMicLevel()
-#### Function Prototype
+### Obtain real-time microphone volume
+This API is used to obtain real time microphone volume. An int value is returned.
+#### Function prototype  
 ```
-GetAudioCtrl -(int)GetMicLevel
+ITMGAudioCtrl -(int)GetMicLevel
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetMicLevel();
 ```
 
-### Set the Software Volume of a Microphone
-The SetMicVolume function is used to set the software volume of a microphone. The **volume** parameter specifies the software volume of a microphone. Value **0** indicates mute and value **100** indicates that the actual volume will be the same as the original volume. The default value is **100**.
-#### Function Prototype
+### Set software volume for the microphone
+This API is used to set software volume for the microphone. The corresponding parameter is "volume". The value "0" sets the volume to Mute, and "100" means the volume remains unchanged. Default is 100.
+#### Function prototype  
 ```
-IQAVAudioCtrl SetMicVolume(int volume)
+ITMGAudioCtrl SetMicVolume(int volume)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| volume    |int      |Volume, ranging from **0** to **100**.|
-#### Sample Codes
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| volume    |int      | Sets the volume, value range: 0 to 150 |
+#### Sample code  
 ```
 int micVol = (int)(value * 100);
 IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
 ```
 
-### Obtain the Software Volume of a Microphone
-The GetMicVolume function is used to obtain the software volume of a microphone. The return value of this function is of the int type.
-#### Function Prototype
+### Obtain software volume for the microphone
+This API is used to obtain the software volume for the microphone. An int value is returned.
+#### Function prototype  
 ```
-IQAVAudioCtrl GetMicVolume()
+ITMGAudioCtrl GetMicVolume()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetMicVolume();
 ```
 
-### Enable or Disable Speakers
-The EnableSpeaker function is used to enable or disable speakers.
-#### Function Prototype
+### Enable/disable the speaker
+This API is used to enable/disable the speaker.
+#### Function prototype  
 ```
-IQAVAudioCtrl EnableSpeaker(bool isEnabled)
+ITMGAudioCtrl EnableSpeaker(bool isEnabled)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| isEnabled    |bool        |To enable speakers, set the input parameter to **YES**. To disable speakers, set the input parameter to **NO**.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| isEnabled    |bool       	| To disable the speaker, set this parameter to false, otherwise, set it to true.	|
+#### Sample code  
 ```
-Enable speakers
+Enable the speaker.
 IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
-Disable speakers
-IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(false);
 ```
 
 
-### Obtain the Status of Speakers
-The GetSpeakerState function is used to obtain the status of speakers. The return value of this function is of the int type.
-#### Function Prototype
+### Obtain the speaker status
+This API is used to obtain the speaker status. If "0" is returned, the speaker is off. If "1" is returned, the speaker is on. If "2" is returned, the speaker is being worked on. If "3" is returned, no speaker exists. If "4" is returned, the speaker is not initialized well.
+#### Function prototype  
 ```
-QAVAudioCtrl GetSpeakerState()
-```
-
-#### Sample Code
-```
-speakerToggle.isOn = IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerState() != 0;
+ITMGAudioCtrl GetSpeakerState()
 ```
 
-### Obtain the Real-Time Volume of Speakers
-The GetSpeakerLevel function is used to obtain the real-time volume of speakers. The return value of this function is of the int type.
-#### Function Prototype
+#### Sample code  
 ```
-IQAVAudioCtrl GetSpeakerLevel()
+speakerToggle.isOn = IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerState();
 ```
 
-#### Sample Code
+### Obtain real-time speaker volume
+This API is used to obtain real time speaker volume. An int value is returned to indicate the real-time speaker volume.
+#### Function prototype  
+```
+ITMGAudioCtrl GetSpeakerLevel()
+```
+
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerLevel();
 ```
 
-### Set the Software Volume of Speakers
-The SetSpeakerVolume function is used to set the software volume of speakers.
->Note: The **vol** parameter specifies the software volume of speakers. Value **0** indicates mute and value **100** indicates that the actual volume will be the same as the original volume. The default value is **100**.
+### Set software volume for the speaker
+This API is used to set the software volume for the speaker.
+The corresponding parameter is "volume". The value "0" sets the volume to Mute, and "100" means the volume remains unchanged. Default is 100.
 
-#### Function Prototype
+#### Function prototype  
 ```
-IQAVAudioCtrl SetSpeakerVolume(int volume)
+ITMGAudioCtrl SetSpeakerVolume(int volume)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| vol    |int        |Volume, ranging from **0** to **100**.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| vol    |int        | Sets the volume, value range: 0 to 150 |
+#### Sample code  
 ```
 int speVol = (int)(value * 100);
-IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol );
+IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol);
 ```
 
-### Obtain the Software Volume of Speakers
-The GetSpeakerVolume function is used to obtain the software volume of speakers. The return value of this function is of the int type.
->Note: The **Level** parameter indicates the real-time volume, while the **Volume** parameter indicates the software volume of speakers. The final volume is calculated as follows: Final volume = Value of Level x Value of Volume%. For example, if the values of **Level** and **Volume** are **100** and **60** respectively, the final volume is 60.
+### Obtain software volume for the speaker
+This API is used to obtain the software volume for the speaker. An int value is returned to indicate the software volume for the speaker.
+"Level" indicates the real-time volume, and "Volume" the software volume for the speaker. The ultimate volume equals to Level*Volume%. For example, if the value for "Level" is 100 and the one for "Volume" is 60, the ultimate volume will be "60".
 
-#### Function Prototype
+#### Function prototype  
 ```
-IQAVAudioCtrl GetSpeakerVolume()
+ITMGAudioCtrl GetSpeakerVolume()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerVolume();
 ```
 
-### Start Playing an Accompaniment
-The StartAccompany function is used to start playing an accompaniment.
-#### Function Prototype
+
+### Enable in-ear monitoring
+This API is used to enable in-ear monitoring.
+#### Function prototype  
+
+```
+ITMGContext GetAudioCtrl EnableLoopBack(bool enable)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| enable    |bool         | Specifies whether to enable in-ear monitoring |
+#### Sample code  
+
+```
+IQAVContext.GetInstance().GetAudioCtrl().EnableLoopBack(true);
+```
+
+### Message details
+
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |Enables the microphone |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |Disables the microphone |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |Enables the speaker |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |Disables the speaker |
+
+### Details of Data corresponding to the message
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+
+## APIs related to the accompaniment in voice chat
+| API | Description |
+| ------------- |:-------------:|
+|StartAccompany    				       |Starts playing back the accompaniment |
+|StopAccompany    				   	|Stops playing back the accompaniment |
+|IsAccompanyPlayEnd				|Indicates whether the accompaniment is over |
+|PauseAccompany    					|Pauses playing back the accompaniment |
+|ResumeAccompany					|Replays the accompaniment |
+|SetAccompanyVolume 				|Sets the accompaniment volume |
+|GetAccompanyVolume				|Obtains the volume of the accompaniment |
+|SetAccompanyFileCurrentPlayedTimeByMs 				|Sets the playback progress |
+
+### Start playing back the accompaniment
+This API is called to play back the accompaniment. Supported formats include M4A, AAC, WAV, and MP3. Calling this API resets the volume.
+#### Function prototype  
 ```
 IQAVAudioEffectCtrl int StartAccompany(string filePath, bool loopBack, int loopCount, int duckerTimeMs)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |string            |Path for playing an accompaniment.|
-| loopBack    |bool          |Indicates whether to send a mix. The parameter is generally set to **true**, indicating that other users can also hear an accompaniment.|
-| loopCount    |int          |Number of loops. Value **-1** means an infinite loop.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |string            | Accompaniment's playback path |
+| loopBack    |bool          | Indicates whether to send a mix. This is generally set to true, indicating that other users can also hear the accompaniment. |
+| loopCount    |int          | Number of loops. Value -1 means an infinite loop. |
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StartAccompany(filePath,true,loopCount,duckerTimeMs);
 ```
 
-### Callback for Playing an Accompaniment
-Callback is executed after an accompaniment has been played, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Callback for accompaniment playback
+Callback is executed after an accompaniment has been played, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
 public delegate void QAVAccompanyFileCompleteHandler(int code, string filepath);
 Event function:
 public abstract event QAVAccompanyFileCompleteHandler OnAccompanyFileCompleteHandler;
 ```
-#### Sample Code
+#### Sample code
 ```
 Listen for an event:
 IQAVContext.GetInstance().GetAudioEffectCtrl().OnAccompanyFileCompleteHandler += new QAVAccompanyFileCompleteHandler(OnAccomponyFileCompleteHandler);
 Process the event after listening:
 void OnAccomponyFileCompleteHandler(int code, string filepath){
-    //Callback for playing an accompaniment
+    //Send a callback after an accompaniment has been played
 }
 ```
 
-### Stop Playing an Accompaniment
-The StopAccompany function is used to stop playing an accompaniment.
-#### Function Prototype
+### Stop playing back the accompaniment
+This API is used to stop playing back the accompaniment.
+#### Function prototype  
 ```
 IQAVAudioEffectCtrl int StopAccompany(int duckerTimeMs)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| duckerTimeMs    |int             |Fading time.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| duckerTimeMs    |int             | Fading time |
 
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopAccompany(duckerTimeMs);
 ```
 
-### Check Whether the Playback of an Accompaniment Is Complete
-The IsAccompanyPlayEnd function is used to check whether the playback of an accompaniment is complete. If yes, the function returns **true**. If no, it returns **false**.
-#### Function Prototype
+### Indicate whether the accompaniment is over
+If it is over, "true" is returned. If it is not, "false" is returned.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract bool IsAccompanyPlayEnd();
+IQAAudioEffectCtrl bool IsAccompanyPlayEnd();
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().IsAccompanyPlayEnd();
 ```
 
-### Pause an Accompaniment
-The PauseAccompany function is used to pause an accompaniment.
-#### Function Prototype
+
+### Pause playing back the accompaniment
+This API is used to pause playing back the accompaniment.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int PauseAccompany()
+IQAAudioEffectCtrl int PauseAccompany()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAccompany();
 ```
 
-### Resume an Accompaniment
-The ResumeAccompany function is used to resume an accompaniment.
-#### Function Prototype
+
+
+### Replay the accompaniment
+This API is used to replay the accompaniment.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int ResumeAccompany()
+IQAAudioEffectCtrl int ResumeAccompany()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAccompany();
 ```
 
-### Configure Whether Users Can Hear Accompaniments Played by Themselves
-The EnableAccompanyPlay function is used to configure whether users can hear accompaniments played by themselves.
-#### Function Prototype
+### Specify whether you can hear the accompaniment
+This API is used to specify whether you can hear the accompaniment.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int EnableAccompanyPlay(bool enable)
+IQAAudioEffectCtrl int EnableAccompanyPlay(bool enable)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| enable    |bool             |Indicates whether users can hear accompaniments played by themselves.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| enable    |bool | Indicates whether you can hear the accompaniment |
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ```
 
-### Configure Whether Other Users Can Hear an Accompaniment
-The EnableAccompanyLoopBack function is used to configure whether other users can hear an accompaniment.
-#### Function Prototype
+### Specify whether others can also hear the accompaniment
+This API is used to specify whether others can also hear the accompaniment.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int EnableAccompanyLoopBack(bool enable)
+IQAAudioEffectCtrl int EnableAccompanyLoopBack(bool enable)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| enable    |bool             |Indicates whether other users can hear an accompaniment.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| enable    |bool | Indicates whether you can hear the accompaniment |
 
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyLoopBack(true);
 ```
 
-### Set the Volume of an Accompaniment
-The SetAccompanyVolume function is used to set the linear volume of an accompaniment. The default value is **100**. If the return value is greater than **100**, the actual accompaniment volume is higher than the original volume. If the return value is less than **100**, the actual accompaniment volume is lower than the original volume.
-#### Function Prototype
-```
-IQAAudioEffectCtrl abstract int SetAccompanyVolume(int vol)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| vol    |int             |Volume.|
 
-#### Sample Code
+### Set the accompaniment volume
+This API is used to set the DB volume. Value range: 0-200. Default is 100. A value greater than 100 means volume up, otherwise volume down.
+#### Function prototype  
+```
+IQAAudioEffectCtrl int SetAccompanyVolume(int vol)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| vol    |int | Indicates the volume value |
+
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolume(vol);
 ```
 
-### Obtain the Volume of an Accompaniment
-The GetAccompanyVolume function is used to obtain the volume of an accompaniment.
-#### Function Prototype
+### Obtain the volume of the accompaniment
+This API is used to get the DB volume.
+#### Function prototype  
 ```
 IQAAudioEffectCtrl abstract int GetAccompanyVolume()
 ```
-#### Sample Code
+#### Sample code  
 ```
-string currentVol = "VOL: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolume();
+string currentVol = "VOL: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolume();
 ```
 
-### Obtain the Playback Progress of an Accompaniment
-The following two functions are used to obtain the playback progress of an accompaniment. Note: Current / Total = Number of current loop times; Current % Total = Playback position of the current loop.
-#### Function Prototype
+### Obtain the accompaniment playback progress
+The following two APIs are used to obtain the accompaniment playback progress. Note: Current/Total = current loop times, Current % Total = current loop playback position.
+#### Function prototype  
 ```
 IQAAudioEffectCtrl abstract uint GetAccompanyFileTotalTimeByMs()
 IQAAudioEffectCtrl abstract int GetAccompanyFileCurrentPlayedTimeByMs()
 ```
-#### Sample Code
+#### Sample code  
 ```
 Sstring current = "Current: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyFileCurrentPlayedTimeByMs() + " ms";
 string total = "Total: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyFileTotalTimeByMs() + " ms";
 ```
 
 
-### Set Playback Progress
-The SetAccompanyFileCurrentPlayedTimeByMs function is used to set playback progress.
-#### Function Prototype
+### Set the playback progress
+This API is used to set the playback progress.
+#### Function prototype  
 ```
 IQAAudioEffectCtrl abstract uint SetAccompanyFileCurrentPlayedTimeByMs(uint time)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| time    |uint                |Playback progress, in milliseconds.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| time    |uint | Indicates the playback progress in milliseconds |
 
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyFileCurrentPlayedTimeByMs(time);
 ```
-### Obtain the dB Volume of an Accompaniment
-The GetAccompanyVolumeDB function is used to obtain the dB volume of an accompaniment. The default value is **61**. If the return value is greater than **61**, the actual volume is higher than the original volume. If the return value is less than **61**, the actual volume is lower than the original volume.
-#### Function Prototype
-```
-IQAAudioEffectCtrl abstract int GetAccompanyVolumeDB()
-```
-#### Sample Code
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolumeDB();
-```
-
-### Set the dB Volume of an Accompaniment
-The SetAccompanyVolumeDB function is used to set the dB volume of an accompaniment. The default value is **61**. If the return value is greater than **61**, the actual volume is higher than the original volume. If the return value is less than **61**, the actual volume is lower than the original volume.
-#### Function Prototype
-```
-IQAAudioEffectCtrl abstract int SetAccompanyVolumeDB(int dbVol)
-```
-#### Sample Code
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolumeDB(vol);
-```
 
 
-### Obtain the Volume of a Sound Effect
-The GetEffectsVolume function is used to obtain the linear volume of a sound effect. The default value is **100**. If the return value is greater than **100**, the actual sound effect volume is higher than the original volume. If the return value is less than **100**, the actual sound effect volume is lower than the original volume.
-#### Function Prototype
-```
-IQAAudioEffectCtrl abstract int GetEffectsVolume()
-```
-#### Sample Code
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().GetEffectsVolume();
-```
+## APIs related to sound effect in voice chat
+| API | Description |
+| ------------- |:-------------:|
+|PlayEffect    		|Plays the sound effect |
+|PauseEffect    	|Pauses the sound effect |
+|PauseAllEffects	|Pauses all sound effects |
+|ResumeEffect    	|Replays the sound effect |
+|ResumeAllEffects	|Replays all sound effects |
+|StopEffect 		|Stops the sound effect |
+|StopAllEffects		|Stops all sound effects |
+|SetVoiceType 		|Voice changing effects |
+|GetEffectsVolume	|Obtains the volume of sound effects |
+|SetEffectsVolume 	|Sets the volume of sound effects |
 
-### Set the Volume of a Sound Effect
-The SetEffectsVolume function is used to set the volume of a sound effect.
-#### Function Prototype
+### Play the sound effect
+This API is used to play sound effects. The sound effect ID in the parameter needs to be managed by the App side, uniquely identifying a separate file.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int SetEffectsVolume(int volume)
+IQAAudioEffectCtrl int PlayEffect(int soundId, string filePath, bool loop = false, double pitch = 1.0f, double pan = 0.0f, double gain = 1.0f)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| volume    |int                    |Volume.|
-
-#### Sample Code
-```
-IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
-```
-
-### Play a Sound Effect
-The PlayEffect function is used to play a sound effect. The **soundId** parameter, which uniquely identifies an independent file, must be managed on the application side.
-#### Function Prototype
-```
-IQAAudioEffectCtrl abstract int PlayEffect(int soundId, string filePath, bool loop = false, double pitch = 1.0f, double pan = 0.0f, double gain = 1.0f)
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
-| filePath    |string                     |Sound effect path.|
-| loop    |bool                     |Indicates whether to repeat playback.|
-| pitch    |double                     |Reserved field.|
-| pan    |double                     |Reserved field.|
-| gain    |double                     |Reserved field.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    	|int      	|Indicates the sound effect ID |
+| filePath    	|string 	|Indicates the sound effect path |
+| loop    		|bool   	|Indicates whether to repeat playback |
+| pitch    	|double	|Reserved field |
+| pan    		|double	|Reserved field |
+| gain    		|double	|Reserved field |
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PlayEffect(soundId,filePath,true,1.0,0,1.0);
 ```
 
-### Pause a Sound Effect
-The PauseEffect function is used to pause a sound effect.
-#### Function Prototype
+### Pause the sound effect
+This API is used to pause playing back the sound effect.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int PauseEffect(int soundId)
+IQAAudioEffectCtrl int PauseEffect(int soundId)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
 
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseEffect(soundId);
 ```
 
-### Pause All Sound Effects
-The PauseAllEffects function is used to pause all sound effects.
-#### Function Prototype
+### Pause all sound effects
+This API is used to pause all sound effects.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int PauseAllEffects()
+IQAAudioEffectCtrl int PauseAllEffects()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAllEffects();
 ```
 
-### Resume a Sound Effect
-The ResumeEffect function is used to resume a sound effect.
-#### Function Prototype
+### Replay the sound effect
+This API is used to replay the sound effect.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int ResumeEffect(int soundId)
+IQAAudioEffectCtrl int ResumeEffect(int soundId)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeEffect(soundId);
 ```
 
-### Resume All Sound Effects
-The ResumeAllEffects function is used to resume all sound effects.
-#### Function Prototype
+
+
+### Replay all sound effects
+This API is used to replay all sound effects.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int ResumeAllEffects()
+IQAAudioEffectCtrl int ResumeAllEffects()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAllEffects();
 ```
 
-### Stop Playing a Sound Effect
-The StopEffect function is used to stop playing a sound effect.
-#### Function Prototype
+### Stop the sound effect
+This API is used to stop the sound effect.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int StopEffect(int soundId)
+IQAAudioEffectCtrl int StopEffect(int soundId)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopEffect(soundId);
 ```
 
-### Stop Playing All Sound Effects
-The StopAllEffects function is used to stop playing all sound effects.
-#### Function Prototype
+### Stop all sound effects
+This API is used to stop all sound effects.
+#### Function prototype  
 ```
-IQAAudioEffectCtrl abstract int StopAllEffects()
+IQAAudioEffectCtrl int StopAllEffects()
 ```
-#### Sample Code
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetAudioEffectCtrl().StopAllEffects(soundId);
-```
-
-### Obtain Diagnosis Information
-The GetQualityTips function is used to obtain information about the quality of real-time voice or video chats. The function is mainly used to check the quality of real-time chats and detect problems. The function can be ignored on the service side.
-#### Function Prototype
-```
-IQAVRoom GetQualityTips()
-```
-#### Sample Code
-```
-string tips = IQAVContext.GetInstance().GetRoom().GetQualityTips();
+IQAVContext.GetInstance().GetAudioEffectCtrl().StopAllEffects(); 
 ```
 
+### Voice changing effects
+This API is used to set the voice changing effects.
+#### Function prototype  
+```
+IQAAudioEffectCtrl int setVoiceType(int type)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| type    |int | Indicates the type of local voice changing effect |
 
-## PTT Access
-### Initialize PTT Access
-Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction_intl.md).
-The **Error** parameter is used to pass error information. For example, when **appId** is set to **0** or **privateKey** or **identifier** is left blank, error information indicating that a parameter is incorrectly set is returned.
-#### Function Prototype
+
+| Type | Parameter | Description |
+| ------------- |-------------|------------- |
+|VOICE_TYPE_ORIGINAL_SOUND  	|0	|Original sound |
+|VOICE_TYPE_LOLITA    		|1	|Lolita |
+|VOICE_TYPE_UNCLE  		|2	|Uncle |
+|VOICE_TYPE_INTANGIBLE    	|3	|Ethereal |
+|VOICE_TYPE_KINDER_GARTEN    	|4	|Kindergarten |
+|VOICE_TYPE_HEAVY_GARTEN    	|5	|Mechanic sound |
+|VOICE_TYPE_OPTIMUS_PRIME    	|6	|Optimus Prime |
+|VOICE_TYPE_CAGED_ANIMAL    	|7	|Trapped beast |
+|VOICE_TYPE_DIALECT    		|8	|Dialect |
+|VOICE_TYPE_METAL_ROBOT    	|9	|Metal robot |
+|VOICE_TYPE_DEAD_FATBOY    	|10	|Fat boy |
+
+#### Sample code  
+```
+IQAVContext.GetInstance().GetAudioEffectCtrl().setVoiceType(0); 
+```
+
+### Obtain the volume of sound effects
+This API is used to obtain the volume (linear volume) of sound effects. A value greater than 100 means volume up, otherwise volume down.
+#### Function prototype  
+```
+IQAAudioEffectCtrl  int GetEffectsVolume()
+```
+#### Sample code  
+```
+IQAVContext.GetInstance().GetAudioEffectCtrl().GetEffectsVolume();
+```
+
+
+### Set the volume of sound effects
+This API is used to set the volume of sound effects.
+#### Function prototype  
+```
+IQAAudioEffectCtrl  int SetEffectsVolume(int volume)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| volume    |int | Indicates the volume value |
+
+#### Sample code  
+```
+IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
+```
+
+
+
+
+
+
+
+## Offline Voice
+| API | Description |
+| ------------- |:-------------:|
+|genSig    		|Indicates the offline voice authentication |
+|SetMaxMessageLength    |Specifies the maximum length of a voice message |
+|StartRecording		|Starts recording |
+|StopRecording    	|Stops recording |
+|CancelRecording	|Cancels recording |
+|UploadRecordedFile 	|Uploads voice files |
+|DownloadRecordedFile	|Downloads voice files |
+|PlayRecordedFile 	|Plays voice files |
+|StopPlayFile		|Stops playing voice files |
+|GetFileSize 		|Indicates the size of a voice file |
+|GetVoiceFileDuration	|Indicates the length of a voice file |
+|SpeechToText 		|Converts the voice file into text with Speech Recognition |
+
+### Initialization for integrating the offline voice technology
+Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](https://cloud.tencent.com/document/product/607/12218) document.  
+The parameter Error is used to pass the error message in cases when you enter an incorrect parameter, for example, appid is 0, key is empty or identifier is empty.
+#### Function prototype  
 ```
 QAVSig GenSig(int appId, string identifier, string privateKey)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| appId    |int                    |The value is the same as the value of **sdkAppId** on Tencent Cloud Console.|
-| identifier    |string                      |Identifier that uniquely identifies a user. The setting rule is customized by application developers.|
-| privateKey    |string                      |The value is the key provided by Tencent Cloud Console.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| appId    |int   		| The SdkAppId obtained from Tencent Cloud console		|
+| identifier    |string                      | Uniquely identifies a user, and the setting rule is customized by App developers |
+| privateKey    |string                      | The authentication obtained from Tencent Cloud console |
 
 ```
 IQAVPTT ApplyAccessToken(string accessToken)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| accessToken    | string|The value is the same as the access token returned by the Gensig function.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| accessToken    | string|Indicates the accessToken returned by GenSig function |
+#### Sample code  
 ```
-string GetAccessToken(string appId, string accountType, string userId)
+string GetAccessToken(string appId, string openid, string userId)
 	{
-		string key = Key obtained from the Tencent Cloud backend;
+		string key = The authentication obtained from the Tencent Cloud backend;
 		return QAVSig.GenSig(int.Parse(appId), userId, key);
 	}
 
-string sig = this.GetAccessToken(appId, accountType, userId);
+string sig = this.GetAccessToken(appId, openid, userId);
 		if (sig != null) {
 			IQAVContext.GetInstance().GetPttCtrl().ApplyAccessToken(sig);
-			//Success
+			//Successful
 		} else {
-			//Failure
+			//Failed
 		}
 ```
 
-### Specify the Maximum Length of a Voice Message
-The SetMaxMessageLength function is used to specify the maximum length of a voice message. The maximum length can be 60 seconds.
-#### Function Prototype
+### Specify the maximum length of a voice message
+This API is used to specify the maximum length of a voice message, which is limited to 60 seconds.
+#### Function prototype  
 ```
 IQAVPTT int SetMaxMessageLength(int msTime)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| msTime    |int                    |Length of a voice message.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| msTime    |int | Indicates the length of a voice message |
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetPttCtrl().SetMaxMessageLength(60000);
+IQAVContext.GetInstance().GetPttCtrl().SetMaxMessageLength(60000); 
 ```
 
 
-### Start Recording
-The StartRecording function is used to start recording.
-#### Function Prototype
+### Start recording
+This API is used to start recording.
+#### Function prototype  
 ```
 IQAVPTT int StartRecording(string fileDir)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| fileDir    |string                      |Path for playing a voice file, which can be NULL.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileDir    |string                      | Path for storing the voice file |
+#### Sample code  
 ```
 string recordPath = Application.persistentDataPath + string.Format ("/{0}.silk", sUid++);
 int ret = IQAVContext.GetInstance().GetPttCtrl().StartRecording(recordPath);
 ```
 
-### Callback for Recording
-Callback is executed after recording, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Callback for starting recordings
+Callback is executed after recording, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
-public delegate void QAVRecordFileCompleteCallback(int code, string filepath);
+public delegate void QAVRecordFileCompleteCallback(int code, string filepath); 
 Event function:
 public abstract event QAVRecordFileCompleteCallback OnRecordFileComplete;
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| code    |string                      |When **code** is set to **0**, the recording is complete.|
-| filepath    |string                      |Path for storing a recorded file.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| code    |string                      | When code is 0, recording is completed |
+| filepath    |string                      | Path for storing the recorded file |
 
-#### Sample Code
+#### Sample code  
 ```
 Listen for an event:
 IQAVContext.GetInstance().GetPttCtrl().OnRecordFileComplete += mInnerHandler;
 Process the event after listening:
 void mInnerHandler(int code, string filepath){
-    //Callback for starting recording
+    //Send a callback after the recording has started
 }
 ```
 
-### Stop Recording
-The StopRecording function is used to stop recording.
-#### Function Prototype
+### Stop recording
+This API is used to stop recording.
+#### Function prototype  
 ```
 IQAVPTT int StopRecording()
 ```
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetPttCtrl().StopRecording();
 ```
 
-### Upload a Voice File
-The UploadRecordedFile function is used to upload a voice file.
-#### Function Prototype
+### Cancel recording
+This API is used to cancel recording.
+#### Function prototype  
+
+```
+IQAVPTT int CancelRecording()
+```
+#### Sample code  
+
+```
+IQAVContext.GetInstance().GetPttCtrl().CancelRecording();
+```
+
+### Upload voice files
+This API is used to upload voice files.
+#### Function prototype  
 ```
 IQAVPTT int UploadRecordedFile (string filePath)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |string                      |Path for uploading a voice file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |string                      | Path for uploading the voice file |
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath);
+IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath); 
 ```
 
 
-### Callback for Uploading a Voice File
-Callback is executed after a voice file has been uploaded, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Callback for uploading voice files
+Callback is executed after a voice file has been uploaded, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
 public delegate void QAVUploadFileCompleteCallback(int code, string filepath, string fileid);
 Event function:
-public abstract event QAVUploadFileCompleteCallback OnUploadFileComplete;
+public abstract event QAVUploadFileCompleteCallback OnUploadFileComplete; 
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| code    |int                      |When **code** is set to **0**, the recording is complete.|
-| filepath    |string                      |Path for storing a recorded file.|
-| fileid    |string                      |URL of a file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| code    |int                       | When code is 0, recording is completed |
+| filepath    |string                      | Path for storing the recorded file |
+| fileid    |string                      | URL of the file |
+#### Sample code  
 ```
 Listen for an event:
-IQAVContext.GetInstance().GetPttCtrl().OnUploadFileComplete += mInnerHandler;
+IQAVContext.GetInstance().GetPttCtrl().OnUploadFileComplete += mInnerHandler;
 Process the event after listening:
 void mInnerHandler(int code, string filepath, string fileid){
-    //Callback for uploading a voice file
+    //Send a callback after a voice file has been uploaded
 }
 ```
 
-### Download a Voice File
-The QAVDownloadFileCompleteCallback function is used to download a voice file.
-#### Function Prototype
+
+### Download voice files
+This API is used to download voice files.
+#### Function prototype  
 ```
 IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| fileID    |string                       |URL of a file.|
-| downloadFilePath    |string                       |Path for downloading a file.|
-
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileID    |string                       | URL of a file |
+| downloadFilePath    |string                       | Local path for saving the file |
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath);
+IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath);
 ```
 
-### Callback for Downloading a Voice File
-Callback is executed after a voice file has been downloaded, and the delegate function is used to transfer a message.
-#### Function Prototype
+
+### Callback for downloading voice files
+Callback is executed after a voice file has been downloaded, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
-public delegate void QAVDownloadFileCompleteCallback(int code, string filepath, string fileid);
+public delegate void QAVDownloadFileCompleteCallback(int code, string filepath, string fileid);
 Event function:
-public abstract event QAVDownloadFileCompleteCallback OnDownloadFileComplete;
+public abstract event QAVDownloadFileCompleteCallback OnDownloadFileComplete;
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| code    |int                      |When **code** is set to **0**, the recording is complete.|
-| filepath    |string                      |Path for storing a recorded file.|
-| fileid    |string                      |URL of a file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| code    |int                       | When code is 0, recording is completed |
+| filepath    |string                      | Path for storing the recorded file |
+| fileid    |string                      | URL of the file |
+#### Sample code  
 ```
 Listen for an event:
-IQAVContext.GetInstance().GetPttCtrl().OnDownloadFileComplete += mInnerHandler;
+IQAVContext.GetInstance().GetPttCtrl().OnDownloadFileComplete += mInnerHandler;
 Process the event after listening:
 void mInnerHandler(int code, string filepath, string fileid){
-    //Callback for downloading a voice file
+    //Send a callback after a voice file has been downloaded
 }
 ```
 
 
-### Play a Voice File
-The PlayRecordedFile function is used to play a voice file.
-#### Function Prototype
+
+### Play voice files
+This API is used to play voice files.
+#### Function prototype  
 ```
 IQAVPTT PlayRecordedFile (string downloadFilePath)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| downloadFilePath    |string                       |Path for downloading a file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| downloadFilePath    |string                       | Path of the file |
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetPttCtrl().PlayRecordedFile(filePath);
+IQAVContext.GetInstance().GetPttCtrl().PlayRecordedFile(filePath); 
 ```
 
-### Callback for Playing a Voice File
-Callback is executed after a voice file has been played, and the delegate function is used to transfer a message.
-#### Function Prototype
+
+### Callback for playing voice files
+Callback is executed after a voice file has been played, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
 public delegate void QAVPlayFileCompleteCallback(int code, string filepath);
 Event function:
 public abstract event QAVPlayFileCompleteCallback OnPlayFileComplete;
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| code    |int                      |When **code** is set to **0**, the recording is complete.|
-| filepath    |string                      |Path for storing a recorded file.|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| code    |int                       | When code is 0, recording is completed |
+| filepath    |string                      | Path for storing the recorded file |
 
-#### Sample Code
+#### Sample code  
 ```
 Listen for an event:
-IQAVContext.GetInstance().GetPttCtrl().OnPlayFileComplete += mInnerHandler;
+IQAVContext.GetInstance().GetPttCtrl().OnPlayFileComplete += mInnerHandler;
 Process the event after listening:
 void mInnerHandler(int code, string filepath){
     //Callback for playing a voice file
 }
 ```
 
-### Stop Playing a Voice File
-The StopPlayFile function is used to stop playing a voice file.
-#### Function Prototype
+
+
+
+### Stop playing voice files
+This API is used to stop playing back voice files.
+#### Function prototype  
 ```
 IQAVPTT int StopPlayFile()
 ```
 
-#### Sample Code
+#### Sample code  
 ```
 IQAVContext.GetInstance().GetPttCtrl().StopPlayFile();
 ```
 
-### Obtain the Size of a Voice File
-The GetFileSize function is used to obtain the size of a voice file.
-#### Function Prototype
+
+
+### Obtain the size of a voice file
+This API is used to get the size of a voice file.
+#### Function prototype  
 ```
-IQAVPTT GetFileSize(string filePath)
+IQAVPTT GetFileSize(string filePath) 
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |string                      |Path for storing a voice file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |string                      | Path of the voice file |
+#### Sample code  
 ```
 int fileSize = IQAVContext.GetInstance().GetPttCtrl().GetFileSize(filepath);
 ```
 
-### Obtain the Duration of a Voice File
-The GetVoiceFileDuration function is used to obtain the duration of a voice file.
-#### Function Prototype
+### Obtain the length of a voice file
+This API is used to get the length of voice file.
+#### Function prototype  
 ```
 IQAVPTT int GetVoiceFileDuration(string filePath)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |string                      |Path for storing a voice file.|
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |string                      | Path of the voice file |
+#### Sample code  
 ```
-int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuration(filepath);
+int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuration(filepath);
 ```
 
-### Convert Specified Speech into Text
-The specified speech is converted into text. A language id indicates which language to be translate. Support set"KR-KR","ZH-ZH".
-#### Function Prototype
+
+### Convert the specified voice file into text with Speech Recognition
+This API is used to convert the specified voice file into text with Speech Recognition.
+#### Function prototype  
 ```
 IQAVPTT int SpeechToText(String fileID)
-IQAVPTT int SpeechToText(String fileID,String language)
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| fileID    |string                      |URL of a file|
-| language    |string                      |Language id|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileID    |string                      | URL of the voice file |
 
-#### Sample Code
+#### Sample code  
 ```
-IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID,"KR-KR");
+IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID);
 ```
 
-
-### Convert Specified Speech into Text
-The specified speech is converted into text, and the delegate function is used to transfer a message.
-#### Function Prototype
+### Callback for Speech Recognition
+This API is used to convert the specified voice file into text with Speech Recognition, and the delegate function is used to pass the message.
+#### Function prototype  
 ```
 Delegate function:
 public delegate void QAVSpeechToTextCallback(int code, string fileid, string result);
 Event function:
 public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| code    |int                      |When **code** is set to **0**, the recording is complete.|
-| filepath    |string                      |Path for storing a recorded file.|
-| result    |string                      |Text generated after conversion.|
-
-#### Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| code    |int                       | When code is 0, recording is completed |
+| filepath    |string                      | Path for storing the recorded file |
+| result    |string                      | Result of text conversion |
+#### Sample code  
 ```
 Listen for an event:
 IQAVContext.GetInstance().GetPttCtrl().OnSpeechToTextComplete += mInnerHandler;
@@ -1028,3 +1281,159 @@ void mInnerHandler(int code, string fileid, string result){
     //Callback for playing a voice file
 }
 ```
+## Advanced APIs
+### Obtain the version number
+This API is used to get the SDK version number for analysis.
+#### Function prototype
+```
+ITMGContext  abstract string GetVersion()
+```
+#### Sample code  
+```
+IQAVContext.GetInstance().GetVersion();
+```
+
+
+
+
+
+### Set the print log level
+This API is used to set the print log level.
+#### Function prototype
+```
+ITMGContext  SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
+```
+
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| logLevel    		|int | Level of logs to be printed |
+| enableWrite    	| bool | Indicates whether to write data to a file. Default is Yes |
+| enablePrint    	|bool | Indicates whether to write data to the console. Default is Yes |
+
+
+
+|ITMG_LOG_LEVEL|Description |
+| -------------------------------|:-------------:|
+|TMG_LOG_LEVEL_NONE=0		|Do not print logs |
+|TMG_LOG_LEVEL_ERROR=1		|Prints error logs (default) |
+|TMG_LOG_LEVEL_INFO=2			|Prints prompt logs |
+|TMG_LOG_LEVEL_DEBUG=3		|Prints development and debugging logs |
+|TMG_LOG_LEVEL_VERBOSE=4		| Prints high-frequency logs |
+#### Sample code  
+```
+IQAVContext.GetInstance().SetLogLevel(TMG_LOG_LEVEL_NONE,true,true);
+```
+
+### Set the print log path
+This API is used to set the print log path.
+The default path is:
+
+| Platform | Path |
+| ------------- |-------------|
+|Windows 	|%appdata%\Tencent\GME\ProcessName|
+|iOS    		|Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Documents|
+|Android	|/sdcard/Android/data/xxx.xxx.xxx/files|
+|Mac    		|/Users/username/Library/Containers/xxx.xxx.xxx/Data/Documents|
+
+#### Function prototype
+```
+ITMGContext  SetLogPath(string logDir)
+```
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------
+| logDir    		|NSString | Path |
+
+#### Sample code  
+```
+IQAVContext.GetInstance().SetLogPath(path);
+```
+### Obtain diagnostic messages
+This API is used to obtain information about the quality of real-time audio/video calls. This API is mainly used to check the quality of real-time calls and troubleshoot problems, and can be ignored at the business side.
+#### Function prototype  
+```
+IQAVRoom GetQualityTips()
+```
+#### Sample code  
+```
+string tips = IQAVContext.GetInstance().GetRoom().GetQualityTips();
+```
+
+### Add an ID to the audio data blacklist
+This API is used to add an ID to the audio data blacklist. A return value of 0 indicates that the call failed.
+#### Function prototype  
+
+```
+ITMGContext ITMGAudioCtrl AddAudioBlackList(string identifier)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| identifier    |NSString      | ID that needs to be added to the blacklist |
+#### Sample code  
+
+```
+IQAVContext.GetInstance().GetAudioCtrl ().AddAudioBlackList (id);
+```
+
+### Remove an ID from the audio data blacklist
+This API is used to remove an ID from the audio data blacklist. A return value of 0 indicates that the call failed.
+#### Function prototype  
+
+```
+ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string identifier)
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| identifier    | NSString   | ID that needs to be removed from the blacklist |
+#### Sample code  
+
+```
+IQAVContext.GetInstance().GetAudioCtrl ().RemoveAudioBlackList (id);
+```
+## Callback Messages
+
+#### Message list:
+
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		| Enters the audio room |
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		| Exits the audio room |
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT		| Room disconnection due to network or other reasons |
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE		|Room type change event |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|Enables the microphone |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|Disables the microphone |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER		|Enables the speaker |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER		|Disables the speaker |
+|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH		|The accompaniment is over |
+|ITMG_MAIN_EVNET_TYPE_USER_UPDATE		|The room members are updated |
+|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE	|PTT recording is completed |
+|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE	|PTT is successfully uploaded |
+|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|PTT is successfully downloaded |
+|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|The playback of PTT is completed |
+|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|The voice-to-text conversion is completed |
+
+#### Data list
+
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		|result; error_info			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    	|result; error_info  			|{"error_info":"waiting timeout, please check your network","result":0}|
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    	|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"Speaker (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}|
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"Speaker (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}|
+| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"Microphone (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}|
+| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    	|result; error_info 			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"Microphone (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0}|
+| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    		|user_list;  event_id			|{"event_id":1,"user_list":["0"]}|
+| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id		|{"file_id":"","filepath":"","result":0}|
+
+
