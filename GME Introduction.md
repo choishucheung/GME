@@ -16,6 +16,7 @@
 
 
 
+
 ## 新建服务
 
 ### 1.登录成功后，点击【新建应用】
@@ -49,7 +50,9 @@
 - 页面修改密钥后，15 分钟 ~ 1 小时内生效，不建议频繁更换。
 - 点击【下载公私钥】可以下载此应用离线语音相应的公私钥。
 
+
 详细参见[GME密钥文档](./GME%20Developer%20Manual/GME%20Key%20Manual.md)。
+
 
 
 ![image](Image/j8.png)
@@ -63,18 +66,20 @@
 
 ## 下载 SDK 
 ### 1.下载地址
-请在[腾讯云游戏多媒体引擎官网](https://cloud.tencent.com/product/tmg?idx=1)下载相关 Demo 及 SDK。
+请在[下载指引](https://cloud.tencent.com/document/product/607/18521)下载相关 Demo 及 SDK。
 
 ### 2.接入准备
 接入 SDK 需要使用腾讯云提供的 appid 及相关权限密钥。即应用管理列表中的 AppID 及 应用设置中的鉴权信息模块。
 - 接入实时语音时候会使用鉴权信息模块中的权限密钥。
 - 接入离线语音时候会使用鉴权信息模块中的下载的公私钥。
+
 详细参见[GME密钥文档](./GME%20Developer%20Manual/GME%20Key%20Manual.md)。
+
 
 更多平台相关配置请参考各平台工程配置文档。
 
 ### 3.官方 Demo 使用需知
-Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人及公司测试账号，需要在 Demo 中在相应界面将腾讯云测试账号 AppID 更换为开发者在控制台获取的 AppID，并需要在 AVChatViewController-GetAuthBuffer 函数中修改实时语音的权限密钥。
+Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人及公司测试账号，需要在 Demo 中在相应界面将腾讯云测试账号 AppID 更换为开发者在控制台获取的 AppID，并需要在 AVChatViewController-GetAuthBuffer 函数中修改实时语音的权限密钥，权限密钥在[控制台](https://console.cloud.tencent.com/gamegme)获取。
 
 
 
@@ -115,6 +120,7 @@ Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人
 - [Android 开发接入技术文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
 
 
+
 ## 控制台用量统计使用
 
 ### 在应用管理界面打开用量统计
@@ -145,6 +151,8 @@ Demo 中带有腾讯云测试账号，可进行功能体验，如需更换个人
 ![image](Image/j12.png)
 ## 特殊问题处理
 
+
 [腾讯云游戏多媒体引擎FAQ文档](./GME%20Developer%20Manual/GME%20FAQ%20Manual.md)    
 
 [错误码文档](./GME%20Developer%20Manual/GME%20Error%20Code.md)
+
