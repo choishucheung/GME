@@ -22,7 +22,7 @@ Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document prov
 
 **The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
 
-** This document is applicable to GME sdk version：2.0.2.38430 **
+**This document is applicable to GME sdk version：2.0.2.38430 **
 
 ## Initialization-related APIs
 For an uninitialized SDK, you must initialize it via initialization authentication to enter a room.
