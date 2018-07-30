@@ -24,7 +24,7 @@ The AppID in the list will be used as a parameter in the integration of SDK.
 
 
 #### 4. Click **Setting** corresponding to the application in the list to enter the application setting page.
-![](https://main.qcloudimg.com/raw/91e81b071e2d99cc1d39a5d6db161627.png)
+![](https://main.qcloudimg.com/raw/ad13c32afec03001858782a3d000ac28.png)
 You can click **Modify** to modify the information in the Application Information module.
 
 
@@ -64,18 +64,22 @@ The Demo provides a Tencent Cloud test account for you to experience features. I
 
 ## Related SDK Technical Documents
 **Unity engine** 
+
 [Unity Project Configuration](./GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Project%20Configuration_intl.md)     
 [Unity integration technical document](./GME%20Developer%20Manual/Unity%20Developer%20Manual/Unity%20SDK%20Developer%20Manual_intl.md)
 
 **Unreal engine**
+
 [Unreal Engine Project Configuration](./GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Project%20Configuration_intl.md)     
 [Unreal Engine integration technical document](./GME%20Developer%20Manual/Unreal%20Engine%20Developer%20Manual/Unreal%20Engine%20SDK%20Developer%20Manual_intl.md)
 
 **Cocos2D engine**
+
 [Cocos2D-X Project Configuration](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Project%20Configuration_intl.md)     
 [Cocos2D-X integration technical document](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual_intl.md)
 
 **Native application**
+
 [PC (C++) integration technical document](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual_intl.md)
 [iOS Project Configuration](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration_intl.md)     
 [iOS integration technical document](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Manual_intl.md)

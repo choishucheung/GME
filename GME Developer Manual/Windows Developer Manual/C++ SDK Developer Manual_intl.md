@@ -75,7 +75,7 @@ m_pTmgContext->TMGDelegate(p);
 
 ### Initialize the SDK
 
-For more information on how to obtain parameters, please see [GME Integration Guide](.../GME%20Introduction_intl.md).
+For more information on how to obtain parameters, please see [GME Integration Guide](/GME%20Introduction_intl.md).
 This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
 SDK must be initialized before a user can enter a room.
 #### Function prototype 
@@ -240,7 +240,7 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 
 ### Team voice chat room
-For more information on how to integrate team voice chat, please see relevant [integration document](.../GME%20Introduction_intl.md).
+For more information on how to integrate team voice chat, please see relevant [integration document](/GME%20Introduction_intl.md).
 
 #### Function prototype
 ```
