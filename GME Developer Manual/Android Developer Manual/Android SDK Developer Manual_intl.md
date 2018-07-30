@@ -17,8 +17,12 @@ Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document prov
 
 **Note**
 **When a GME API is called successfully, QAVError.OK is returned, and the value is 0.**
+
 **GME APIs are called in the same thread.**
+
 **The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
+
+**This document is applicable to GME sdk version：2.0.2.38430.**
 
 ## Initialization-related APIs
 For an uninitialized SDK, you must initialize it via initialization authentication to enter a room.
@@ -170,7 +174,7 @@ You must initialize and call the SDK to enter a room before Voice Chat can start
 
 
 ### Voice chat authentication
-AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](https://cloud.tencent.com/document/product/607/12218).    
+AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](../GME%20Key%20Manual_intl.md).    
 
 
 A value of type Byte[] is returned by this API.
@@ -984,7 +988,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 
 ### Initialization for integrating the offline voice technology
-Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](https://cloud.tencent.com/document/product/607/12218) document.  
+Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](../GME%20Key%20Manual_intl.md) document.  
 
 #### Function prototype  
 ```
