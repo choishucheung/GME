@@ -70,7 +70,7 @@ With the API class, the Delegate method is used to send callback notifications t
 
 
 ### Initialize the SDK
-For more information on how to obtain parameters, please see [GME Integration Guide](.../GME%20Introduction_intl.md).
+For more information on how to obtain parameters, please see [GME Integration Guide](/GME%20Introduction_intl.md).
 This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
 SDK must be initialized before a user can enter a room.
 #### Function prototype
