@@ -28,6 +28,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
+**此文档对应GME sdk version：2.0.2.38430。**
 ## 快速接入步骤
 
 ### 1、获取单例
@@ -43,7 +44,7 @@ context->SetTMGDelegate(this);
 
 
 ### 2、初始化 SDK
-参数获取见文档：[游戏多媒体引擎接入指引](https://github.com/TencentMediaLab/GME/blob/master/GME%20Introduction.md)。
+参数获取见文档：[游戏多媒体引擎接入指引](.../GME%20Introduction.md)。
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 初始化 SDK 之后才可以进房。
 > 函数原型
@@ -165,7 +166,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 
 ## 关于鉴权
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/GME%20Key%20Manual.md)。  
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
 
 > 函数原型
 ```

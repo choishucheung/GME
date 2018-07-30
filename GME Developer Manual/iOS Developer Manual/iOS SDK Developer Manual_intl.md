@@ -18,10 +18,12 @@ Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document prov
 
 **Note:**
 **When a GME API is called successfully, QAVError.OK is returned, and the value is 0.**
+
 **GME APIs are called in the same thread.**
+
 **The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
 
-
+**This document is applicable to GME sdk version：2.0.2.38430.**
 ## Initialization-related APIs
 For an uninitialized SDK, you must initialize it via initialization authentication to enter a room.
 
@@ -68,7 +70,7 @@ With the API class, the Delegate method is used to send callback notifications t
 
 
 ### Initialize the SDK
-For more information on how to obtain parameters, please see [GME Integration Guide](https://cloud.tencent.com/document/product/607/10782).
+For more information on how to obtain parameters, please see [GME Integration Guide](.../GME%20Introduction_intl.md).
 This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
 SDK must be initialized before a user can enter a room.
 #### Function prototype
@@ -174,7 +176,7 @@ You must initialize and call the SDK to enter a room before Voice Chat can start
 
 
 ### Voice chat authentication
-AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](https://cloud.tencent.com/document/product/607/12218).    
+AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](../GME%20Key%20Manual_intl.md).    
 A value of type NSData is returned by this API.
 #### Function prototype
 
@@ -1056,7 +1058,7 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 
 
 ### Initialization for integrating the offline voice technology
-Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](https://cloud.tencent.com/document/product/607/12218) document.  
+Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](../GME%20Key%20Manual_intl.md) document.  
 The parameter Error is used to pass the error message in cases when you enter an incorrect parameter, for example, appid is 0, key is empty or identifier is empty.
 #### Function prototype  
 

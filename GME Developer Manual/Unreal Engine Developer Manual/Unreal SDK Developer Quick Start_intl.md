@@ -9,7 +9,7 @@ Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document prov
 
 ### Key considerations for using GME
 
-This document only provides the most important APIs to help you get started with GME. For more APIs, please see [API Documentation](https://cloud.tencent.com/document/product/607/15231).
+This document only provides the most important APIs to help you get started with GME. For more APIs, please see [API Documentation](./Unreal%20Engine%20SDK%20Developer%20Manual_intl.md).
 
 
 | Important API | Description |
@@ -22,9 +22,12 @@ This document only provides the most important APIs to help you get started with
 
 **Note:**
 **When a GME API is called successfully, QAVError.OK is returned, and the value is 0.**
+
 **GME APIs are called in the same thread.**
+
 **The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
 
+**This document is applicable to GME sdk version：2.0.2.38430.**
 ## Procedure for Quick Integration
 
 ### 1. Get a singleton
@@ -40,7 +43,7 @@ context->SetTMGDelegate(this);
 
 
 ### 2. Initialize the SDK
-For more information on how to obtain parameters, please see [GME Integration Guide](https://cloud.tencent.com/document/product/607/10782).
+For more information on how to obtain parameters, please see [GME Integration Guide](.../GME%20Introduction_intl.md).
 This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
 SDK must be initialized before a user can enter a room.
 #### Function prototype
@@ -168,7 +171,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 
 ## Authentication
 ### Voice chat authentication
-AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](https://cloud.tencent.com/document/product/607/12218).  
+AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](../GME%20Key%20Manual_intl.md).  
 
 #### Function prototype
 ```
