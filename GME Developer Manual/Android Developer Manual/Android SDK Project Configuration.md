@@ -4,12 +4,11 @@
 ## SDK 准备
 可以通过以下方式获取 SDK。
 
-### 1. 打开腾讯云为您提供的[游戏多媒体引擎](https://cloud.tencent.com/product/tmg?idx=1)  
-![image](Image/a1.png)
+### 1. 请在[下载指引](https://cloud.tencent.com/document/product/607/18521)下载相关 Demo 及 SDK。
 
 
-### 2. 在界面中找到开发者资源一栏，找到 Android 版本的 SDK 资源。
-![image](Image/a2.png)
+### 2. 在界面中找到找到 Android 版本的 SDK 资源。
+
 
 ### 3. 点击【下载】按钮。
 下载完的SDK资源解压后有以下几个部分：
