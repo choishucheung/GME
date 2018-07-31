@@ -2,7 +2,8 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Unreal Engine 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Unreal Engine 开发的工程配置。
 
 ## SDK 准备
-可以联系工作人员获取 SDK。
+请在[下载指引](https://cloud.tencent.com/document/product/607/18521)下载相关 Demo 及 SDK。
+
 在 Unreal Engine 工程目录下，打开 Plugins 文件夹（如果没有请自行创建），拷贝 SDK 进去，SDK 目录如下图：
 
 ![image](Image/ue1.png)
