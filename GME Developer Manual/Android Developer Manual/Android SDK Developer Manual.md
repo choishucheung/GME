@@ -250,7 +250,7 @@ ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, a
 ### 加入房间事件的回调
 加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
 
-> 代码说明  
+> 示例代码  
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENTER_ROOM == type)
@@ -433,7 +433,7 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 
 > 函数原型  
 ```
-ITMGContext ITMGAudioCtrl int PauseAudio()
+ITMGContext ITMGAudioCtrl public int PauseAudio()
 ```
 > 示例代码  
 ```
@@ -444,7 +444,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().PauseAudio();
 调用此接口恢复音频引擎的采集和播放，只在进房后有效。
 > 函数原型  
 ```
-ITMGContext ITMGAudioCtrl int ResumeAudio()
+ITMGContext ITMGAudioCtrl public int ResumeAudio()
 ```
 > 示例代码  
 ```
@@ -531,7 +531,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().SetMicVolume(volume);
 此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型  
 ```
-ITMGContext TMGAudioCtrl int GetMicVolume()
+ITMGContext TMGAudioCtrl public int GetMicVolume()
 ```
 > 示例代码  
 ```
@@ -1258,7 +1258,7 @@ ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID);
 
 ### 识别回调
 将指定的语音文件识别成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
-传递的参数包含三个信息，result、file_path 和 text，其中 text 为翻译的文本。
+传递的参数包含三个信息，result、file_path 和 text，其中 text 为识别的文本。
 ```
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	if(ITMGContext.ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE == type)

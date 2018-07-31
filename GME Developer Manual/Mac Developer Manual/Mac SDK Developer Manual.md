@@ -28,7 +28,6 @@
 | ------------- |:-------------:|
 |InitEngine    				|初始化 GME 	|
 |Poll    		|触发事件回调	|
-|SetDefaultAudienceAudioCategory 	|设置后台|
 |EnterRoom	 	|进房  		|
 |EnableMic	 	|开麦克风 	|
 |EnableSpeaker		|开扬声器 	|
@@ -345,7 +344,7 @@ ITMGContext GetRoom -(int)GetRoomType
 
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，包含两个信息，event_id 及 endpoints，在 OnEvent 函数中对事件消息进行判断。
-音频事件的通知有一个阈值，超过这个阈值才会发送通知。
+音频事件的通知有一个阈值，超过这个阈值才会发送通知。超过两秒没有收到音频包才通知“有成员停止发送音频包”消息。
 
 |event_id     | 含义         |应用侧维护内容|
 | ------------- |:-------------:|-------------|
@@ -535,7 +534,7 @@ ITMGContext GetAudioCtrl -(void)SetMicVolume:(int) volume
 ```
 
 ###  获取麦克风的软件音量
-此接口用于获取麦克风的软件音量。返回值为一个int类型数值。
+此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型  
 
 ```
@@ -632,7 +631,7 @@ ITMGContext GetAudioCtrl -(void)SetSpeakerVolume:(int)vol
 ```
 
 ### 获取扬声器的软件音量
-此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量。
+此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
 Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
 > 函数原型  
@@ -1044,7 +1043,7 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|翻译			|
+|SpeechToText 		|语音识别成文字			|
 
 
 ### 离线语音技术接入初始化
@@ -1291,8 +1290,8 @@ ITMGContext GetPTT -(int)GetVoiceFileDuration:(NSString*)filePath
 [[[ITMGContext GetInstance]GetPTT]GetVoiceFileDuration:path];
 ```
 
-### 将指定的语音文件翻译成文字
-此接口用于将指定的语音文件翻译成文字。
+### 将指定的语音文件识别成文字
+此接口用于将指定的语音文件识别成文字。
 > 函数原型  
 
 ```
@@ -1307,15 +1306,15 @@ ITMGContext GetPTT -(int)SpeechToText:(NSString*)fileID
 [[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID];
 ```
 
-### 翻译回调
-将指定的语音文件翻译成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
+### 识别回调
+将指定的语音文件识别成文字的回调，事件消息为 ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE， 在 OnEvent 函数中对事件消息进行判断。
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
         case ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE：
         {
-	    //成功翻译语音文件       
+	    //成功识别语音文件       
         }
             break;   
     }
@@ -1449,7 +1448,7 @@ ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|播放 PTT 完成			|
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|语音转文字完成			|
 
-> Data 列表
+> Data 列表：
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |

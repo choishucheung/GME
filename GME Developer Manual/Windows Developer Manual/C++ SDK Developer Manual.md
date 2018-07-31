@@ -220,7 +220,7 @@ QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, exp
 
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
-如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME小队语音文档](../GME%20TeamAudio%20Manual.md)。
+如果普通语音进房，业务方面无涉及小队语音需求，则使用普通进房接口。详细信息请查阅[GME 小队语音文档](../GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 
@@ -253,7 +253,7 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 
 #### 小队语音房间
-详细接入细节请查阅[小队语音接入文档](../GME%20TeamAudio%20Manual.md)。
+详细接入细节请查阅[GME 小队语音文档](../GME%20TeamAudio%20Manual.md)。
 
 > 函数原型
 ```

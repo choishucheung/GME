@@ -11,6 +11,7 @@
 ```
 ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
 | relationId		|int    		|房间号，只支持32位|

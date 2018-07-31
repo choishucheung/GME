@@ -158,7 +158,7 @@ byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly 
 
 ### 加入房间
 用生成的鉴权信息进房。加入房间默认不打开麦克风及扬声器。
-小队语音详细接入细节请查阅[小队语音接入文档](../GME%20TeamAudio%20Manual.md)。
+小队语音详细接入细节请查阅[GME 小队语音](../GME%20TeamAudio%20Manual.md)。
 
 
 > 函数原型
@@ -461,8 +461,7 @@ ITMGAudioCtrl EnableMic(bool isEnabled)
 ```
 打开麦克风
 IQAVContext.GetInstance().GetAudioCtrl().EnableMic(true);
-关闭麦克风
-IQAVContext.GetInstance().GetAudioCtrl().EnableMic(false);
+
 ```
 
 ### 麦克风状态获取
@@ -526,8 +525,7 @@ ITMGAudioCtrl EnableSpeaker(bool isEnabled)
 ```
 打开扬声器
 IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
-关闭扬声器
-IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(false);
+
 ```
 
 
@@ -991,7 +989,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|识别			|
+|SpeechToText 		|语音识别成文字			|
 
 ### 离线语音技术接入初始化
 初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](../GME%20Key%20Manual.md)。  
@@ -1309,7 +1307,7 @@ public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 IQAVContext.GetInstance().GetPttCtrl().OnSpeechToTextComplete += mInnerHandler;
 监听处理：
 void mInnerHandler(int code, string fileid, string result){
-    //识别回调
+    //播放语音的回调
 }
 ```
 ## 高级 API
