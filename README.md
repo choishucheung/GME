@@ -42,6 +42,10 @@
 
 - [PC（C++）开发接入技术文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
 
+- [Mac 工程配置文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Project%20Configuration.md)
+
+- [Mac 快速接入文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Quick%20Start.md)
+
 - [iOS 工程配置文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
 - [iOS 快速接入文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Developer%20Quick%20Start.md)

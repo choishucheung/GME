@@ -40,6 +40,8 @@
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
+**此文档对应GME sdk version：2.0.2.38430。**
+
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
 
@@ -97,7 +99,7 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 
 ### 初始化 SDK
 
-参数获取见文档：[游戏多媒体引擎接入指引](.../GME%20Introduction.md)。
+参数获取见文档：[游戏多媒体引擎接入指引](/GME%20Introduction.md)。
 此接口需要来自腾讯云控制台的 SdkAppId 号码作为参数，再加上 openId，这个 openId 是唯一标识一个用户，规则由 App 开发者自行制定，App 内不重复即可（目前只支持 INT64）。
 初始化 SDK 之后才可以进房。
 > 函数原型 

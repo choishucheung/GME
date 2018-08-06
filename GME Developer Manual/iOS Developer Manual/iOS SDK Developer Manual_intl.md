@@ -1,213 +1,241 @@
-Welcome to the Tencent Cloud Game Multimedia Engine (GME) SDK. This document describes access to technologies for iOS development so that iOS developers can easily debug and access to APIs for Tencent Cloud GME.
+## Overview
+Thank you for using Tencent Cloud Game Multimedia Engine SDK. This document provides a detailed description that makes it easy for iOS developers to debug and integrate the APIs for Game Multimedia Engine (GME).
 
-## Main Process Flowchart
-![image](Image/i6.png)
-
-### Important!!!
-
-|Important Interface     | Description|
-|:-------------|:-------------:|
-|InitEngine    |Initialize 	|
-|Poll    		|Trigger Callback Message	|
-|SetDefaultAudienceAudioCategory 	|SetDefault Catetegory|
-|EnterRoom	 	|Enter a room for communication  		|
-|EnableMic	 	|Open microphone capture and send audio data captured 	|
-|EnableSpeaker	|Receive audio data and play it	|
-
-**Note：**
-**All of the interfaces of GME returns QAVResult, AV_OK which is 0 indicates success。**
-**All of the interfaces of GME should be call in a same thread. And Callback will trigger in the same thread where Poll() function is called.**
-**GME need authentication, you can see QAVAuthBuffer.GenAuthBuffer,and see the [GME KEY Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Developer%20Manual/GME%20Key%20Manual_intl.md).**
+## How to Use
+![](https://main.qcloudimg.com/raw/810d0404638c494d9d5514eb5037cd37.png)
 
 
+### Key considerations for using GME
 
-## SDK Initialization
+| Important API | Description |
+| ------------- |:-------------:|
+|InitEngine    				       	|Initializes GME 	|
+|Poll    		|Triggers event callback	|
+|SetDefaultAudienceAudioCategory 	| Sets background sound |
+|EnterRoom	 	|Enters a room  		|
+|EnableMic	 	|Enables the microphone 	|
+|EnableSpeaker		|Enables the speaker 	|
 
-### Get a Singleton
-The GME SDK is provided as a singleton. All calls start with ITMGContext. Asynchronous operation results or any internal status changes are passed to an application via ITMGDelegate.
-> Function Prototype
+**Note:**
+**When a GME API is called successfully, QAVError.OK is returned, and the value is 0.**
+
+**GME APIs are called in the same thread.**
+
+**The request for entering a room via GME API should be authenticated. For more information, please see authentication section in relevant documentation.**
+
+**This document is applicable to GME sdk version：2.0.2.38430.**
+## Initialization-related APIs
+For an uninitialized SDK, you must initialize it via initialization authentication to enter a room.
+
+| API | Description |
+| ------------- |:-------------:|
+|InitEngine    				       	|Initializes GME 	|
+|Poll    	|Triggers event callback	|
+|Pause   	|Pauses the system	|
+|Resume 	|Resumes the system	|
+|Uninit    	|Initializes GME 	|
+|SetDefaultAudienceAudioCategory 	| Sets background sound |
+
+### Get a singleton
+This API is used to get the ITMGContext object when using the voice feature.
+#### Function prototype
+
 ```
-ITMGContext @protocol ITMGDelegate <NSObject>
+ITMGContext ITMGDelegate <NSObject>
 ```
-> Sample Code
+#### Sample code  
+
 ```
 ITMGContext* _context = [ITMGContext GetInstance];
 _context.TMGDelegate =self;
 ```
 
-### Message Transferring
-GME messages are transferred to an application via ITMGDelegate. The message type is specified by **ITMG_MAIN_EVENT_TYPE**. The message content is a dictionary. Message content varies with the event type.
-> Function Prototype
+### Message passing
+With the API class, the Delegate method is used to send callback notifications to your application. ITMG_MAIN_EVENT_TYPE indicates the message type. The message content is a dictionary, which varies depending on the event type.
+#### Function prototype
+
 ```
 - (void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary*)data
 ```
-> Sample Code
+#### Sample code
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     	NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
 		switch (eventType) {
-			//Check eventType
+			//Identify eventType
 			}
 	}
 ```
-### Trigger Callback Message
-Trigger Callback Message.
-> Function Prototype
+
+
+### Initialize the SDK
+For more information on how to obtain parameters, please see [GME Integration Guide](/GME%20Introduction_intl.md).
+This API should contain SdkAppId and openId. The SdkAppId is obtained from Tencent Cloud console, and the openId is used to uniquely identify a user. The setting rule for openId can be customized by App developers, and this ID must be unique in an App (only INT64 is supported).
+SDK must be initialized before a user can enter a room.
+#### Function prototype
+
+```
+ITMGContext -(void)InitEngine:(NSString*)sdkAppID openID:(NSString*)openID
+```
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| sdkAppId    	|NSString  |The SdkAppId obtained from Tencent Cloud console |
+| openID    		|NSString  |The OpenID supports Int64 type (which is passed after being converted to a string) only. It is used to identify users and must be greater than 10000. 	|
+#### Sample code  
+
+```
+[[ITMGContext GetInstance] InitEngine:SDKAPPID3RD openID:_openId];
+```
+
+
+### Trigger event callback
+This API is used to trigger the event callback via periodic Poll call in update.
+#### Function prototype
 
 ```
 ITMGContext -(void)Poll
 ```
-> Sample Code
+#### Sample code
 ```
 [[ITMGContext GetInstance] Poll];
 ```
 
 
 
-### UnInit SDK
- UnInit SDK.
->  Function Prototype
+### Pause the system
+This API is used to notify the engine for Pause at the same time the system Pause occurs.
+#### Function prototype
+
+```
+ITMGContext -(void)Pause
+```
+
+### Resume the system
+This API is used to notify the engine for Resume at the same time the system Resume occurs.
+#### Function prototype
+
+```
+ITMGContext -(void)Resume
+```
+
+
+### Deinitialize the SDK
+Deinitializes an SDK to make it uninitialized.
+#### Function prototype
 
 ```
 ITMGContext -(void)Uninit
 ```
-> Sample Code
+#### Sample code
 ```
 [[ITMGContext GetInstance] Uninit];
 ```
 
 
 
-### SetDefault Catetegory
-SetDefault Catetegory，before a user enters a room.
-Note:
-- SetDefault catetegory is not suspend acquisition and playback by the audio engine.
-- In App Info.plist,at least add key:Required background modes，string:App plays audio or streams audio/video using AirPlay.
+### Set background playback sound
+This API is used to set background playback sound, which is called before a user enters the room.
+The followings should be noted at the application side:
+- The capture and playback functions of the audio engine cannot be paused (PauseAudio) when the App is switched to the background.
+- At least key: Required background modes and string: App plays audio or streams audio/video using AirPlay are required in the Info.plist of the App.
 
-> Function Prototype
+#### Function prototype
 ```
 ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)audioCategory
 ```
 
-|Parameter     | Type         |Description|
+| Type | Parameter | Description |
 | ------------- |:-------------:|-------------|
-| ITMG_CATEGORY_AMBIENT    	|0	|suspend playback|
-| ITMG_CATEGORY_PLAYBACK    	|1   	|Not suspend playback|
+| ITMG_CATEGORY_AMBIENT    	|0	|Indicates that audio is not played when the application is switched to the background (default) |
+| ITMG_CATEGORY_PLAYBACK    	|1 | Indicates that audio is played when the application is switched to the background |
+
+This can be achieved by modifying kAudioSessionProperty_AudioCategory. For more information, please see Apple official documentation.
 
 
-> Sample Code  
+#### Sample code  
 ```
 [[ITMGContext GetInstance]SetDefaultAudienceAudioCategory:ITMG_CATEGORY_AMBIENT];
 ```
 
 
-## Real-Time Voice Access
 
-### Set Relevant Information
-Relevant information is applied for through Tencent Cloud Console. For more information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction_intl.md).
-The SetAppInfo function contains the **sdkAppId**, and **openID** parameters. The values of **sdkAppId** are obtained from Tencent Cloud Console. The value of **OpenID** indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers, and the ID must be unique in an application. Currently, the ID can be only of the int64 type.
-> Function Prototype
-```
-ITMGContext -(void)InitEngine:(NSString*)sdkAppID openID:(NSString*)openID
-```
+## Voice Chat Room-Related APIs
+You must initialize and call the SDK to enter a room before Voice Chat can start.
 
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| sdkAppId    	|NSString  |The value is obtained from Tencent Cloud Console.				|
-| openID    		|NSString  |The value indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers. Currently, the value must be greater than **10000**.|
+| API | Description |
+| ------------- |:-------------:|
+|GenAuthBuffer    	|Initialization authentication |
+|EnterRoom   		|Joins a room |
+|IsRoomEntered   	|Indicates whether any member has entered a room |
+|ExitRoom 			|Exits the room |
+|ChangeRoomType 	|Modifies the audio type of the user's room |
+|GetRoomType 		|Obtains the audio type of the user's room |
 
-> Sample Code
-```
-[[ITMGContext GetInstance] InitEngine:SDKAPPID3RD openID:_openId];
-```
-The SetAppVersion function is used to set version information that is used during log query and debugging. No functions are affected if version information is not set.
-> Function Prototype
-```
-ITMGContext  -(void)SetAppVersion:(NSString*)appVersion
-```
 
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| sAppVersion    |NSString  |Version number.|
 
-> Sample Code
-```
-[[ITMGContext GetInstance]SetAppVersion:appversion];
-```
-The GetSDKVersion function is used to obtain the SDK version number.
+### Voice chat authentication
+AuthBuffer is generated for encryption and authentication of appropriate features. For more information on how to obtain relevant parameters, please see [GME Key](../GME%20Key%20Manual_intl.md).    
+A value of type NSData is returned by this API.
+#### Function prototype
 
-> Function Prototype
-```
-ITMGContext  -(NSString*)GetSDKVersion
-```
-> Sample Code
-```
-[[ITMGContext GetInstance] GetSDKVersion];
-```
-Then, the value of **AuthBuffer** is generated for encryption and authentication of relevant functions. For more information about how to obtain relevant parameters and other information, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction_intl.md).
-The return value of this function is of the NSData type.
-> Function Prototype
 ```
 @interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
++ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
 @end
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| appId    		|int   		|The value is the same as the value of **sdkAppId** on Tencent Cloud Console.		|
-| roomId    		|int  		|Name a room to be entered. Only 32bits unsigned integer supported.			|
-| openId  		|NSString    	|The value indicates an ID that uniquely identifies a user. The ID setting rule can be customized by application developers. Currently, the value must be greater than **10000**.|
-| key    			|NSString    	|The value is the key provided by Tencent Cloud Console.	|
-| expTime    		|int   		|Timeout interval for entering a room.						|
-| authBits   	 	|uint64    	|Permissions.									|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| appId    		|int   		| The SdkAppId obtained from Tencent Cloud console		|
+| roomId    		|int | Room number. 32-bit is supported. |
+| identifier  		|NSString | User ID |
+| key    			|NSString | The key obtained from Tencent Cloud console |
+| expTime    		|int   		| authBuffer timeout						|
+| authBits   	 	|uint64 | Permission (ITMG_AUTH_BITS_DEFAULT indicates full access) |
 
->About permissions
-The value **ITMG_AUTH_BITS_ALL** indicates all permissions. It is recommended that this parameter be set to **ITMG_AUTH_BITS_ALL** for real-time users and VJs. The value **ITMG_AUTH_BITS_RECV** indicates downstream permissions. It is recommended that this parameter be set to ITMG_AUTH_BITS_RECV for listening- or watching-only audiences. The startAccompany function is unavailable for downstream permissions.
 
-> Sample Code
+
+#### Sample code  
+
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_ALL];
-```
-
-### Enter a Room
-When a user enters a room with a generated **AuthBuffer** value, the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message is received as a callback.
->Note: The microphone and speakers are disabled by default when a user enters a room.
-
-
-> Function Prototype
-```
-ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int)roomType authBuffer:(NSData*)authBuffer
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
 ```
 
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| roomID		|int    		|Name a room to be entered. Only 32bits unsigned integer supported.			|
-| roomType    	|int    	|Audio room type.|
-| authBuffer    	|NSData    	|The value is used for authentication.						|
+### Join a room
+This API is used to enter a room with the generated authentication information, and the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message is received as a callback. Microphone and speaker are not enabled by default after a user enters the room.
 
-|ITMG_ROOM_TYPE     	|Description|Parameter|Volume Mode|Console recommended sample rate setting|Applicable scene|
+
+#### Function prototype
+
+```
+ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| relationId 	|int		|Room number. 32-bit is supported.									|
+| roomType 		|int			|Audio type of the room		|
+| authBuffer    	|NSData | Authentication key |
+
+| Audio Type | Meaning | Parameter | Volume Type | Recommended Sampling Rate on the Console | Application Scenarios |
 | ------------- |------------ | ---- |---- |---- |---- |
-| ITMG_ROOM_TYPE_FLUENCY			|Low sound quality		|1|use voicechat mode with no headset plugin	|If there is no special demand for sound quality, like music etc., the 16K sampling rate can be used;					|Smooth priority, ultra-low latency real-time voice, applied in the game to open team play scenes, suitable for FPS, MOBA and other types of games;|
-| ITMG_ROOM_TYPE_STANDARD			|Standard sound quality	|2|use voicechat mode with no headset plugin	|According to the demand for sound quality, you can choose the sampling rate of 16k/48k							|The sound quality is good, the lag is moderate, suitable for real-time call scenes of casual games such as  table games, chess and so on;|
-| ITMG_ROOM_TYPE_HIGHQUALITY		|High sound quality		|3|always use media mode 	|For best performance, it is recommended that the console set a high-quality configuration with a 48k sample rate.						|High sound quality, relatively laggy, suitable for music and dance games and voice social apps; suitable for playing music, online karaoke and other scenes with high sound quality requirements;|
+| ITMG_ROOM_TYPE_FLUENCY			|Fluent	|1|Speaker: chat volume; headset: media volume 	| 16k sampling rate is recommended if there is no special requirement for sound quality					| With fluent sound and ultra-low latency, it allows voice chat and is suitable for team speak scenario in such games as FPS and MOBA.	|							
+| ITMG_ROOM_TYPE_STANDARD			|Standard	|2|Speaker: chat volume; headset: media volume	| Choose 16k or 48k sampling rate depending on different requirements for sound quality				| With good sound quality and medium latency, it is suitable for real time chat scenarios in casual games such as Werewolf, chess and card games.	|												
+| ITMG_ROOM_TYPE_HIGHQUALITY		|High-quality	|3|Speaker: media volume; headset: media volume	| To ensure optimum effect, it is recommended to enable HQ configuration with 48k sampling rate	| With ultra-high sound quality and high latency, it is suitable for scenarios demanding high sound quality, such as music playback and online karaoke.	|
 
-- If you have special needs for volume type or scene, please contact the frontline customer service;
-- The console sample rate setting directly affects the game's voice performance. Please check again on the [console](https://console.cloud.tencent.com/gamegme) that the sample rate setting is consistent with the project usage scenario.
+- If you have special requirement for audio type or scenarios, contact the customer service.
+- The sound effect in a game depends directly on the sampling rate set on the console. Please confirm whether the sampling rate you set on the [console](https://console.cloud.tencent.com/gamegme) is suitable for the project's application scenario.
 
+#### Sample code  
 
-> Sample Code
 ```
 [[ITMGContext GetInstance] EnterRoom:_roomId roomType:_roomType authBuffer:authBuffer];
 ```
 
-### Callback for Entering a Room
-After a user enters a room, the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message is sent, which is checked in the OnEvent function.
-> Function Prototype
-```
-- (void)OnEnterRoomComplete:(int)result WithErrinfo:(NSString *)error_info
-```
+### Callback for entering a room
+This API is used to send the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message after a user enters a room, which is checked in the OnEvent function.
+#### Sample code 
 
-> Code Description
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
@@ -216,866 +244,1240 @@ After a user enters a room, the ITMG_MAIN_EVENT_TYPE_ENTER_ROOM message is sent,
         {
             int result = ((NSNumber*)[data objectForKey:@"result"]).intValue;
             NSString* error_info = [data objectForKey:@"error_info"];
-            //Enter a room
+            // Receive the event of entering the room successfully.
         }
             break;
      }
 }
 ```
 
-### Check Whether a User Has Entered a Room
-The IsRoomEntered function is used to check whether a user has entered a room. The return value of this function is of the bool type.
-> Function Prototype
+### Identify whether any member has entered a room
+This API is called to identify whether any member has entered a room. A BOOL value is returned.
+#### Function prototype  
+
 ```
 ITMGContext -(BOOL)IsRoomEntered
 ```
-> Sample Code
+#### Sample code  
+
 ```
 [[ITMGContext GetInstance] IsRoomEntered];
 ```
 
-### Exit from a Room
-The ExitRoom function is used to exit from a room.
-> Function Prototype
+### Exit a room
+This API is called to exit the current room.
+#### Function prototype  
+
 ```
 ITMGContext -(void)ExitRoom
 ```
-> Sample Code
+#### Sample code
+
 ```
 [[ITMGContext GetInstance] ExitRoom];
 ```
 
-### Callback for Exiting from a Room
-After a user exits from a room, the SDK sends the ITMG_MAIN_EVENT_TYPE_EXIT_ROOM message to notify an application of the exit via ITMGDelegate callback.
-> Function Prototype
-```
- -(void)OnExitRoomComplete
-```
-> Sample Code
+### Callback for exiting a room
+After a user exits the room, a callback response is returned and the ITMG_MAIN_EVENT_TYPE_EXIT_ROOM message is received.
+
+#### Sample code  
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_EXIT_ROOM：
+        case ITMG_MAIN_EVENT_TYPE_EXIT_ROOM:
         {
-	    //Exit from a room
+	    // Receive the event of exiting the room successfully.
         }
             break;
     }
 }
 ```
 
-### RoomType Setting
-The ChangeRoomType method is used to set audio room type.the SDK sends the ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE message to notify an application. 
 
 
-> Function Prototype
+### Modify the audio type of the user's room
+This API is used to modify the audio type of the user's room. See the callback event for the result. The event type is ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE.
+
+#### Function prototype  
 ```
-ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
+ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
 ```
-|Parameter     | Type         |Description|
+| Parameter | Type | Description |
 | ------------- |:-------------:|-------------|
-| nRoomType    |int    |Audio room type.|
+| nRoomType    |int    |The room type to be switched to. See the API EnterRoom for the audio type of the user's room. |
 
-> Sample Code
-
-```
-[[[ITMGContext GetInstance]GetRoom ]ChangeRoomType:_roomType];
-```
-
-###  Get Audio Room Type
-The GetRoomType method is used to get audio room type.
-
-> Function Prototype
-```
-ITMGContext GetRoom -(int)GetRoomType
-```
-
-
-> Sample Code
+#### Sample code
 
 ```
-[[[ITMGContext GetInstance]GetRoom ]GetRoomType];
+[[[ITMGContext GetInstance]GetRoom ]ChangeRoomType:_roomType];
+```
+
+### Obtain the audio type of the user's room
+This API is used to obtain the audio type of the user's room. The returned value is the audio type of the room. The audio type of the user's room can be found in the API EnterRoom.
+
+#### Function prototype  
+```
+ITMGContext GetRoom -(int)GetRoomType
 ```
 
 
+#### Sample code
+
+```
+[[[ITMGContext GetInstance]GetRoom ]GetRoomType];
+```
+
+### Callback after the room type is set
+After the room type is set, the event message ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE is returned in the callback response. The returned parameters include result, error_info, and new_room_type. new_room_type represents the following information and is identified in the OnEvent function.
+
+| Event Sub-type | Parameters | Description |
+| ------------- |:-------------:|-------------|
+| ITMG_ROOM_CHANGE_EVENT_ENTERROOM		|1 	|Indicates that the existing audio type is inconsistent with and changed to that of the room to enter.	|
+| ITMG_ROOM_CHANGE_EVENT_START			|2	|Indicates that there are members in the room and the audio type starts changing (e.g., the audio type is changed after the ChangeRoomType API is called.) |
+| ITMG_ROOM_CHANGE_EVENT_COMPLETE		|3	|Indicates that there are members in the room and the audio type has changed |
+| ITMG_ROOM_CHANGE_EVENT_REQUEST			|4	|Indicates that a room member calls the ChangeRoomType API to request a change in the audio type |	
 
 
-### Suspend Acquisition and Playback by the Audio Engine
-The PauseAudio function is used to suspend acquisition and playback by the audio engine and is effective only after a user enters a room.
-After the EnterRoom function is successfully called, the microphone is occupied and other programs cannot acquire data from the microphone.
-Note: Calling of EnableMic(false) cannot release the microphone.
-To release a microphone, call the PauseAudio function that can suspend the audio engine. To resume audio acquisition, call the ResumeAudio function.
-> Function Prototype
+#### Sample code  
 ```
-GetAudioCtrl -(QAVResult)PauseAudio
+-(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data {
+	NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
+    switch (eventType) {
+ 		case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+			//Process
+	 }
+    }
+}
 ```
-> Sample Code
+
+
+### Member status change
+Notification about this event is sent only when the status changes. To obtain member status in real time, cache the notification when receiving it at a higher layer. The event message ITMG_MAIN_EVNET_TYPE_USER_UPDATE is returned. The passed parameter includes event_id and endpoints. Identify the event message in the OnEvent function.
+Audio events are subject to a threshold above which a notification is sent.
+
+|event_id     | Description | What is maintained at the App side |
+| ------------- |:-------------:|-------------|
+|ITMG_EVENT_ID_USER_ENTER    				|A member enters the room			| Member list		|
+|ITMG_EVENT_ID_USER_EXIT    				|A member exits the room			| Member list		|
+|ITMG_EVENT_ID_USER_HAS_AUDIO    		|A member sends audio packages		| Chat member list	|
+|ITMG_EVENT_ID_USER_NO_AUDIO    			|A member stops sending audio packages		| Chat member list	|
+
+#### Sample code  
+
+```
+-(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
+    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
+    switch (eventType) {
+        case ITMG_MAIN_EVNET_TYPE_USER_UPDATE:
+		{
+		//Process
+		//The developer parses the parameter to obtain vent_id and user_list.
+		    switch (eventID)
+ 		    {
+ 		    case ITMG_EVENT_ID_USER_ENTER:
+  			    //A member enters the room
+  			    break;
+ 		    case ITMG_EVENT_ID_USER_EXIT:
+  			    //A member exits the room
+			    break;
+		    case ITMG_EVENT_ID_USER_HAS_AUDIO:
+			    //A member sends audio packages
+			    break;
+		    case ITMG_EVENT_ID_USER_NO_AUDIO:
+			    //A member stops sending audio packages
+			    break;
+ 		    }
+		break;
+		}
+    }
+}
+```
+
+### Message details
+
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				       |Enters the audio/video room |
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				         	|Exits the audio/video room |
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		       |Room disconnection due to network or other reasons |
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE				|Room type change event |
+
+### Details of Data corresponding to the message
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    				|result; error_info					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    		|result; error_info  					|{"error_info":"waiting timeout, please check your network","result":0}|
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    		|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
+
+
+## Audio APIs for Voice Chat
+The audio APIs for Voice Chat can only be called after the SDK is initialized and there are members in the room.
+
+| API | Description |
+| ------------- |:-------------:|
+|PauseAudio    				       	|Pauses audio engine |
+|ResumeAudio    				      	|Resumes audio engine |
+|EnableMic    						|Enables/disables the microphone |
+|GetMicState    						|Obtains the microphone status |
+|GetMicLevel    						|Obtains real-time microphone volume |
+|SetMicVolume    					|Sets microphone volume |
+|GetMicVolume    					|Obtains microphone volume |
+|EnableSpeaker    					|Enables/disables the speaker |
+|GetSpeakerState    					|Obtains the speaker status |
+|GetSpeakerLevel    					|Obtains real-time speaker volume |
+|SetSpeakerVolume    				|Sets speaker volume |
+|GetSpeakerVolume    				|Obtains speaker volume |
+|EnableLoopBack    					|Enables/disables in-ear monitoring |
+
+### Pause the capture and playback features of the audio engine
+This API is called to pause the capture and playback features of the audio engine, and only works when members have entered the room.
+You can get the microphone permission after calling the EnterRoom API successfully, and other programs cannot capture audio data from the microphone during your use of microphone. Calling EnableMic(false) does not release the microphone.
+If you really need to release the microphone, call PauseAudio, which can cause the engine to be paused entirely. To resume audio capturing, call ResumeAudio.
+#### Function prototype  
+
+```
+ITMGContext GetAudioCtrl -(QAVResult)PauseAudio
+```
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] PauseAudio];
 ```
 
-### Resume Acquisition and Playback by the Audio Engine
-The ResumeAudio function is used to resume acquisition and playback by the audio engine and is effective only after a user enters a room.
-> Function Prototype
+### Resume the capture and playback features of the audio engine
+This API is called to resume the capture and playback features of the audio engine, and only works when members have entered the room.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(QAVResult)ResumeAudio
+ITMGContext GetAudioCtrl -(QAVResult)ResumeAudio
 ```
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] ResumeAudio];
 ```
 
-### Member State Change
-The member state change event is triggered to send notifications only when the state of a member changes. To allow real-time member state query, cache the state each time the upper layer receives the ITMG_MAIN_EVNET_TYPE_USER_UPDATE event message, which contains **event_id** and **endpoints**. The message is checked in the OnEvent function.
-> Sample Code
+
+
+
+### Enable/disable the microphone
+This API is used to enable/disable the microphone. Microphone and speaker are not enabled by default after a user enters a room.
+
+#### Function prototype  
+
+```
+ITMGContext GetAudioCtrl -(void)EnableMic:(BOOL)enable
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| isEnabled    | boolean | To enable the microphone, set this parameter to YES; otherwise, set it to NO. |
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance] GetAudioCtrl] EnableMic:YES];
+```
+
+### Callback for microphone events
+The callback function OnEvent is called for microphone events. This callback notification allows the SDK to call the microphone successfully. The event messages ITMG_MAIN_EVENT_TYPE_ENABLE_MIC and ITMG_MAIN_EVENT_TYPE_DISABLE_MIC are returned. The event messages are identified in the OnEvent function.
+The passed parameter "intent" includes audio_state and audio_errcode.
+#### Sample code  
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_USER_UPDATE：
+        case ITMG_MAIN_EVENT_TYPE_ENABLE_MIC:
         {
-	    //Member state change
+	    //Microphone enabled successfully
+        }
+            break;
+	case ITMG_MAIN_EVENT_TYPE_DISABLE_MIC:
+        {
+	    //Microphone disabled successfully
         }
             break;
     }
 }
 ```
 
+### Obtain the microphone status
+This API is used to obtain the microphone status. If "0" is returned, the microphone is off. If "1" is returned, the microphone is on. If "2" is returned, the microphone is being worked on. If "3" is returned, no microphone exists. If "4" is returned, the microphone is not initialized well.
+#### Function prototype  
 
-### Enable or Disable a Microphone
-The EnableMic function is used to enable or disable a microphone.
->Note: The microphone and speakers are disabled by default when a user enters a room.
+```
+ITMGContext GetAudioCtrl -(int)GetMicState
+```
+#### Sample code  
 
-> Function Prototype
-```
-GetAudioCtrl -(void)EnableMic:(BOOL)enable
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| isEnabled    |boolean     |To enable a microphone, set the input parameter to **true**. To disable a microphone, set the input parameter to **false**.|
-> Sample Code
-```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableMic:YES];
-```
-### Callback of a Microphone Event
-The OnEvent function is used for callback of a microphone event. The SDK notifies an application of microphone invocation via the callback. The event message involved is ITMG_MAIN_EVENT_TYPE_ENABLE_MIC or ITMG_MAIN_EVENT_TYPE_DISABLE_MIC, which is checked in the OnEvent function.
-
-> Sample Code
-```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
-    switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ENABLE_MIC：
-        {
-	    //Enable a microphone
-        }
-            break;
-	case ITMG_MAIN_EVENT_TYPE_DISABLE_MIC：
-        {
-	    //Disable a microphone
-        }
-            break;
-    }
-}
-```
-### Obtain the Status of a Microphone
-The GetMicState function is used to obtain the status of a microphone.
-> Function Prototype
-```
-GetAudioCtrl -(int)GetMicState
-```
-> Sample Code
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetMicState];
 ```
 
-### Obtain the Real-Time Volume of a Microphone
-The GetMicLevel function is used to obtain the real-time volume of a microphone. The return value of this function is of the int type.
-> Function Prototype
+### Obtain real-time microphone volume
+This API is used to obtain real time microphone volume. An int value is returned.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(int)GetMicLevel
+ITMGContext GetAudioCtrl -(int)GetMicLevel
 ```
-> Sample Code
+#### Sample code  
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetMicLevel];
 ```
 
-### Set the Software Volume of a Microphone
-The SetMicVolume function is used to set the software volume of a microphone. The **volume** parameter specifies the software volume of a microphone. Value **0** indicates mute and value **100** indicates that the actual volume will be the same as the original volume. The default value is **100**.
-> Function Prototype
+### Set software volume for the microphone
+This API is used to set software volume for the microphone. The corresponding parameter is "volume". The value "0" sets the volume to Mute, and "100" means the volume remains unchanged. Default is 100.
+#### Function prototype 
+ 
 ```
-GetAudioCtrl -(void)SetMicVolume:(int) volume
+ITMGContext GetAudioCtrl -(void)SetMicVolume:(int) volume
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| volume    |int      |Volume, ranging from **0** to **100**.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| volume    |int      | Sets the volume, value range: 0 to 150 |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] SetMicVolume:100];
 ```
 
-### Obtain the Software Volume of a Microphone
-The GetMicVolume function is used to obtain the software volume of a microphone. The return value of this function is of the int type.
-> Function Prototype
+### Obtain the software volume of the microphone
+This API is used to obtain the software volume for the microphone. An int value is returned.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(int) GetMicVolume
+ITMGContext GetAudioCtrl -(int) GetMicVolume
 ```
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetMicVolume];
 ```
 
-### Enable or Disable Speakers
-The EnableSpeaker function is used to enable or disable speakers.
-> Function Prototype
+### Enable/disable the speaker
+This API is used to enable/disable the speaker.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
+ITMGContext GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| isEnabled    |boolean       |To enable speakers, set the input parameter to **true**. To disable speakers, set the input parameter to **false**.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| isEnabled    | boolean | To disable the speaker, set this parameter to NO; otherwise, set it to YES. |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:YES];
+[[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:YES];
 ```
 
-### Callback of a Speaker Event
-The OnEvent function is used for callback of a speaker event. The SDK notifies an application of speaker invocation via the callback. The event message involved is ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER or ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER.
-> Sample Code
+### Callback for speaker events
+The callback function OnEvent is called for speaker events. The events messages ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER and ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER are returned.
+#### Sample code  
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER：
+        case ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER:
         {
-	    //Enable speakers
+	    //Speaker enabled successfully
         }
             break;
-	case ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER：
+	case ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER:
         {
-	    //Disable speakers
+	    //Speaker disabled successfully
         }
             break;
     }
 }
 ```
 
-### Obtain the Status of Speakers
-The GetSpeakerState function is used to obtain the status of speakers. The return value of this function is of the int type.
-> Function Prototype
+### Obtain the speaker status
+This API is used to obtain the speaker status. If "0" is returned, the speaker is off. If "1" is returned, the speaker is on. If "2" is returned, the speaker is being worked on. If "3" is returned, no speaker exists. If "4" is returned, the speaker is not initialized well.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(int)GetSpeakerState
+ITMGContext GetAudioCtrl -(int)GetSpeakerState
 ```
 
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetSpeakerState];
 ```
 
-### Obtain the Real-Time Volume of Speakers
-The GetSpeakerLevel function is used to obtain the real-time volume of speakers. The return value of this function is of the int type.
-> Function Prototype
+### Obtain real-time speaker volume
+This API is used to obtain real time speaker volume. An int value is returned to indicate the real-time speaker volume.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(int)GetSpeakerLevel
+ITMGContext GetAudioCtrl -(int)GetSpeakerLevel
 ```
 
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetSpeakerLevel];
 ```
 
-### Set the Software Volume of Speakers
-The SetSpeakerVolume function is used to set the software volume of speakers.
->Note: The **vol** parameter specifies the software volume of speakers. Value **0** indicates mute and value **100** indicates that the actual volume will be the same as the original volume. The default value is **100**.
+### Set software volume for the speaker
+This API is used to set the software volume for the speaker.
+The corresponding parameter is "volume". The value "0" sets the volume to Mute, and "100" means the volume remains unchanged. Default is 100.
 
-> Function Prototype
+#### Function prototype  
+
 ```
-GetAudioCtrl -(void)SetSpeakerVolume:(int)vol
+ITMGContext GetAudioCtrl -(void)SetSpeakerVolume:(int)vol
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| vol    |int        |Volume, ranging from **0** to **100**.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| vol    |int        | Sets the volume, value range: 0 to 150 |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] SetSpeakerVolume:100];
 ```
 
-### Obtain the Software Volume of Speakers
-The GetSpeakerVolume function is used to obtain the software volume of speakers and returns  an INT value.
->Note: The **Level** parameter indicates the real-time volume, while the **Volume** parameter indicates the software volume of speakers. The final volume is calculated as follows: Final volume = Value of Level x Value of Volume%. For example, if the values of **Level** and **Volume** are **100** and **60** respectively, the final volume is 60.
+### Obtain software volume for the speaker
+This API is used to obtain the software volume for the speaker. An int value is returned to indicate the software volume for the speaker.
+"Level" indicates the real-time volume, and "Volume" the software volume for the speaker. The ultimate volume equals to Level*Volume%. For example, if the value for "Level" is 100 and the one for "Volume" is 60, the ultimate volume will be "60".
 
-> Function Prototype
+#### Function prototype  
+
 ```
-GetAudioCtrl -(int)GetSpeakerVolume
+ITMGContext GetAudioCtrl -(int)GetSpeakerVolume
 ```
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] GetSpeakerVolume];
 ```
-### Enable In-Ear Monitoring
-The EnableLoopBack function is used to enable in-ear monitoring.
-> Function Prototype
+
+
+### Enable in-ear monitoring
+This API is used to enable in-ear monitoring.
+#### Function prototype  
+
 ```
-GetAudioCtrl -(QAVResult)EnableLoopBack:(BOOL)enable
+ITMGContext GetAudioCtrl -(QAVResult)EnableLoopBack:(BOOL)enable
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| enable    |boolean         |Indicates whether to enable in-ear monitoring.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| enable    |boolean | Specifies whether to enable in-ear monitoring |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] EnableLoopBack:YES];
 ```
+### Message details
 
-### Start Playing an Accompaniment
-The StartAccompany function is used to start playing an accompaniment.
->Note:
-1. Calling the API will reset the volume.
-2. The API is unavailable for downstream permissions.
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |Enables the microphone |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |Disables the microphone |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |Enables the speaker |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |Disables the speaker |
 
-> Function Prototype
+### Details of Data corresponding to the message
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
+
+
+## APIs related to the accompaniment in voice chat
+| API | Description |
+| ------------- |:-------------:|
+|StartAccompany    				       |Starts playing back the accompaniment |
+|StopAccompany    				   	|Stops playing back the accompaniment |
+|IsAccompanyPlayEnd				|Indicates whether the accompaniment is over |
+|PauseAccompany    					|Pauses playing back the accompaniment |
+|ResumeAccompany					|Replays the accompaniment |
+|SetAccompanyVolume 				|Sets the accompaniment volume |
+|GetAccompanyVolume				|Obtains the volume of the accompaniment |
+|SetAccompanyFileCurrentPlayedTimeByMs 				|Sets the playback progress |
+
+
+### Start playing back the accompaniment
+This API is called to play back the accompaniment. Supported formats include M4A, AAC, WAV, and MP3. Calling this API resets the volume.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVAccResult)StartAccompany:(NSString*)filePath loopBack:(BOOL)loopBack loopCount:(int)loopCount
+ITMGContext GetAudioEffectCtrl -(QAVAccResult)StartAccompany:(NSString*)filePath loopBack:(BOOL)loopBack loopCount:(int)loopCount
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    	|NSString    		|Path for playing an accompaniment.											|
-| loopBack  	|boolean         	|Indicates whether to send a mix. The parameter is generally set to **true**, indicating that other users can also hear an accompaniment.	|
-| loopCount	|int          		|Number of loops. Value **-1** means an infinite loop.							|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    	|NSString | Accompaniment's playback path |
+| loopBack  	|boolean | Indicates whether to send a mix. This is generally set to true, indicating that other users can also hear the accompaniment. |
+| loopCount	|int | Number of loops. Value -1 means an infinite loop. |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] StartAccompany:path loopBack:isLoopBack loopCount:loopCount];
 ```
 
-### Callback for Playing an Accompaniment
-After the playback of an accompaniment, the ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH event message is sent and the OnEvent function is called to check the message.
-> Sample Code
+### Callback for accompaniment playback
+After the accompaniment is over, the event message ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH is returned, which is identified in the OnEvent function.
+#### Sample code  
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH：
+        case ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH:
         {
-	    //Accompaniment played
+	    //Callback for accompaniment playback
         }
             break;
     }
 }
 ```
 
-### Stop Playing an Accompaniment
-The StopAccompany function is used to stop playing an accompaniment.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVAccResult)StopAccompany:(int)duckerTime
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| duckerTimeMs    |int             |Fading time.|
+### Stop playing back the accompaniment
+This API is used to stop playing back the accompaniment.
+#### Function prototype  
 
-> Sample Code
+```
+ITMGContext GetAudioEffectCtrl -(QAVAccResult)StopAccompany:(int)duckerTime
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| duckerTimeMs    |int             | Fading time |
+
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] StopAccompany:duckerTime];
 ```
 
-### Check Whether the Playback of an Accompaniment Is Complete
-The IsAccompanyPlayEnd function is used to check whether the playback of an accompaniment is complete. If yes, the function returns **true**. If no, it returns **false**.
-> Function Prototype
+### Indicate whether the accompaniment is over
+If it is over, "YES" is returned. If it is not, "NO" is returned.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(bool)IsAccompanyPlayEnd
+ITMGContext GetAudioEffectCtrl -(bool)IsAccompanyPlayEnd
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] IsAccompanyPlayEnd];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] IsAccompanyPlayEnd];
 ```
 
-### Pause an Accompaniment
-The PauseAccompany function is used to pause an accompaniment.
-> Function Prototype
+### Pause playing back the accompaniment
+This API is used to pause playing back the accompaniment.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVAccResult)PauseAccompany
+ITMGContext GetAudioEffectCtrl -(QAVAccResult)PauseAccompany
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] IsAccompanyPlayEnd];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseAccompany];
 ```
 
-### Resume an Accompaniment
-The ResumeAccompany function is used to resume an accompaniment.
-> Function Prototype
+### Replay the accompaniment
+This API is used to replay the accompaniment.
+#### Function prototype  
+
 ```
 GetAudioEffectCtrl -(QAVAccResult)ResumeAccompany
 ```
-> Sample Code
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] ResumeAccompany];
 ```
 
-### Configure Whether Users Can Hear Accompaniments Played by Themselves
-The EnableAccompanyPlay function is used to configure whether users can hear accompaniments played by themselves.
-> Function Prototype
+### Set the accompaniment volume
+This API is used to set the DB volume. Value range: 0200. Default is 100. A value greater than 100 means volume up, otherwise volume down.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyPlay:(BOOL)enable
+ITMGContext GetAudioEffectCtrl -(QAVAccResult)SetAccompanyVolume:(int)vol
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| enable    |BOOL             |Indicates whether users can hear accompaniments played by themselves.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| vol    |int | Indicates the volume value |
+
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAudioEffectCtrl :YES];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetAccompanyVolume:volume];
 ```
 
-### Configure Whether Other Users Can Hear an Accompaniment
-The EnableAccompanyLoopBack function is used to configure whether other users can hear an accompaniment.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVAccResult)EnableAccompanyLoopBack:(BOOL)enable
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| enable    |BOOL             |Indicates whether other users can hear an accompaniment.|
+### Obtain the volume of the accompaniment
+This API is used to get the DB volume.
+#### Function prototype  
 
-> Sample Code
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] EnableAccompanyLoopBack:YES];
+ITMGContext GetAudioEffectCtrl -(int)GetAccompanyVolume
 ```
+#### Sample code  
 
-### Set the Volume of an Accompaniment
-The SetAccompanyVolume function is used to set the linear volume of an accompaniment. The default value is **100**. If the return value is greater than **100**, the accompaniment volume increases. If the return value is less than **100**, the accompaniment volume attenuates.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVAccResult)SetAccompanyVolume:(int)vol
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| vol    |int             |Volume.|
-
-> Sample Code
-```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetAccompanyVolume:volume];
-```
-
-### Obtain the Volume of an Accompaniment
-The GetAccompanyVolume function is used to obtain the volume of an accompaniment.
-> Function Prototype
-```
-GetAudioEffectCtrl -(int)GetAccompanyVolume
-```
-> Sample Code
 ```
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAccompanyVolume];
 ```
 
-### Obtain the Playback Progress of an Accompaniment
-The following two functions are used to obtain the playback progress of an accompaniment. Note: Current / Total = Number of current loop times; Current % Total = Playback position of the current loop.
-> Function Prototype
+### Obtain the accompaniment playback progress
+The following two APIs are used to obtain the accompaniment playback progress. Note: Current/Total = current loop times, Current % Total = current loop playback position.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(int)GetAccompanyFileTotalTimeByMs
-GetAudioEffectCtrl -(int)GetAccompanyFileCurrentPlayedTimeByMs
+ITMGContext GetAudioEffectCtrl -(int)GetAccompanyFileTotalTimeByMs
+ITMGContext GetAudioEffectCtrl -(int)GetAccompanyFileCurrentPlayedTimeByMs
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAccompanyFileTotalTimeByMs];
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAccompanyFileCurrentPlayedTimeByMs];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAccompanyFileTotalTimeByMs];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetAccompanyFileCurrentPlayedTimeByMs];
 ```
 
-### Set Playback Progress
-The SetAccompanyFileCurrentPlayedTimeByMs function is used to set playback progress.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVAccResult)SetAccompanyFileCurrentPlayedTimeByMs:(uint) time
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| time    |uint                |Playback progress, in milliseconds.|
+### Set the playback progress
+This API is used to set the playback progress.
+#### Function prototype  
 
-> Sample Code
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetAccompanyFileCurrentPlayedTimeByMs:time];
+ITMGContext GetAudioEffectCtrl -(QAVAccResult)SetAccompanyFileCurrentPlayedTimeByMs:(uint) time
 ```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| time    |uint | Indicates the playback progress in milliseconds |
 
-### Obtain the Volume of a Sound Effect
-The GetEffectsVolume function is used to obtain the linear volume of a sound effect. The default value is **100**. If the return value is greater than **100**, the accompaniment volume increases. If the return value is less than **100**, the accompaniment volume attenuates.
-> Function Prototype
+#### Sample code  
+
 ```
-GetAudioEffectCtrl -(int)GetEffectsVolume
-```
-> Sample Code
-```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetEffectsVolume];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetAccompanyFileCurrentPlayedTimeByMs:time];
 ```
 
-### Set the Volume of a Sound Effect
-The SetEffectsVolume function is used to set the volume of a sound effect.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| volume    |int                    |Volume.|
+## APIs related to sound effect in voice chat
+| API | Description |
+| ------------- |:-------------:|
+|PlayEffect    		|Plays the sound effect |
+|PauseEffect    	|Pauses the sound effect |
+|PauseAllEffects	|Pauses all sound effects |
+|ResumeEffect    	|Replays the sound effect |
+|ResumeAllEffects	|Replays all sound effects |
+|StopEffect 		|Stops the sound effect |
+|StopAllEffects		|Stops all sound effects |
+|SetVoiceType 		|Voice changing effects |
+|GetEffectsVolume	|Obtains the volume of sound effects |
+|SetEffectsVolume 	|Sets the volume of sound effects |
 
-> Sample Code
-```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetEffectsVolume:(int)Volume];
-```
 
-### Play a Sound Effect
-The PlayEffect function is used to play a sound effect. The **soundId** parameter, which uniquely identifies an independent file, must be managed on the application side.
-> Function Prototype
+### Play the sound effect
+This API is used to play sound effects. The sound effect ID in the parameter needs to be managed by the App side, uniquely identifying a separate file.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVResult)PlayEffect:(int)soundId filePath:(NSString*)filePath loop:(BOOL)loop
+ITMGContext GetAudioEffectCtrl -(QAVResult)PlayEffect:(int)soundId filePath:(NSString*)filePath loop:(BOOL)loop
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId  	|int           	|Sound effect ID.			|
-| filePath    	|NSString    	|Sound effect path.		|
-| loop    		|boolean  	|Indicates whether to repeat playback.	|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId  	|int           	|Indicates the sound effect ID |
+| filePath    	|NSString    	|Indicates the sound effect path |
+| loop    		|boolean  	|Indicates whether to repeat playback |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance] GetAudioEffectCtrl] PlayEffect:soundId filePath:path loop:isLoop];
 ```
 
-### Pause a Sound Effect
-The PauseEffect function is used to pause a sound effect.
-> Function Prototype
-```
-GetAudioEffectCtrl -(QAVResult)PauseEffect:(int)soundId
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
+### Pause the sound effect
+This API is used to pause playing back the sound effect.
+#### Function prototype  
 
-> Sample Code
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseEffect:soundId];
+ITMGContext GetAudioEffectCtrl -(QAVResult)PauseEffect:(int)soundId
 ```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
 
-### Pause All Sound Effects
-The PauseAllEffects function is used to pause all sound effects.
-> Function Prototype
+#### Sample code  
+
 ```
-GetAudioEffectCtrl -(QAVResult)PauseAllEffects
-```
-> Sample Code
-```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseAllEffects];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseEffect:soundId];
 ```
 
-### Resume a Sound Effect
-The ResumeEffect function is used to resume a sound effect.
-> Function Prototype
+### Pause all sound effects
+This API is used to pause all sound effects.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVResult)ResumeEffect:(int)soundId
+ITMGContext GetAudioEffectCtrl -(QAVResult)PauseAllEffects
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] ResumeEffect:soundId];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] PauseAllEffects];
 ```
 
-### Resume All Sound Effects
-The ResumeAllEffects function is used to resume all sound effects.
-> Function Prototype
+### Replay the sound effect
+This API is used to replay the sound effect.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVResult)ResumeAllEffects
+ITMGContext GetAudioEffectCtrl -(QAVResult)ResumeEffect:(int)soundId
 ```
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] ResumeAllEffects];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] ResumeEffect:soundId];
 ```
 
-### Stop Playing a Sound Effect
-The StopEffect function is used to stop playing a sound effect.
-> Function Prototype
+### Replay all sound effects
+This API is used to replay all sound effects.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVResult)StopEffect:(int)soundId
+ITMGContext GetAudioEffectCtrl -(QAVResult)ResumeAllEffects
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| soundId    |int                    |Sound effect ID.|
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] StopEffect:soundId];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] ResumeAllEffects];
 ```
 
-### Stop Playing All Sound Effects
-The StopAllEffects function is used to stop playing all sound effects.
-> Function Prototype
+### Stop the sound effect
+This API is used to stop the sound effect.
+#### Function prototype  
+
 ```
-GetAudioEffectCtrl -(QAVResult)StopAllEffects
+ITMGContext GetAudioEffectCtrl -(QAVResult)StopEffect:(int)soundId
 ```
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| soundId    |int | Indicates the sound effect ID |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance] GetAudioEffectCtrl] StopAllEffects];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] StopEffect:soundId];
 ```
 
-### Obtain Diagnosis Information
-The GetQualityTips function is used to obtain information about the quality of real-time voice or video chats. The function is mainly used to check the quality of real-time chats and detect problems. The function can be ignored on the service side.
-> Function Prototype
+### Stop all sound effects
+This API is used to stop all sound effects.
+#### Function prototype  
+
 ```
-GetRoom -(NSString*)GetQualityTips
+ITMGContext GetAudioEffectCtrl -(QAVResult)StopAllEffects
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetRoom ] GetQualityTips];
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] StopAllEffects];
 ```
 
-## PTT Access
-### Initialize PTT Access
-Initializing PTT access requires passing **accessToken** to TLS-related functions. For details on the process of obtaining **accessToken** for authentication, see the [GME Access Guide](https://github.com/TencentMediaLab/GME/blob/GME_2.0_Dev/GME%20Introduction_intl.md).
-The **Error** parameter is used to pass error information. For example, when **appId** is set to **0** or **privateKey** or **identifier** is left blank, error information indicating that a parameter is incorrectly set is returned.
-> Function Prototype
+### Voice changing effects
+This API is used to set the voice changing effects.
+#### Function prototype  
+
 ```
-+(NSString*)genSig:(NSString*)appId identifier:(NSString*)identifier privateKey:(NSString*)privateKey error:(NSError**)error
+ITMGContext GetAudioEffectCtrl -(QAVResult)SetVoiceType:(ITMG_VOICE_TYPE) type
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| sdkAppId  	|int   		|The value is obtained from Tencent Cloud Console.													|
-| openID    	|NSString	|Identifier that uniquely identifies a user. The setting rule is customized by application developers.											|
-| key    		|NSString 	|The value is the key provided by Tencent Cloud Console.																|
-| error    	|Error   		|The destination address for receiving an error value must be specified. If an error occurs during the **sig** generation, the return value is left blank and the value of the **error** parameter includes error information.	|
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| type    |int                    |Indicates the type of local voice changing effect |
+
+
+
+| Type | Parameter | Description |
+| ------------- |-------------|------------- |
+|VOICE_TYPE_ORIGINAL_SOUND  	|0	|Original sound |
+|VOICE_TYPE_LOLITA    		|1	|Lolita |
+|VOICE_TYPE_UNCLE  		|2	|Uncle |
+|VOICE_TYPE_INTANGIBLE    	|3	|Ethereal |
+|VOICE_TYPE_KINDER_GARTEN    	|4	|Kindergarten |
+|VOICE_TYPE_HEAVY_GARTEN    	|5	|Mechanic sound |
+|VOICE_TYPE_OPTIMUS_PRIME    	|6	|Optimus Prime |
+|VOICE_TYPE_CAGED_ANIMAL    	|7	|Trapped beast |
+|VOICE_TYPE_DIALECT    		|8	|Dialect |
+|VOICE_TYPE_METAL_ROBOT    	|9	|Metal robot |
+|VOICE_TYPE_DEAD_FATBOY    	|10	|Fat boy |
+
+#### Sample code  
+
 ```
- -(QAVResult)ApplyAccessToken:(NSString*)accessToken
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetVoiceType:0];
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| accessToken    |NSString                       |The value is the same as the value of **accessToken** returned by the getTLSSig function.|
-> Sample Code
+
+### Obtain the volume of sound effects
+This API is used to obtain the volume (linear volume) of sound effects. A value greater than 100 means volume up, otherwise volume down.
+#### Function prototype  
+
 ```
-NSString* privateKey = @"Private key on the official website";
+ITMGContext GetAudioEffectCtrl -(int)GetEffectsVolume
+```
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] GetEffectsVolume];
+```
+
+### Set the volume of sound effects
+This API is used to set the volume of sound effects.
+#### Function prototype  
+
+```
+ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| volume    |int | Indicates the volume value |
+
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance] GetAudioEffectCtrl] SetEffectsVolume:(int)Volume];
+```
+
+## Offline Voice
+| API | Description |
+| ------------- |:-------------:|
+|genSig    		|Indicates the offline voice authentication |
+|SetMaxMessageLength    |Specifies the maximum length of a voice message |
+|StartRecording		|Starts recording |
+|StopRecording    	|Stops recording |
+|CancelRecording	|Cancels recording |
+|UploadRecordedFile 	|Uploads voice files |
+|DownloadRecordedFile	|Downloads voice files |
+|PlayRecordedFile 	|Plays voice files |
+|StopPlayFile		|Stops playing voice files |
+|GetFileSize 		|Indicates the size of a voice file |
+|GetVoiceFileDuration	|Indicates the length of a voice file |
+|SpeechToText 		|Converts the voice file into text with Speech Recognition |
+
+
+### Initialization for integrating the offline voice technology
+Passing the authentication access token to the TLS-related function is required for initialization. For more information on how to obtain authentication, please see [GME Key](../GME%20Key%20Manual_intl.md) document.  
+The parameter Error is used to pass the error message in cases when you enter an incorrect parameter, for example, appid is 0, key is empty or identifier is empty.
+#### Function prototype  
+
+```
++(NSString*)genSig:(NSString*)appId identifier:(NSString*)identifier privateKey:(NSString*)privateKey error:(NSError**)error
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| sdkAppId  	|int   		|The SdkAppId obtained from Tencent Cloud console |
+| openID    	|NSString	|Uniquely identifies a user, and the setting rule is customized by App developers |
+| key    		|NSString 	|The authentication obtained from Tencent Cloud console |
+| error    	|Error   		|Specifies the address of the object passing an incorrect value. If an error occurred while generating sig, the returned value is empty with an error message described in "error".
+```
+-(QAVResult)ApplyAccessToken:(NSString*)accessToken
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| accessToken    |NSString | Indicates the accessToken returned by getTLSSig function |
+#### Sample code  
+
+```
+NSString* privateKey = @"Your key on ​the official website";
 NSString* accessToken = [QAVSDKSigManager genSig:SDKAPPID3RD identifier:_openId privateKey:privateKey error:&error];
 [[[ITMGContext GetInstance]GetPTT]ApplyAccessToken:accessToken];
 ```
 
-### Specify the Maximum Length of a Voice Message
-The SetMaxMessageLength function is used to specify the maximum length of a voice message. The maximum length can be 60 seconds.
-> Function Prototype
+### Specify the maximum length of a voice message
+This API is used to specify the maximum length of a voice message, which is limited to 60 seconds.
+
+#### Function prototype  
+
 ```
-GetPTT -(void)SetMaxMessageLength:(int)msTime
+ITMGContext GetPTT -(void)SetMaxMessageLength:(int)msTime
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| msTime    |int                    |Length of a voice message.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| msTime    |int | Indicates the length of a voice message |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance]GetPTT]SetMaxMessageLength:(int)msTime];
 ```
 
-### Start Recording
-The StartRecording function is used to start recording.
-> Function Prototype
+### Start recording
+This API is used to start recording.
+#### Function prototype  
+
 ```
-GetPTT -(void)StartRecording:(NSString*)fileDir
+ITMGContext GetPTT -(void)StartRecording:(NSString*)fileDir
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| fileDir    |NSString                     |Path for playing a voice file, which can be NULL.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileDir    |NSString                     | Path for storing the voice file |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]StartRecording:path];
+[[[ITMGContext GetInstance]GetPTT]StartRecording:path];
 ```
 
-### Callback for Starting Recording
-After recording, the ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLET event message is sent and the OnEvent function is called to check the message.
+### Callback for starting recordings
+The callback function OnEvent is called after the recording is started. Th event message is ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE is returned, which is identified in the OnEvent function.
 
-> Sample Code
+#### Sample code  
+
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE：
+        case ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE:
         {
-	    //PTT recorded
+	    //Callback for recording
         }
             break;
     }
 }
 ```
 
-### Stop Recording
-The StopRecording function is used to stop recording.
-> Function Prototype
+### Stop recording
+This API is used to stop recording.
+#### Function prototype  
+
 ```
-GetPTT -(QAVResult)StopRecording
+ITMGContext GetPTT -(QAVResult)StopRecording
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]StopRecording];
+[[[ITMGContext GetInstance]GetPTT]StopRecording];
 ```
 
-### Cancel Recording
-The CancelRecording function is used to cancel recording.
-> Function Prototype
+### Cancel recording
+This API is used to cancel recording.
+#### Function prototype  
+
 ```
-GetPTT -(QAVResult)CancelRecording
+ITMGContext GetPTT -(QAVResult)CancelRecording
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]CancelRecording];
+[[[ITMGContext GetInstance]GetPTT]CancelRecording];
 ```
 
-### Upload a Voice File
-The UploadRecordedFile function is used to upload a voice file.
-> Function Prototype
+### Upload voice files
+This API is used to upload voice files.
+#### Function prototype  
+
 ```
-GetPTT -(void)UploadRecordedFile:(NSString*)filePath
+ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |NSString                      |Path for uploading a voice file.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |NSString | Path for uploading the voice file |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path];
+[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path];
 ```
 
-### Callback for Uploading a Voice File
-After a voice file is uploaded, the ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE event message is sent, which is checked in the OnEvent function.
+### Callback for uploading voice files
+After the voice file is uploaded, the event message ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE is returned, which is identified in the OnEvent function.
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE：
+        case ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE:
         {
-	    //Voice file uploaded
+	    //Voice file uploaded successfully
         }
             break;
     }
 }
 ```
 
-### Download a Voice File
-The QAVDownloadFileCompleteCallback function is used to download a voice file.
-> Function Prototype
+### Download voice files
+This API is used to download voice files.
+#### Function prototype  
+
 ```
-GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath
+ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| fileID    			|NSString                      |URL of a file.		|
-| downloadFilePath 	|NSString                      |Path for downloading a file.	|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileID    			|NSString | URL of the file |
+| downloadFilePath 	|NSString | Local path for saving the file |
+#### Sample code  
+
 ```
 [[[ITMGContext GetInstance]GetPTT]DownloadRecordedFile:fileIdpath downloadFilePath:path];
 ```
 
-### Callback for Downloading a Voice File
-After a voice file is downloaded, the ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE event message is sent, which is checked in the OnEvent function.
+### Callback for downloading voice files
+After the voice file is downloaded, the event message ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE is returned, which is identified in the OnEvent function.
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE：
+        case ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE:
         {
-	    //Voice file downloaded
+	    //Downloaded successfully   
         }
             break;
     }
 }
 ```
 
-### Play a Voice File
-The PlayRecordedFile function is used to play a voice file.
-> Function Prototype
+### Play voice files
+This API is used to play voice files.
+#### Function prototype  
+
 ```
-GetPTT -(void)PlayRecordedFile:(NSString*)downloadFilePath
+ITMGContext GetPTT -(void)PlayRecordedFile:(NSString*)downloadFilePath
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| downloadFilePath    |NSString                      |Path for downloading a file.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| downloadFilePath    |NSString | Path of the file |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]downloadFilePath:path];
+[[[ITMGContext GetInstance]GetPTT]PlayRecordedFile:path];
 ```
 
-### Callback for Playing a Voice File
-As a callback for playing a voice file, the ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE event message is sent, which is checked in the OnEvent function.
+### Callback for playing voice files
+After the voice file is played back, the event message ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE is returned, which is identified in the OnEvent function.
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE：
+        case ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE:
         {
-	    //Playback completed
+	    //Callback for playing a voice file 
         }
             break;
     }
 }
 ```
 
-### Stop Playing a Voice File
-The StopPlayFile function is used to stop playing a voice file.
-> Function Prototype
+### Stop playing voice files
+This API is used to stop playing back voice files.
+#### Function prototype  
+
 ```
-GetPTT -(int)StopPlayFile
+ITMGContext GetPTT -(int)StopPlayFile
 ```
-> Sample Code
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]StopPlayFile];
-```
-### Obtain the Size of a Voice File
-The GetFileSize function is used to obtain the size of a voice file.
-> Function Prototype
-```
-GetPTT -(int)GetFileSize:(NSString*)filePath
-```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |NSString                     |Path for storing a voice file.|
-> Sample Code
-```
-[[[ITMGContext GetInstance]GetPTT]GetFileSize:path];
+[[[ITMGContext GetInstance]GetPTT]StopPlayFile];
 ```
 
-### Obtain the Duration of a Voice File
-The GetVoiceFileDuration function is used to obtain the duration of a voice file.
-> Function Prototype
+### Obtain the size of a voice file
+This API is used to get the size of a voice file.
+#### Function prototype  
+
 ```
-GetPTT -(int)GetVoiceFileDuration:(NSString*)filePath
+ITMGContext GetPTT -(int)GetFileSize:(NSString*)filePath
 ```
-|Parameter     | Type         |Description|
-| ------------- |-------------|-------------
-| filePath    |NSString                     |Path for storing a voice file.|
-> Sample Code
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |NSString | Path of the voice file |
+#### Sample code  
+
 ```
-[[[ITMGContext GetInstance]GetPTT]GetVoiceFileDuration:path];
+[[[ITMGContext GetInstance]GetPTT]GetFileSize:path];
 ```
 
-### Convert Specified Speech into Text
-As a callback for converting specified speech into text, the ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE event message is sent, which is checked in the OnEvent function.
+### Obtain the length of a voice file
+This API is used to obtain the length of a voice file (in milliseconds).
+#### Function prototype  
+
+```
+ITMGContext GetPTT -(int)GetVoiceFileDuration:(NSString*)filePath
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| filePath    |NSString | Path of the voice file |
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance]GetPTT]GetVoiceFileDuration:path];
+```
+
+### Convert the specified voice file into text with Speech Recognition
+This API is used to convert the specified voice file into text with Speech Recognition.
+#### Function prototype  
+
+```
+ITMGContext GetPTT -(int)SpeechToText:(NSString*)fileID
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| fileID    |NSString | URL of the voice file |
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID];
+```
+
+### Callback for Speech Recognition
+After the specified voice file is converted into text with Speech Recognition, the event message ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE is returned, which is identified in the OnEvent function.
 ```
 -(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
     NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
     switch (eventType) {
-        case ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE：
+        case ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE:
         {
-	    //Conversion completed
+	    //Voice file recognized successfully       
         }
-            break;
+            break;   
     }
 }
 ```
+## Advanced APIs
 
-## Message List:
+### Obtain the version number
+This API is used to get the SDK version number for analysis.
+#### Function prototype
 
-|Message     | Description
-| ------------- |-------------|
-| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM        |Entry into an audio/video room.
-| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM        |Exit from an audio/video room.
-| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT      |Disconnection from a room due to network issues or other reasons.
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC        |Microphone enabled.
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC        |Microphone disabled.
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    |Speaker enabled.
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    |Speaker disabled.
-|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH   |Accompaniment ended.
-|ITMG_MAIN_EVNET_TYPE_USER_UPDATE     |Room member updated.
-|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE  |PTT recorded.
-|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE  |PTT uploaded.
-|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE |PTT downloaded.
-|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE   |PTT played.
-|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE |Speech converted into text.
-|ITMG_MAIN_EVENT_TYPE_OPEN_CAMERA    |Camera turned on.
-|ITMG_MAIN_EVENT_TYPE_CLOSE_CAMERA    |Camera turned off.
+```
+ITMGContext  -(NSString*)GetSDKVersion
+```
+#### Sample code  
 
+```
+[[ITMGContext GetInstance] GetSDKVersion];
+```
+
+### Set the print log level
+This API is used to set the print log level.
+#### Function prototype
+```
+ITMGContext -(void)SetLogLevel:(ITMG_LOG_LEVEL)logLevel (BOOL)enableWrite (BOOL)enablePrint
+```
+
+
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| logLevel    		|ITMG_LOG_LEVEL | Level of logs to be printed |
+| enableWrite    	|BOOL | Indicates whether to write data to a file. Default is Yes |
+| enablePrint    	|BOOL | Indicates whether to write data to the console. Default is Yes |
+
+
+
+
+|ITMG_LOG_LEVEL|Description |
+| -------------------------------|:-------------:|
+|TMG_LOG_LEVEL_NONE=0		|Do not print logs |
+|TMG_LOG_LEVEL_ERROR=1		|Prints error logs (default) |
+|TMG_LOG_LEVEL_INFO=2			|Prints prompt logs |
+|TMG_LOG_LEVEL_DEBUG=3		|Prints development and debugging logs |
+|TMG_LOG_LEVEL_VERBOSE=4		| Prints high-frequency logs |
+#### Sample code  
+```
+[[ITMGContext GetInstance] SetLogLevel:TMG_LOG_LEVEL_NONE YES YES];
+```
+
+### Set the print log path
+This API is used to set the path of the log to be printed. The default path is: Application/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/Documents.
+#### Function prototype
+```
+ITMGContext -(void)SetLogPath:(NSString*)logDir
+```
+
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| logDir    		|NSString | Path |
+
+#### Sample code  
+```
+[[ITMGContext GetInstance] SetLogPath:Path];
+```
+
+
+### Obtain diagnostic messages
+This API is used to obtain information about the quality of real-time audio/video calls. This API is mainly used to check the quality of real-time calls and troubleshoot problems, and can be ignored at the business side.
+#### Function prototype  
+
+```
+ITMGContext GetRoom -(NSString*)GetQualityTips
+```
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance]GetRoom ] GetQualityTips];
+```
+
+### Add an ID to the audio data blacklist
+This API is used to add an ID to the audio data blacklist. A return value of 0 indicates that the call failed.
+#### Function prototype  
+
+```
+ITMGContext GetAudioCtrl -(QAVResult)AddAudioBlackList:(NSString*)identifier
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| identifier    |NSString      | ID that needs to be added to the blacklist |
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance]GetAudioCtrl ] AddAudioBlackList[id]];
+```
+
+### Remove an ID from the audio data blacklist
+This API is used to remove an ID from the audio data blacklist. A return value of 0 indicates that the call failed.
+#### Function prototype  
+
+```
+ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
+```
+| Parameter | Type | Description |
+| ------------- |:-------------:|-------------|
+| identifier    | NSString   | ID that needs to be removed from the blacklist |
+#### Sample code  
+
+```
+[[[ITMGContext GetInstance]GetAudioCtrl ] RemoveAudioBlackList[openId]];
+```
+## Callback Messages
+
+#### Message list:
+
+| Message | Description of message |   
+| ------------- |:-------------:|
+|ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		| Enters the audio room |
+|ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		| Exits the audio room |
+|ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT		| Room disconnection due to network or other reasons |
+|ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE		|Room type change event |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|Enables the microphone |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|Disables the microphone |
+|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER		|Enables the speaker |
+|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER		|Disables the speaker |
+|ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH		|The accompaniment is over |
+|ITMG_MAIN_EVNET_TYPE_USER_UPDATE		|The room members are updated |
+|ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE	|PTT recording is completed |
+|ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE	|PTT is successfully uploaded |
+|ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|PTT is successfully downloaded |
+|ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|The playback of PTT is completed |
+|ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|The voice-to-text conversion is completed |
+
+#### Data list
+
+| Message | Data         | Example |
+| ------------- |:-------------:|------------- |
+| ITMG_MAIN_EVENT_TYPE_ENTER_ROOM    		|result; error_info			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    	|result; error_info  			|{"error_info":"waiting timeout, please check your network","result":0}|
+| ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    	|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"Speaker (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0} |
+| ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"Speaker (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0} |
+| ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"Microphone (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0} |
+| ITMG_MAIN_EVENT_TYPE_MIC_LOST_DEVICE    	|result; error_info 			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"Microphone (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":true,"result":0} |
+| ITMG_MAIN_EVNET_TYPE_USER_UPDATE    		|user_list;  event_id			|{"event_id":1,"user_list":["0"]}|
+| ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE 	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_DOWNLOAD_COMPLETE	|result; file_path;file_id  		|{"file_id":"","filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE 	|result; file_path  			|{"filepath":"","result":0}|
+| ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|result; file_path;file_id		|{"file_id":"","filepath":"","result":0}|
