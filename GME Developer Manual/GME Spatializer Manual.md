@@ -3,33 +3,39 @@
 
 
 ## 3D音效接入
-### 1、开关 3D 音效
-此函数用于开关 3D 音效。在使用 3D 音效之前必须先调用此接口，只接收 3D 音效而不发出 3D 音效的用户也需要调用此接口。
+### 1、初始化 3D 音效引擎
+此函数用于初始化 3D 音效引擎，在进房后调用。在使用 3D 音效之前必须先调用此接口，只接收 3D 音效而不发出 3D 音效的用户也需要调用此接口。
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual int EnableSpatializer(bool enable)
+public abstract int InitSpatializer()
 ```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| enable    |bool         |设置是否开启|
 
-
-
-### 2、获取当前 3D 音效状态
-此函数获取当前 3D 音效的状态，返回值为 bool 类型数值。
+### 2、开启或关闭 3D 音效
+此函数用于开启或关闭 3D 音效。开启之后可以听到 3D 音效。
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual bool IsEnableSpatializer()
+public abstract int EnableSpatializer(bool enable)
+```
+|参数	|类型	|意义 |
+| ------- |---------|------|
+| enable    	|bool    	|开启之后可以听到 3D 音效|
+
+### 3、获取当前 3D 音效状态
+此函数用于获取当前 3D 音效状态。
+
+> 函数原型  
+```
+public abstract bool IsEnableSpatializer()
 ```
 |返回值	|意义	|
 | ------- |---------|
 | true    	|开启状态    	|
 | false    	|关闭状态	|  
 
-### 3、更新声源方位（包含朝向）
-此函数用于更新声源方位角信息，传入用户 openID 后每帧调用便可实现 3D 音效效果。
+### 4、更新声源方位（包含朝向）
+此函数用于更新声源方位角信息，每帧调用便可实现 3D 音效效果。
 
 #### 距离与声音衰减的关系
 
@@ -37,21 +43,33 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 
 |距离范围（引擎单位）|衰减公式	|
 | ------- |---------|
-| 0< N <40  	|衰减系数：1.0 （音量无衰减）	|
-| N≥40  |衰减系数：40/N          			|
+| 0< N <range/5  	|衰减系数：1.0 （音量无衰减）	|
+| N≥range/5  |衰减系数：40/N          			|
 
 ![](https://github.com/TencentMediaLab/GME/blob/master/Image/t1.jpg)
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float elevation,float distance_cm)
+public abstract int UpdateSelfPosition(int x, int y, int z, int pitch, int yaw, int roll, int range)
 ```
+在GME中设计的世界坐标系下（此坐标系与 Unreal 引擎坐标系相同，与 Unity 引擎不同，需要开发者注意）：
+- x 轴指向前方，y 轴指向右方，z 轴指向上方。
+- pitch：绕右轴（Y轴）旋转，上下观察，数值为 0 是代表向前，向下数值增加，向上数值减少，与虚幻坐标系相反。
+- yaw：绕上轴（Z轴）旋转，相当于左右观察，数值为 0 代表东方向，往北数值增加，往南数值减少。
+- roll：围绕正轴（X轴）旋转，倾斜头部观察，数值为 0 代表人的身体垂直地面，逆时针倾斜数值增加，顺时针倾斜数值减少，与虚幻坐标系相反。
+
 |参数     | 类型         |意义|
 | ------------- |-------------|-------------
-| identifier   		|string	|传入一个 identifier，以识别用户（identifier 在进房时候已经确定）	|
-| azimuth    		|float	|方位参数（需要计算）											|
-| elevation    	|float 	|角度参数（需要计算）											|
-| distance_cm    	|float  	|距离参数（需要计算）											|
+| x   		|int		|自身坐标 x 轴坐标	|
+| y    	|int		|自身坐标 y 轴坐标	|
+| z    	|int 		|自身坐标 z 轴坐标	|
+| pitch   	|int  	|围绕 Y 轴旋转，也叫做俯仰角。范围是-90~90，数值90代表视线往 z 轴反方向看|
+| yaw    	|int  	|围绕 Z 轴旋转，也叫偏航角。范围是-180~180，数值90代表视线往 x 轴方向看|
+| roll    	|int  	|围绕 X 轴旋转，也叫翻滚角，范围是-180~180，数值90代表用户身体平行于地面且头朝 y 轴方向|
+| range 	|int  	|设定音效可接收的范围|
+
+
+
 
 >函数原理
 
@@ -64,75 +82,6 @@ QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float
 ![](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Image/w1.png)
 
 
->示例代码
-```
-private void CalculatePosition()
-{
-	Transform selftrans = currentPlayer.gameObject.transform;
-	Vector3 relativePos = new  Vector3 (playerPrefab.transform.position.x - selftrans.position.x, playerPrefab.transform.position.y - selftrans.position.y, playerPrefab.transform.position.z - selftrans.position.z);
-	Vector3 rotation = Quaternion.Inverse(selftrans.rotation) * relativePos;  
-	double distance = 0;
-	double azimuth = 0;
-	double elevation = 0;
-	double x = rotation.z;
-	double y = rotation.x;
-	double z = rotation.y;
-	double sqxy = Math.Sqrt(x*x + y*y);
-	distance = Math.Sqrt(relativePos.x*relativePos.x + relativePos.y*relativePos.y + relativePos.z*relativePos.z)*10;
-	if (y != 0)
-	{
-		if (x != 0)
-		{
-			if (x > 0)
-			{
-				azimuth =  Math.Atan(y / x);
-			}
-			else
-			{
-				azimuth = (Math.PI) + Math.Atan(y / x);
-			}
-		}
-		else
-		{
-			if (y > 0)
-			{
-				azimuth = -Math.PI/2;
-			}
-			else
-			{
-				azimuth = Math.PI/2;
-			}
-		}
-	}
-	else
-	{
-		if (x > 0)
-		{
-			azimuth = 0;
-		}
-		else
-		{
-			azimuth = -Math.PI;
-		}
-	}
 
-	if (sqxy != 0)
-	{
-		elevation = Math.Atan(z / sqxy);
-	}
-	else
-	{
-		if (z > 0)
-		{
-			elevation = Math.PI;
-		}
-		else
-		{
-			elevation = -Math.PI;
-		}
-	}
-	Debug.LogFormat(string.Format ("3Daudio UpdateSpatializer, azimuth:{0}, elevation:{1}, distance:{2}", (float)(azimuth * 180)/Math.PI, (float)(elevation * 180)/Math.PI,distance));		
-}
-```
 
 

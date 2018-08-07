@@ -29,8 +29,11 @@
 |Poll    		|触发事件回调	|
 |SetDefaultAudienceAudioCategory 	|设置后台|
 |EnterRoom	 	|进房  		|
-|EnableMic	 	|开麦克风 	|
-|EnableSpeaker		|开扬声器 	|
+|EnableAudioCaptureDevice	 	|开关采集设备 	|
+|EnableAudioSend		|打开关闭音频上行 	|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|EnableAudioRecv    					|打开关闭音频下行	|
+
 
 **说明**
 
@@ -40,7 +43,10 @@
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
+**GME 需要调用 Poll 接口触发事件回调。**
+
 **此文档对应GME sdk version：2.0.2.38430。**
+
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
 
@@ -126,7 +132,7 @@ ITMGContext -(void)Poll
 > 函数原型
 
 ```
-ITMGContext -(void)Pause
+ITMGContext -(QAVResult)Pause
 ```
 
 ### 系统恢复
@@ -134,7 +140,7 @@ ITMGContext -(void)Pause
 > 函数原型
 
 ```
-ITMGContext -(void)Resume
+ITMGContext -(QAVResult)Resume
 ```
 
 
@@ -202,14 +208,14 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 
 ```
 @interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
++ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId openID:(NSString*)openID  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
 @end
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int  		|房间号，只支持32位							|
-| identifier  		|NSString    	|用户标识								|
+| openID  		|NSString    	|用户标识								|
 | key    			|NSString    	|来自腾讯云控制台的密钥					|
 | expTime    		|int   		|authBuffer 超时时间						|
 | authBits   	 	|uint64    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）									|
@@ -219,21 +225,21 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 > 示例代码  
 
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId openID:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
 ```
 
 ### 加入房间
-用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
+用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。进房超时是 30 秒会有回调。
 
 
 > 函数原型
 
 ```
-ITMGContext   -(void)EnterRoom:(int) relationId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
+ITMGContext   -(void)EnterRoom:(int) roomId roomType:(int*)roomType authBuffer:(NSData*)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId 	|int		|房间号，只支持32位	|
+| roomId 	|int		|房间号，只支持32位	|
 | roomType 		|int			|房间音频类型		|
 | authBuffer    	|NSData    	|鉴权码						|
 
@@ -285,7 +291,7 @@ ITMGContext -(BOOL)IsRoomEntered
 ```
 
 ### 退出房间
-通过调用此接口可以退出所在房间。
+通过调用此接口可以退出所在房间。这是一个同步接口，调用返回时会释放所占用的设备资源。
 > 函数原型  
 
 ```
@@ -335,7 +341,7 @@ ITMGContext GetRoom -(void)ChangeRoomType:(int)nRoomType
 ```
 
 ### 获取用户房间音频类型
-此接口用于获取用户房间音频类型，返回值为房间音频类型，房间音频类型参考 EnterRoom 接口。
+此接口用于获取用户房间音频类型，返回值为房间音频类型，返回值为0时代表获取用户房间音频类型发生错误，房间音频类型参考 EnterRoom 接口。
 
 > 函数原型  
 ```
@@ -435,27 +441,40 @@ ITMGContext GetRoom -(int)GetRoomType
 
 ## 实时语音音频接口
 初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
+调用场景举例：
+
+当用户界面点击打开/关闭麦克风/扬声器按钮时，建议如下方式：
+- 对于大部分的游戏类 App，总是应该同时调用 EnableAudioCaptureDevice/EnableAudioSend 和 EnableAudioPlayDevice/EnableAudioRecv；
+- 其他类型的移动端 App 例如社交类型 App，打开或者关闭采集设备，会伴随整个设备（采集及播放）重启，如果此时 App 正在播放背景音乐，那么背景音乐的播放也会被中断。利用控制上下行的方式来实现开关麦克风效果，不会中断播放设备。具体调用方式为：在进房的时候调用 EnableAudioCaptureDevice(true) && EnabledAudioPlayDevice(true) 一次，点击开关麦克风时只调用 EnableAudioSend/Recv 来控制音频流是否发送/接收。
+
+如目的是互斥（释放录音权限给其他模块使用），建议使用 PauseAudio/ResumeAudio。
+
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|PauseAudio    				       	|暂停音频引擎|
-|ResumeAudio    				      	|恢复音频引擎|
-|EnableMic    						|开关麦克风|
-|GetMicState    						|获取麦克风状态|
-|GetMicLevel    						|获取实时麦克风音量|
-|SetMicVolume    					|设置麦克风音量|
-|GetMicVolume    					|获取麦克风音量|
-|EnableSpeaker    					|开关扬声器|
-|GetSpeakerState    					|获取扬声器状态|
-|GetSpeakerLevel    					|获取实时扬声器音量|
-|SetSpeakerVolume    				|设置扬声器音量|
-|GetSpeakerVolume    				|获取扬声器音量|
-|EnableLoopBack    					|开关耳返|
+|PauseAudio    				       	   |暂停音频引擎		|
+|ResumeAudio    				      	 |恢复音频引擎		|
+|EnableAudioCaptureDevice    		|开关采集设备		|
+|IsAudioCaptureDeviceEnabled    	|获取采集设备状态	|
+|EnableAudioSend    				|打开关闭音频上行	|
+|IsAudioSendEnabled    				|获取音频上行状态	|
+|GetMicLevel    						|获取实时麦克风音量	|
+|SetMicVolume    					|设置麦克风音量		|
+|GetMicVolume    					|获取麦克风音量		|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|IsAudioPlayDeviceEnabled    		|获取播放设备状态	|
+|EnableAudioRecv    					|打开关闭音频下行	|
+|IsAudioRecvEnabled    				|获取音频下行状态	|
+|GetSpeakerLevel    					|获取实时扬声器音量	|
+|SetSpeakerVolume    				|设置扬声器音量		|
+|GetSpeakerVolume    				|获取扬声器音量		|
+|EnableLoopBack    					|开关耳返			|
+
 
 ### 暂停音频引擎的采集和播放
-调用此接口暂停音频引擎的采集和播放，只在进房后有效。
-在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。调用 EnableMic(false) 无法释放麦克风占用。
-如果确实需要释放麦克风，请调用 PauseAudio 接口。调用 PauseAudio 接口后会整个暂停引擎，调用 ResumeAudio 接口可恢复音频采集。
+调用此接口暂停音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
+如果想单独释放采集或者播放设备，请参考接口 EnableAudioCaptureDevice 及 EnableAudioPlayDevice。
+
 > 函数原型  
 
 ```
@@ -468,7 +487,7 @@ ITMGContext GetAudioCtrl -(QAVResult)PauseAudio
 ```
 
 ### 恢复音频引擎的采集和播放
-调用此接口恢复音频引擎的采集和播放，只在进房后有效。
+调用此接口恢复音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
 > 函数原型  
 
 ```
@@ -483,58 +502,71 @@ ITMGContext GetAudioCtrl -(QAVResult)ResumeAudio
 
 
 
-### 开启关闭麦克风
-此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
+### 开启关闭采集设备
+此接口用来开启/关闭采集设备。加入房间默认不打开设备。
+- 只能在进房后调用此接口，退房会自动关闭设备。
+- 在移动端，打开采集设备通常会伴随权限申请，音量类型调整等操作。
 
-> 函数原型  
+> 函数原型
 
 ```
-ITMGContext GetAudioCtrl -(void)EnableMic:(BOOL)enable
+ITMGContext GetAudioCtrl -(QAVResult)EnableAudioCaptureDevice:(BOOL)enabled
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开麦克风，则传入的参数为 YES，如果关闭麦克风，则参数为 NO|
+| enabled    |BOOL     |如果需要打开采集设备，则传入的参数为 YES，如果关闭采集设备，则参数为 NO|
+
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableMic:YES];
+打开采集设备
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioCaptureDevice:enabled];
 ```
 
-### 麦克风事件的回调
-麦克风事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了麦克风，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_MIC， ITMG_MAIN_EVENT_TYPE_DISABLE_MIC，在 OnEvent 函数中对事件消息进行判断。
-传递的参数 intent 包含两个信息，一个是 audio_state，另一个是 audio_errcode。
+### 采集设备状态获取
+此接口用于采集设备状态获取。
+> 函数原型
+
+```
+ITMGContext GetAudioCtrl -(BOOL)IsAudioCaptureDeviceEnabled
+```
+> 示例代码
+
+```
+BOOL IsAudioCaptureDevice = [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioCaptureDeviceEnabled];
+```
+
+### 打开关闭音频上行
+此接口用于打开/关闭音频上行。如果采集设备已经打开，那么会发送采集到的音频数据。如果采集设备没有打开，那么仍旧无声。采集设备的打开关闭参见接口 EnableAudioCaptureDevice。
+
+> 函数原型
+
+```
+ITMGContext GetAudioCtrl -(QAVResult)EnableAudioSend:(BOOL)enable
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| enable    |BOOL     |如果需要打开音频上行，则传入的参数为 YES，如果关闭音频上行，则参数为 NO|
+
 > 示例代码  
 
 ```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
-    switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ENABLE_MIC：
-        {
-	    //打开麦克风成功
-        }
-            break;
-	case ITMG_MAIN_EVENT_TYPE_DISABLE_MIC：
-        {
-	    //关闭麦克风成功
-        }
-            break;
-    }
-}
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioSend:enabled];
 ```
 
-### 麦克风状态获取
-此接口用于获取麦克风状态，返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 3 为麦克风设备不存在，返回值 4 为设备没初始化好。
+### 音频上行状态获取
+此接口用于音频上行状态获取。
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(int)GetMicState
+ITMGContext GetAudioCtrl -(BOOL)IsAudioSendEnabled
 ```
-> 示例代码  
+> 示例代码
 
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] GetMicState];
+BOOL IsAudioSend =  [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioSendEnabled];
 ```
+
 
 ### 获取麦克风实时音量
 此接口用于获取麦克风实时音量，返回值为 int 类型。
@@ -553,7 +585,7 @@ ITMGContext GetAudioCtrl -(int)GetMicLevel
 > 函数原型 
  
 ```
-ITMGContext GetAudioCtrl -(void)SetMicVolume:(int) volume
+ITMGContext GetAudioCtrl -(QAVResult)SetMicVolume:(int) volume
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -577,58 +609,67 @@ ITMGContext GetAudioCtrl -(int) GetMicVolume
 [[[ITMGContext GetInstance] GetAudioCtrl] GetMicVolume];
 ```
 
-### 开启关闭扬声器
-此接口用于开启关闭扬声器。
+### 开启关闭播放设备
+此接口用于开启关闭播放设备。
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(void)EnableSpeaker:(BOOL)enable
+ITMGContext GetAudioCtrl -(QAVResult)EnableAudioPlayDevice:(BOOL)enabled
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean       |如果需要关闭扬声器，则传入的参数为 NO，如果打开扬声器，则参数为 YES|
+| enabled    |BOOL        |如果需要关闭播放设备，则传入的参数为 NO，如果打开播放设备，则参数为 YES|
+> 示例代码
+
+```
+打开播放设备
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioPlayDevice:enabled];
+```
+
+
+### 播放设备状态获取
+此接口用于播放设备状态获取。
+> 函数原型
+
+```
+ITMGContext GetAudioCtrl -(BOOL)IsAudioPlayDeviceEnabled
+```
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] EnableSpeaker:YES];
+BOOL IsAudioPlayDevice =  [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioPlayDeviceEnabled];
 ```
 
-### 扬声器事件的回调
-扬声器事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
-> 示例代码  
+### 打开关闭音频下行
+此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。播放设备的打开关闭参见接口 参见EnableAudioPlayDevice。
 
-```
--(void)OnEvent:(ITMG_MAIN_EVENT_TYPE)eventType data:(NSDictionary *)data{
-    NSLog(@"OnEvent:%lu,data:%@",(unsigned long)eventType,data);
-    switch (eventType) {
-        case ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER：
-        {
-	    //打开扬声器成功
-        }
-            break;
-	case ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER：
-        {
-	    //关闭扬声器成功
-        }
-            break;
-    }
-}
-```
-
-### 扬声器状态获取
-此接口用于扬声器状态获取。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 3 为扬声器设备不存在，返回值 4 为设备没初始化好。
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(int)GetSpeakerState
+ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 ```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| enabled    |BOOL     |如果需要打开音频下行，则传入的参数为 YES，如果关闭音频下行，则参数为 NO|
 
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance] GetAudioCtrl] GetSpeakerState];
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioRecv:enabled];
 ```
 
+### 音频下行状态获取
+此接口用于音频下行状态获取。
+> 函数原型  
+
+```
+ITMGAudioCtrl bool IsAudioRecvEnabled()
+```
+> 示例代码  
+
+```
+BOOL IsAudioRecv = [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioRecvEnabled];
+```
 ### 获取扬声器实时音量
 此接口用于获取扬声器实时音量。返回值为 int 类型数值，表示扬声器实时音量。
 > 函数原型  
@@ -650,7 +691,7 @@ ITMGContext GetAudioCtrl -(int)GetSpeakerLevel
 > 函数原型  
 
 ```
-ITMGContext GetAudioCtrl -(void)SetSpeakerVolume:(int)vol
+ITMGContext GetAudioCtrl -(QAVResult)SetSpeakerVolume:(int)vol
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -692,22 +733,6 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableLoopBack:(BOOL)enable
 ```
 [[[ITMGContext GetInstance] GetAudioCtrl] EnableLoopBack:YES];
 ```
-### 消息详情
-
-|消息     | 消息代表的意义   
-| ------------- |:-------------:|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息|
-
-### 消息对应的Data详情
-|消息     | Data         |例子|
-| ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
 
 
 ## 实时语音伴奏相关接口
@@ -892,7 +917,7 @@ ITMGContext GetAudioEffectCtrl -(QAVAccResult)SetAccompanyFileCurrentPlayedTimeB
 
 
 ### 播放音效
-此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
+此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。文件支持 m4a、AAC、wav、mp3 一共四种格式。
 > 函数原型  
 
 ```
@@ -1061,9 +1086,10 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 ```
 
 ## 离线语音
+使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|genSig    		|离线语音鉴权		|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1074,36 +1100,8 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|语音识别文字		|
+|SpeechToText 		|语音识别成文字		|
 
-
-### 离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](../GME%20Key%20Manual.md)。  
-Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
-> 函数原型  
-
-```
-+(NSString*)genSig:(NSString*)appId identifier:(NSString*)identifier privateKey:(NSString*)privateKey error:(NSError**)error
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| sdkAppId  	|int   		|来自腾讯云控制台的 SdkAppId 号码													|
-| openID    	|NSString	|唯一标识一个用户，规则由 App 开发者自行制定											|
-| key    		|NSString 	|来自腾讯云控制台的鉴权																|
-| error    	|Error   		|指定一个传错误值的对象的地址。生成 sig 出错了，返回值为空，error 里面会带上错误信息。	|
-```
--(QAVResult)ApplyAccessToken:(NSString*)accessToken
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| accessToken    |NSString                       |getTLSSig 函数返回的 accessToken|
-> 示例代码  
-
-```
-NSString* privateKey = @"自己在官网的 key";
-NSString* accessToken = [QAVSDKSigManager genSig:SDKAPPID3RD identifier:_openId privateKey:privateKey error:&error];
-[[[ITMGContext GetInstance]GetPTT]ApplyAccessToken:accessToken];
-```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1183,19 +1181,20 @@ ITMGContext GetPTT -(QAVResult)CancelRecording
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。
+此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath
+ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath  authBuffer:(NSData *)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |NSString                      |上传的语音路径|
+| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path];
+[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path authBuffer:authBuffer];
 ```
 
 ### 上传语音完成的回调
@@ -1214,20 +1213,21 @@ ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath
 ```
 
 ### 下载语音文件
-此接口用于下载语音文件。
+此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath
+ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath  authBuffer:(NSData *)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    			|NSString                      |文件的url路径		|
 | downloadFilePath 	|NSString                      |文件的本地保存路径	|
+| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]DownloadRecordedFile:fileIdpath downloadFilePath:path];
+[[[ITMGContext GetInstance]GetPTT]DownloadRecordedFile:fileIdpath downloadFilePath:path authBuffer:authBuffer];
 ```
 
 ### 下载语音文件完成回调
@@ -1322,19 +1322,20 @@ ITMGContext GetPTT -(int)GetVoiceFileDuration:(NSString*)filePath
 ```
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。
+此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(int)SpeechToText:(NSString*)fileID
+ITMGContext GetPTT -(void)SpeechToText:(NSString*)fileID  authBuffer:(NSData *)authBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |NSString                     |语音文件 url|
+| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID];
+[[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID authBuffer:authBuffer];
 ```
 
 ### 识别回调
@@ -1467,10 +1468,6 @@ ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 |ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|退出音频房间消息		|
 |ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT		|房间因为网络等原因断开消息	|
 |ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE		|房间类型变化事件		|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|打开麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|关闭麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER		|打开扬声器消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER		|关闭扬声器消息			|
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH		|伴奏结束消息			|
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE		|房间成员更新消息		|
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE	|PTT 录音完成			|
@@ -1487,10 +1484,6 @@ ITMGContext GetAudioCtrl -(QAVResult)RemoveAudioBlackList:(NSString*)identifier
 | ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|result; error_info  			|{"error_info":"","result":0}|
 | ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    	|result; error_info  			|{"error_info":"waiting timeout, please check your network","result":0}|
 | ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    	|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
 | ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}|
 | ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}|
 | ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}|

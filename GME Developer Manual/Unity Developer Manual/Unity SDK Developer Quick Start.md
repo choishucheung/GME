@@ -29,6 +29,8 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
+**GME 需要调用 Poll 接口触发事件回调。**
+
 **此文档对应GME sdk version：2.0.2.38430。**
 ## 快速接入步骤
 
@@ -68,11 +70,11 @@ ITMGContext public abstract int Poll();
 
 > 函数原型
 ```
-ITMGContext EnterRoom(int relationId, int roomType, byte[] authBuffer)
+ITMGContext EnterRoom(int roomID, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId		|int    	|房间号，只支持32位					|
+| roomID		|int    	|房间号，只支持32位					|
 | roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权码					|
 

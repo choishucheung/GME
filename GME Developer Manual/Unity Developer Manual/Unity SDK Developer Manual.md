@@ -53,11 +53,14 @@
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|Init    	|初始化 GME	| 
+|Init    	|初始化 GME	|
 |Poll    	|触发事件回调	|
 |Pause   	|系统暂停	|
 |Resume 	|系统恢复	|
 |Uninit    	|反初始化 GME 	|
+
+### 获取实例
+请使用 ITMGContext 的方法获取 Context 实例，不要直接使用 QAVContext.GetInstance() 去获取实例。
 
 
 ### 初始化 SDK
@@ -68,6 +71,7 @@
 初始化 SDK 之后才可以进房。
 
 > 函数原型
+
 ```
 IQAVContext Init(string sdkAppID, string openID)
 ```
@@ -76,6 +80,7 @@ IQAVContext Init(string sdkAppID, string openID)
 | sdkAppId    	|String  |来自腾讯云控制台的 SdkAppId 号码						|
 | openID    	|String  |OpenID 只支持 Int64 类型（转为string传入），必须大于 10000，用于标识用户 	|
 > 示例代码  
+
 ```
 int ret = IQAVContext.GetInstance().Init(str_appId, str_userId);
 	if (ret != QAVError.OK) {
@@ -157,6 +162,7 @@ QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string 
 | expTime    		|int   		|authBuffer 超时时间				|
 | authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
 > 示例代码  
+
 ```
 byte[] GetAuthBuffer(string appId, string userId, int roomId, uint authBits)
     {
@@ -168,7 +174,7 @@ byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly 
 ```
 
 ### 加入房间
-用生成的鉴权信息进房。加入房间默认不打开麦克风及扬声器。
+用生成的鉴权信息进房。加入房间默认不打开麦克风及扬声器。进房超时是 30 秒会有回调。
 
 小队语音详细接入细节请查阅[GME 小队语音](../GME%20TeamAudio%20Manual.md)。
 
@@ -193,8 +199,9 @@ ITMGContext EnterRoom(int roomId, int roomType, byte[] authBuffer)
 
 - 如对音量类型或场景有特殊需求，请联系一线客服反馈；
 - 控制台采样率设置会直接影响游戏语音效果，请在[控制台](https://console.cloud.tencent.com/gamegme)上再次确认采样率设置是否符合项目使用场景。
-> 示例代码 
- 
+
+> 示例代码
+
 ```
 IQAVContext.GetInstance().EnterRoom(roomId, ITMG_ROOM_TYPE_FLUENCY, authBuffer);
 ```
@@ -229,23 +236,27 @@ void OnEnterRoomComplete(int err, string errInfo)
 ```
 
 ### 判断是否已经进入房间
-通过调用此接口可以判断是否已经进入房间，返回值为 BOOL 类型。
+通过调用此接口可以判断是否已经进入房间，返回值为 bool 类型。
 > 函数原型  
+
 ```
 ITMGContext abstract bool IsRoomEntered()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().IsRoomEntered();
 ```
 
 ### 退出房间
-通过调用此接口可以退出所在房间。
+通过调用此接口可以退出所在房间。这是一个同步接口，调用返回时会释放所占用的设备资源。
 > 函数原型  
+
 ```
 ITMGContext ExitRoom()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().ExitRoom();
 ```
@@ -253,13 +264,15 @@ IQAVContext.GetInstance().ExitRoom();
 ### 退出房间回调
 退出房间完成回调，通过委托传递消息。
 > 函数原型  
+
 ```
 委托函数：
 public delegate void QAVExitRoomComplete();
 事件函数：
-public abstract event QAVExitRoomComplete OnExitRoomCompleteEvent; 
+public abstract event QAVExitRoomComplete OnExitRoomCompleteEvent;
 ```
-> 示例代码  
+> 示例代码
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().OnExitRoomCompleteEvent += new QAVExitRoomComplete(OnExitRoomComplete);
@@ -273,18 +286,21 @@ void OnExitRoomComplete(){
 此接口用于获取用户房间音频类型，返回值为房间音频类型，返回值为0时代表获取用户房间音频类型发生错误，房间音频类型参考 EnterRoom 接口。
 
 > 函数原型  
+
 ```
 ITMGContext ITMGRoom public  int GetRoomType()
 ```
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetRoom().GetRoomType();
 ```
 
 ### 修改用户房间音频类型
 此接口用于修改用户房间音频类型。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
 ```
@@ -293,7 +309,8 @@ ITMGContext ITMGRoom public void ChangeRoomType(ITMGRoomType roomtype)
 | ------------- |:-------------:|-------------|
 | roomtype    |ITMGRoomType    |希望房间切换成的类型，房间音频类型参考 EnterRoom 接口|
 
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetRoom().ChangeRoomType(ITMG_ROOM_TYPE_FLUENCY);
 ```
@@ -313,7 +330,7 @@ IQAVContext.GetInstance().GetRoom().ChangeRoomType(ITMG_ROOM_TYPE_FLUENCY);
 public delegate void QAVOnChangeRoomtypeCallback(int result, string error_info);
 
 事件函数：
-public abstract event QAVCallback OnChangeRoomtypeCallback; 
+public abstract event QAVCallback OnChangeRoomtypeCallback;
 ```
 > 示例代码  
 
@@ -333,9 +350,10 @@ void OnChangeRoomtypeCallback(){
 public delegate void QAVOnRoomTypeChangedEvent(int roomtype);
 
 事件函数：
-public abstract event QAVOnRoomTypeChangedEvent OnRoomTypeChangedEvent;	
+public abstract event QAVOnRoomTypeChangedEvent OnRoomTypeChangedEvent;
 ```
 > 示例代码  
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().OnRoomTypeChangedEvent += new QAVOnRoomTypeChangedEvent(OnRoomTypeChangedEvent);
@@ -346,7 +364,7 @@ void OnRoomTypeChangedEvent(){
 ```
 
 
-	
+
 ### 成员状态变化
 该事件在状态变化才通知，状态不变化的情况下不通知。如需实时获取成员状态，请在上层收到通知时缓存，事件消息为 ITMG_MAIN_EVNET_TYPE_USER_UPDATE，参数 intent 包含两个信息，event_id 及 user_list，在 OnEvent 函数中对事件消息进行判断。
 音频事件的通知有一个阈值，超过这个阈值才会发送通知。超过两秒没有收到音频包才通知“有成员停止发送音频包”消息。
@@ -359,7 +377,7 @@ void OnRoomTypeChangedEvent(){
 |ITMG_EVENT_ID_USER_NO_AUDIO    			|有成员停止发送音频包	|应用侧维护通话成员列表	|
 
 > 示例代码
-  
+
 ```
 委托函数：
 public delegate void QAVEndpointsUpdateInfo(int eventID, int count, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)]string[] openIdList);
@@ -387,7 +405,7 @@ void OnEndpointsUpdateInfo(int eventID, int count, string[] openIdList)
 		    case ITMG_EVENT_ID_USER_NO_AUDIO:
 			    //有成员停止发送音频包
 			    break;
-		  
+
 		    default:
 			    break;
  		    }
@@ -403,17 +421,18 @@ void OnEndpointsUpdateInfo(int eventID, int count, string[] openIdList)
 ## 实时语音音频接口
 初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
 调用场景举例：
-- 当用户界面点击打开/关闭麦克风/扬声器按钮时，建议如下方式：
 
-Option 1: 在进房的时候调用 EnableAudioCaptureDevice(true) && EnabledAudioPlayDevice(true) 一次，点击时只调用 EnableAudioSend/Recv 来控制音频流是否发送/接收
+当用户界面点击打开/关闭麦克风/扬声器按钮时，建议如下方式：
+- 对于大部分的游戏类 App，总是应该同时调用 EnableAudioCaptureDevice/EnableAudioSend 和 EnableAudioPlayDevice/EnableAudioRecv；
+- 其他类型的移动端 App 例如社交类型 App，打开或者关闭采集设备，会伴随整个设备（采集及播放）重启，如果此时 App 正在播放背景音乐，那么背景音乐的播放也会被中断。利用控制上下行的方式来实现开关麦克风效果，不会中断播放设备。具体调用方式为：在进房的时候调用 EnableAudioCaptureDevice(true) && EnabledAudioPlayDevice(true) 一次，点击开关麦克风时只调用 EnableAudioSend/Recv 来控制音频流是否发送/接收。
 
-Option 2: 也可以和EnableAudioSend/Recv组合调用
-- 如目的是互斥（释放录音权限给其他模块使用），建议使用 PauseAudio/ResumeAudio。
+如目的是互斥（释放录音权限给其他模块使用），建议使用 PauseAudio/ResumeAudio。
+
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|PauseAudio    				       	|暂停音频引擎		|
-|ResumeAudio    				      	|恢复音频引擎		|
+|PauseAudio    				       	   |暂停音频引擎		|
+|ResumeAudio    				      	 |恢复音频引擎		|
 |EnableAudioCaptureDevice    		|开关采集设备		|
 |IsAudioCaptureDeviceEnabled    	|获取采集设备状态	|
 |EnableAudioSend    				|打开关闭音频上行	|
@@ -432,25 +451,28 @@ Option 2: 也可以和EnableAudioSend/Recv组合调用
 
 
 ### 暂停音频引擎的采集和播放
-调用此接口暂停音频引擎的采集和播放，只在进房后有效。
-在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。调用 EnableMic(false) 无法释放麦克风占用。
-如果确实需要释放麦克风，请调用 PauseAudio 接口。调用 PauseAudio 接口后会整个暂停引擎，调用 ResumeAudio 接口可恢复音频采集。
+调用此接口暂停音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
+如果想单独释放采集或者播放设备，请参考接口 EnableAudioCaptureDevice 及 EnableAudioPlayDevice。
 > 函数原型  
+
 ```
 ITMGAudioCtrl abstract int PauseAudio()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance ().GetAudioCtrl ().PauseAudio();
 ```
 
 ### 恢复音频引擎的采集和播放
-调用此接口恢复音频引擎的采集和播放，只在进房后有效。
-> 函数原型  
+调用此接口恢复音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
+> 函数原型
+
 ```
 ITMGAudioCtrl abstract int ResumeAudio()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance ().GetAudioCtrl ().ResumeAudio();
 ```
@@ -460,7 +482,8 @@ IQAVContext.GetInstance ().GetAudioCtrl ().ResumeAudio();
 - 只能在进房后调用此接口，退房会自动关闭设备。
 - 在移动端，打开采集设备通常会伴随权限申请，音量类型调整等操作。
 
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl int EnableAudioPlayDevice(bool isEnabled)
 ```
@@ -475,11 +498,13 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableAudioCaptureDevice(true);
 
 ### 采集设备状态获取
 此接口用于采集设备状态获取。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl bool IsAudioCaptureDeviceEnabled()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 bool IsAudioCaptureDevice = IQAVContext.GetInstance().GetAudioCtrl().IsAudioCaptureDeviceEnabled();
 ```
@@ -487,7 +512,8 @@ bool IsAudioCaptureDevice = IQAVContext.GetInstance().GetAudioCtrl().IsAudioCapt
 ### 打开关闭音频上行
 此接口用于打开/关闭音频上行。如果采集设备已经打开，那么会发送采集到的音频数据。如果采集设备没有打开，那么仍旧无声。采集设备的打开关闭参见接口 EnableAudioCaptureDevice。
 
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl int EnableAudioSend(bool isEnabled)
 ```
@@ -496,6 +522,7 @@ ITMGAudioCtrl int EnableAudioSend(bool isEnabled)
 | isEnabled    |bool     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().EnableAudioSend(true);
 ```
@@ -503,10 +530,12 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableAudioSend(true);
 ### 音频上行状态获取
 此接口用于音频上行状态获取。
 > 函数原型  
+
 ```
 ITMGAudioCtrl bool IsAudioSendEnabled()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 bool IsAudioSend = IQAVContext.GetInstance().GetAudioCtrl().IsAudioSendEnabled();
 ```
@@ -515,18 +544,21 @@ bool IsAudioSend = IQAVContext.GetInstance().GetAudioCtrl().IsAudioSendEnabled()
 
 ### 获取麦克风实时音量
 此接口用于获取麦克风实时音量，返回值为 int 类型。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl -(int)GetMicLevel
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetMicLevel();
 ```
 
 ### 设置麦克风的软件音量
 此接口用于设置麦克风的软件音量。参数 volume 用于设置麦克风的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl SetMicVolume(int volume)
 ```
@@ -534,6 +566,7 @@ ITMGAudioCtrl SetMicVolume(int volume)
 | ------------- |:-------------:|-------------|
 | volume    |int      |设置音量，范围 0 到 200|
 > 示例代码  
+
 ```
 int micVol = (int)(value * 100);
 IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
@@ -541,11 +574,13 @@ IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
 
 ### 获取麦克风的软件音量
 此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl GetMicVolume()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetMicVolume();
 ```
@@ -553,13 +588,15 @@ IQAVContext.GetInstance().GetAudioCtrl().GetMicVolume();
 ### 开启关闭播放设备
 此接口用于开启关闭播放设备。
 > 函数原型  
+
 ```
 ITMGAudioCtrl EnableAudioPlayDevice(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | isEnabled    |bool        |如果需要关闭播放设备，则传入的参数为 false，如果打开播放设备，则参数为 true|
-> 示例代码  
+> 示例代码
+
 ```
 打开播放设备
 IQAVContext.GetInstance().GetAudioCtrl().EnableAudioPlayDevice(true);
@@ -568,11 +605,13 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableAudioPlayDevice(true);
 
 ### 播放设备状态获取
 此接口用于播放设备状态获取。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl bool IsAudioPlayDeviceEnabled()
 ```
 > 示例代码  
+
 ```
 bool IsAudioPlayDevice = IQAVContext.GetInstance().GetAudioCtrl().IsAudioPlayDeviceEnabled();
 ```
@@ -581,6 +620,7 @@ bool IsAudioPlayDevice = IQAVContext.GetInstance().GetAudioCtrl().IsAudioPlayDev
 此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。播放设备的打开关闭参见接口 参见EnableAudioPlayDevice。
 
 > 函数原型  
+
 ```
 ITMGAudioCtrl int EnableAudioRecv(bool isEnabled)
 ```
@@ -589,6 +629,7 @@ ITMGAudioCtrl int EnableAudioRecv(bool isEnabled)
 | isEnabled    |bool     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().EnableAudioRecv(true);
 ```
@@ -596,10 +637,12 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableAudioRecv(true);
 ### 音频下行状态获取
 此接口用于音频下行状态获取。
 > 函数原型  
+
 ```
 ITMGAudioCtrl bool IsAudioRecvEnabled()
 ```
 > 示例代码  
+
 ```
 bool IsAudioRecv = IQAVContext.GetInstance().GetAudioCtrl().IsAudioRecvEnabled();
 ```
@@ -607,12 +650,14 @@ bool IsAudioRecv = IQAVContext.GetInstance().GetAudioCtrl().IsAudioRecvEnabled()
 
 ### 获取扬声器实时音量
 此接口用于获取扬声器实时音量。返回值为 int 类型数值，表示扬声器实时音量。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl GetSpeakerLevel()
 ```
 
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerLevel();
 ```
@@ -622,13 +667,15 @@ IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerLevel();
 参数 volume 用于设置扬声器的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 
 > 函数原型  
+
 ```
 ITMGAudioCtrl SetSpeakerVolume(int volume)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| vol    |int        |设置音量，范围 0 到 200|
-> 示例代码  
+| volume    |int        |设置音量，范围 0 到 200|
+> 示例代码
+
 ```
 int speVol = (int)(value * 100);
 IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol);
@@ -638,11 +685,13 @@ IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol);
 此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
 Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
-> 函数原型  
+> 函数原型
+
 ```
 ITMGAudioCtrl GetSpeakerVolume()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerVolume();
 ```
@@ -712,7 +761,8 @@ void QAVAudioDeviceStateCallback(){
 
 ### 开始播放伴奏
 调用此接口开始播放伴奏。支持 m4a、AAC、wav、mp3 一共四种格式。调用此 API，音量会重置。
-> 函数原型  
+> 函数原型
+
 ```
 IQAVAudioEffectCtrl int StartAccompany(string filePath, bool loopBack, int loopCount, int duckerTimeMs)
 ```
@@ -721,7 +771,8 @@ IQAVAudioEffectCtrl int StartAccompany(string filePath, bool loopBack, int loopC
 | filePath    |string            |播放伴奏的路径|
 | loopBack    |bool          |是否混音发送，一般都设置为 true ，即其他人也能听到伴奏|
 | loopCount    |int          |循环次数，数值为 -1 表示无限循环|
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StartAccompany(filePath,true,loopCount,duckerTimeMs);
 ```
@@ -729,6 +780,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().StartAccompany(filePath,true,loop
 ### 播放伴奏的回调
 伴奏播放结束时的回调，通过委托传递消息。
 > 函数原型  
+
 ```
 委托函数：
 public delegate void QAVAccompanyFileCompleteHandler(int code, string filepath);
@@ -736,18 +788,20 @@ public delegate void QAVAccompanyFileCompleteHandler(int code, string filepath);
 public abstract event QAVAccompanyFileCompleteHandler OnAccompanyFileCompleteHandler;
 ```
 >示例代码
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetAudioEffectCtrl().OnAccompanyFileCompleteHandler += new QAVAccompanyFileCompleteHandler(OnAccomponyFileCompleteHandler);
 监听处理：
 void OnAccomponyFileCompleteHandler(int code, string filepath){
-    //播放伴奏的回调处理
+    //播放伴奏的事件回调
 }
 ```
 
 ### 停止播放伴奏
 调用此接口停止播放伴奏。
-> 函数原型  
+> 函数原型
+
 ```
 IQAVAudioEffectCtrl int StopAccompany(int duckerTimeMs)
 ```
@@ -756,6 +810,7 @@ IQAVAudioEffectCtrl int StopAccompany(int duckerTimeMs)
 | duckerTimeMs    |int             |淡出时间|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopAccompany(duckerTimeMs);
 ```
@@ -763,10 +818,12 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().StopAccompany(duckerTimeMs);
 ### 伴奏是否播放完毕
 如果播放完毕，返回值为 true，如果没播放完，返回值为 false。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl bool IsAccompanyPlayEnd();
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().IsAccompanyPlayEnd();
 ```
@@ -774,11 +831,13 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().IsAccompanyPlayEnd();
 
 ### 暂停播放伴奏
 调用此接口暂停播放伴奏。
-> 函数原型  
+> 函数原型
+
 ```
 IQAAudioEffectCtrl int PauseAccompany()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAccompany();
 ```
@@ -787,11 +846,13 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAccompany();
 
 ### 重新播放伴奏
 此接口用于重新播放伴奏。
-> 函数原型  
+> 函数原型
+
 ```
 IQAAudioEffectCtrl int ResumeAccompany()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAccompany();
 ```
@@ -799,13 +860,15 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAccompany();
 ### 设置自己是否可以听到伴奏
 此接口用于设置自己是否可以听到伴奏。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int EnableAccompanyPlay(bool enable)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | enable    |bool             |是否能听到|
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ```
@@ -813,6 +876,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyPlay(true);
 ### 设置他人是否也可以听到伴奏
 设置他人是否也可以听到伴奏。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int EnableAccompanyLoopBack(bool enable)
 ```
@@ -821,6 +885,7 @@ IQAAudioEffectCtrl int EnableAccompanyLoopBack(bool enable)
 | enable    |bool             |是否能听到|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyLoopBack(true);
 ```
@@ -829,6 +894,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().EnableAccompanyLoopBack(true);
 ### 设置伴奏音量
 设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 - 200。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int SetAccompanyVolume(int vol)
 ```
@@ -837,6 +903,7 @@ IQAAudioEffectCtrl int SetAccompanyVolume(int vol)
 | vol    |int             |音量数值|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolume(vol);
 ```
@@ -844,10 +911,12 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyVolume(vol);
 ### 获取播放伴奏的音量
 此接口用于获取 DB 音量。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl abstract int GetAccompanyVolume()
 ```
 > 示例代码  
+
 ```
 string currentVol = "VOL: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyVolume();
 ```
@@ -855,11 +924,13 @@ string currentVol = "VOL: " + IQAVContext.GetInstance().GetAudioEffectCtrl
 ### 获得伴奏播放进度
 以下两个接口用于获得伴奏播放进度。需要注意：Current / Total = 当前循环次数，Current % Total = 当前循环播放位置。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl abstract uint GetAccompanyFileTotalTimeByMs()
 IQAAudioEffectCtrl abstract int GetAccompanyFileCurrentPlayedTimeByMs()
 ```
 > 示例代码  
+
 ```
 Sstring current = "Current: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyFileCurrentPlayedTimeByMs() + " ms";
 string total = "Total: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAccompanyFileTotalTimeByMs() + " ms";
@@ -869,6 +940,7 @@ string total = "Total: " + IQAVContext.GetInstance().GetAudioEffectCtrl().GetAcc
 ### 设置播放进度
 此接口用于设置播放进度。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl abstract uint SetAccompanyFileCurrentPlayedTimeByMs(uint time)
 ```
@@ -877,6 +949,7 @@ IQAAudioEffectCtrl abstract uint SetAccompanyFileCurrentPlayedTimeByMs(uint time
 | time    |uint                |播放进度，以毫秒为单位|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyFileCurrentPlayedTimeByMs(time);
 ```
@@ -897,8 +970,9 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetAccompanyFileCurrentPlayedTime
 |SetEffectsVolume 	|设置播放音效的音量|
 
 ### 播放音效
-此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
+此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。文件支持 m4a、AAC、wav、mp3 一共四种格式。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int PlayEffect(int soundId, string filePath, bool loop = false, double pitch = 1.0f, double pan = 0.0f, double gain = 1.0f)
 ```
@@ -911,6 +985,7 @@ IQAAudioEffectCtrl int PlayEffect(int soundId, string filePath, bool loop = fals
 | pan    		|double	|保留字段|
 | gain    		|double	|保留字段|
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PlayEffect(soundId,filePath,true,1.0,0,1.0);
 ```
@@ -918,6 +993,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PlayEffect(soundId,filePath,true,
 ### 暂停播放音效
 此接口用于暂停播放音效。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int PauseEffect(int soundId)
 ```
@@ -926,6 +1002,7 @@ IQAAudioEffectCtrl int PauseEffect(int soundId)
 | soundId    |int                    |音效 id|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseEffect(soundId);
 ```
@@ -933,10 +1010,12 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PauseEffect(soundId);
 ### 暂停所有音效
 调用此接口暂停所有音效。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int PauseAllEffects()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAllEffects();
 ```
@@ -944,6 +1023,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().PauseAllEffects();
 ### 重新播放音效
 此接口用于重新播放音效。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int ResumeEffect(int soundId)
 ```
@@ -951,6 +1031,7 @@ IQAAudioEffectCtrl int ResumeEffect(int soundId)
 | ------------- |:-------------:|-------------|
 | soundId    |int                    |音效 id|
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeEffect(soundId);
 ```
@@ -960,17 +1041,20 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeEffect(soundId);
 ### 重新播放所有音效
 调用此接口重新播放所有音效。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int ResumeAllEffects()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().ResumeAllEffects();
 ```
 
 ### 停止播放音效
 此接口用于停止播放音效。
-> 函数原型  
+> 函数原型
+
 ```
 IQAAudioEffectCtrl int StopEffect(int soundId)
 ```
@@ -978,6 +1062,7 @@ IQAAudioEffectCtrl int StopEffect(int soundId)
 | ------------- |:-------------:|-------------|
 | soundId    |int                    |音效 id|
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().StopEffect(soundId);
 ```
@@ -985,17 +1070,20 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().StopEffect(soundId);
 ### 停止播放所有音效
 调用此接口停止播放所有音效。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl int StopAllEffects()
 ```
 > 示例代码  
+
 ```
-IQAVContext.GetInstance().GetAudioEffectCtrl().StopAllEffects(); 
+IQAVContext.GetInstance().GetAudioEffectCtrl().StopAllEffects();
 ```
 
 ### 变声特效
 调用此接口设置变声特效。
-> 函数原型  
+> 函数原型
+
 ```
 IQAAudioEffectCtrl int setVoiceType(int type)
 ```
@@ -1019,17 +1107,20 @@ IQAAudioEffectCtrl int setVoiceType(int type)
 |VOICE_TYPE_DEAD_FATBOY    	|10	|死肥仔			|
 
 > 示例代码  
+
 ```
-IQAVContext.GetInstance().GetAudioEffectCtrl().setVoiceType(0); 
+IQAVContext.GetInstance().GetAudioEffectCtrl().setVoiceType(0);
 ```
 
 ### 获取播放音效的音量
 获取播放音效的音量，为线性音量，默认值为 100，数值大于 100 为增益效果，数值小于 100 为减益效果。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl  int GetEffectsVolume()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().GetEffectsVolume();
 ```
@@ -1038,6 +1129,7 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().GetEffectsVolume();
 ### 设置播放音效的音量
 调用此接口设置播放音效的音量。
 > 函数原型  
+
 ```
 IQAAudioEffectCtrl  int SetEffectsVolume(int volume)
 ```
@@ -1045,7 +1137,8 @@ IQAAudioEffectCtrl  int SetEffectsVolume(int volume)
 | ------------- |:-------------:|-------------|
 | volume    |int                    |音量数值|
 
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 ```
@@ -1057,6 +1150,8 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 
 
 ## 离线语音
+使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+
 |接口     | 接口含义   |
 | ------------- |:-------------:|
 |SetMaxMessageLength    |限制最大语音信息时长	|
@@ -1070,27 +1165,12 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|语音识别成文字			|
->>>>>>> master
-
-### 离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](../GME%20Key%20Manual.md)。  
-Error 参数用于传递错误信息，比如参数填错了：appid 填 0、key 为空、identifier 为空之类的情况都会返回错误。
-> 函数原型  
-```
-QAVSig GenSig(int appId, string identifier, string privateKey)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| appId    |int                    |来自腾讯云控制台的 SdkAppId 号码|
-| identifier    |string                      |唯一标识一个用户，规则由 App 开发者自行制定|
-| privateKey    |string                      |来自腾讯云控制台的鉴权|
->>>>>>> master
-
 
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
-> 函数原型  
+> 函数原型
+
 ```
 ITMGPTT int SetMaxMessageLength(int msTime)
 ```
@@ -1098,21 +1178,23 @@ ITMGPTT int SetMaxMessageLength(int msTime)
 | ------------- |:-------------:|-------------|
 | msTime    |int                    |语音时长|
 > 示例代码  
-```
-IQAVContext.GetInstance().GetPttCtrl().SetMaxMessageLength(60000); 
-```
 
+```
+IQAVContext.GetInstance().GetPttCtrl().SetMaxMessageLength(60000);
+```
 
 ### 启动录音
 此接口用于启动录音。
 > 函数原型  
+
 ```
 ITMGPTT int StartRecording(string fileDir)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileDir    |string                      |存放的语音路径|
-> 示例代码  
+> 示例代码
+
 ```
 string recordPath = Application.persistentDataPath + string.Format ("/{0}.silk", sUid++);
 int ret = IQAVContext.GetInstance().GetPttCtrl().StartRecording(recordPath);
@@ -1121,9 +1203,10 @@ int ret = IQAVContext.GetInstance().GetPttCtrl().StartRecording(recordPath);
 ### 启动录音的回调
 录音完成的回调，通过委托传递消息。
 > 函数原型  
+
 ```
 委托函数：
-public delegate void QAVRecordFileCompleteCallback(int code, string filepath); 
+public delegate void QAVRecordFileCompleteCallback(int code, string filepath);
 事件函数：
 public abstract event QAVRecordFileCompleteCallback OnRecordFileComplete;
 ```
@@ -1133,6 +1216,7 @@ public abstract event QAVRecordFileCompleteCallback OnRecordFileComplete;
 | filepath    |string                      |录制的存放地址|
 
 > 示例代码  
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetPttCtrl().OnRecordFileComplete += mInnerHandler;
@@ -1145,10 +1229,12 @@ void mInnerHandler(int code, string filepath){
 ### 停止录音
 此接口用于停止录音。
 > 函数原型  
+
 ```
 ITMGPTT int StopRecording()
 ```
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetPttCtrl().StopRecording();
 ```
@@ -1169,6 +1255,7 @@ IQAVContext.GetInstance().GetPttCtrl().CancelRecording();
 ### 上传语音文件
 此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
+
 ```
 IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
 ```
@@ -1177,27 +1264,30 @@ IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
 | filePath    |string                      |上传的语音路径|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
-> 示例代码  
+> 示例代码
+
 ```
-IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath，authBuffer); 
+IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath，authBuffer);
 ```
 
 
 ### 上传语音完成的回调
 上传语音完成的回调，通过委托传递消息。
-> 函数原型  
+> 函数原型
+
 ```
 委托函数：
 public delegate void QAVUploadFileCompleteCallback(int code, string filepath, string fileid);
 事件函数：
-public abstract event QAVUploadFileCompleteCallback OnUploadFileComplete; 
+public abstract event QAVUploadFileCompleteCallback OnUploadFileComplete;
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | code    |int                       |当code为0时，录制完成|
 | filepath    |string                      |录制的存放地址|
 | fileid    |string                      |文件的url路径|
-> 示例代码  
+> 示例代码
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetPttCtrl().OnUploadFileComplete += mInnerHandler;
@@ -1211,6 +1301,7 @@ void mInnerHandler(int code, string filepath, string fileid){
 ### 下载语音文件
 此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
+
 ```
 IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] authBuffer)
 ```
@@ -1220,7 +1311,8 @@ IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] aut
 | downloadFilePath    |string                       |文件的本地保存路径|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
-> 示例代码  
+> 示例代码
+
 ```
 IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath，authBuffer);
 ```
@@ -1229,6 +1321,7 @@ IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath，
 ### 下载语音文件完成回调
 下载语音文件完成回调，通过委托传递消息。
 > 函数原型  
+
 ```
 委托函数：
 public delegate void QAVDownloadFileCompleteCallback(int code, string filepath, string fileid);
@@ -1241,6 +1334,7 @@ public abstract event QAVDownloadFileCompleteCallback OnDownloadFileComplete
 | filepath    |string                      |录制的存放地址|
 | fileid    |string                      |文件的url路径|
 > 示例代码  
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetPttCtrl().OnDownloadFileComplete += mInnerHandler;
@@ -1254,7 +1348,8 @@ void mInnerHandler(int code, string filepath, string fileid){
 
 ### 播放语音
 此接口用于播放语音。
-> 函数原型  
+> 函数原型
+
 ```
 IQAVPTT PlayRecordedFile (string downloadFilePath)
 ```
@@ -1262,14 +1357,16 @@ IQAVPTT PlayRecordedFile (string downloadFilePath)
 | ------------- |:-------------:|-------------|
 | downloadFilePath    |string                       |文件的路径|
 > 示例代码  
+
 ```
-IQAVContext.GetInstance().GetPttCtrl().PlayRecordedFile(filePath); 
+IQAVContext.GetInstance().GetPttCtrl().PlayRecordedFile(filePath);
 ```
 
 
 ### 播放语音的回调
 播放语音的回调，通过委托传递消息。
 > 函数原型  
+
 ```
 委托函数：
 public delegate void QAVPlayFileCompleteCallback(int code, string filepath);
@@ -1282,6 +1379,7 @@ public abstract event QAVPlayFileCompleteCallback OnPlayFileComplete;
 | filepath    |string                      |录制的存放地址|
 
 > 示例代码  
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetPttCtrl().OnPlayFileComplete += mInnerHandler;
@@ -1297,11 +1395,13 @@ void mInnerHandler(int code, string filepath){
 ### 停止播放语音
 此接口用于停止播放语音。
 > 函数原型  
+
 ```
 IQAVPTT int StopPlayFile()
 ```
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetPttCtrl().StopPlayFile();
 ```
@@ -1311,20 +1411,23 @@ IQAVContext.GetInstance().GetPttCtrl().StopPlayFile();
 ### 获取语音文件的大小
 通过此接口，获取语音文件的大小。
 > 函数原型  
+
 ```
-IQAVPTT GetFileSize(string filePath) 
+IQAVPTT GetFileSize(string filePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |string                      |语音文件的路径|
 > 示例代码  
+
 ```
 int fileSize = IQAVContext.GetInstance().GetPttCtrl().GetFileSize(filepath);
 ```
 
 ### 获取语音文件的时长
-此接口用于获取语音文件的时长。
+此接口用于获取语音文件的时长，单位毫秒。
 > 函数原型  
+
 ```
 IQAVPTT int GetVoiceFileDuration(string filePath)
 ```
@@ -1332,16 +1435,18 @@ IQAVPTT int GetVoiceFileDuration(string filePath)
 | ------------- |:-------------:|-------------|
 | filePath    |string                      |语音文件的路径|
 > 示例代码  
+
 ```
 int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuration(filepath);
 ```
 
 
 
-### 将指定的语音文件识别为文字
-此接口用于将指定的语音文件识别为文字。鉴权码的生成参考接口 GenAuthBuffer。
+### 将指定的语音文件识别成文字
+此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
 
 > 函数原型  
+
 ```
 IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
 ```
@@ -1351,6 +1456,7 @@ IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
 | authBuffer 	|Byte[] 	|鉴权码					|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID，authBuffer);
 ```
@@ -1360,6 +1466,7 @@ IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID，authBuffer);
 将指定的语音文件识别成文字，通过委托传递消息。
 
 > 函数原型  
+
 ```
 委托函数：
 public delegate void QAVSpeechToTextCallback(int code, string fileid, string result);
@@ -1371,7 +1478,8 @@ public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 | code    |int                       |当code为0时，录制完成|
 | filepath    |string                      |录制的存放地址|
 | result    |string                      |转换的文本结果|
-> 示例代码  
+> 示例代码
+
 ```
 对事件进行监听：
 IQAVContext.GetInstance().GetPttCtrl().OnSpeechToTextComplete += mInnerHandler;
@@ -1384,10 +1492,12 @@ void mInnerHandler(int code, string fileid, string result){
 ### 获取版本号
 获取 SDK 版本号，用于分析。
 > 函数原型
+
 ```
 ITMGContext  abstract string GetSDKVersion()
 ```
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().GetSDKVersion();
 ```
@@ -1399,6 +1509,7 @@ IQAVContext.GetInstance().GetSDKVersion();
 ### 设置打印日志等级
 用于设置打印日志等级。
 > 函数原型
+
 ```
 ITMGContext  SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
 ```
@@ -1420,6 +1531,7 @@ ITMGContext  SetLogLevel(int logLevel, bool enableWrite, bool enablePrint)
 |TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志	|
 |TMG_LOG_LEVEL_VERBOSE=4		|打印高频日志		|
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().SetLogLevel(TMG_LOG_LEVEL_NONE,true,true);
 ```
@@ -1436,6 +1548,7 @@ IQAVContext.GetInstance().SetLogLevel(TMG_LOG_LEVEL_NONE,true,true);
 |Mac    		|/Users/username/Library/Containers/xxx.xxx.xxx/Data/Documents|
 
 > 函数原型
+
 ```
 ITMGContext  SetLogPath(string logDir)
 ```
@@ -1445,16 +1558,19 @@ ITMGContext  SetLogPath(string logDir)
 | logDir    		|NSString   		|路径|
 
 > 示例代码  
+
 ```
 IQAVContext.GetInstance().SetLogPath(path);
 ```
 ### 获取诊断信息
 获取音视频通话的实时通话质量的相关信息。该接口主要用来查看实时通话质量、排查问题等，业务侧可以忽略。
 > 函数原型  
+
 ```
 IQAVRoom GetQualityTips()
 ```
 > 示例代码  
+
 ```
 string tips = IQAVContext.GetInstance().GetRoom().GetQualityTips();
 ```
@@ -1490,5 +1606,3 @@ ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string openId)
 ```
 IQAVContext.GetInstance().GetAudioCtrl ().RemoveAudioBlackList (id);
 ```
-
-

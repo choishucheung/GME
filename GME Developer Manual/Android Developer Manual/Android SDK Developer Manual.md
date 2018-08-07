@@ -28,8 +28,11 @@
 |Init    		|初始化 GME 	|
 |Poll    		|触发事件回调	|
 |EnterRoom	 	|进房  		|
-|EnableMic	 	|开麦克风 	|
-|EnableSpeaker		|开扬声器 	|
+|EnableAudioCaptureDevice	 	|开关采集设备 	|
+|EnableAudioSend		|打开关闭音频上行 	|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|EnableAudioRecv    					|打开关闭音频下行	|
+
 
 **说明**
 
@@ -38,6 +41,8 @@
 **GME 的接口调用要在同一个线程下。**
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
+
+**GME 需要调用 Poll 接口触发事件回调。**
 
 **此文档对应GME sdk version：2.0.2.38430。**
 
@@ -206,7 +211,7 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int   		|房间号，只支持32位				|
-| identifier    	|String 	|用户标识					|
+| openID    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云控制台的密钥				|
 | expTime    		|int   		|authBuffer 超时时间				|
 | authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
@@ -224,11 +229,11 @@ byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkApp
 
 > 函数原型
 ```
-ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[] authBuffer)
+ITMGContext public abstract void  EnterRoom(int roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId 	|int		|房间号，只支持32位	|
+| roomId 	|int		|房间号，只支持32位	|
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
@@ -244,7 +249,7 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, authBuffer);    
+ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(roomId),roomType, authBuffer);    
 ```
 
 ### 加入房间事件的回调
@@ -273,7 +278,7 @@ ITMGContext.GetInstance(this).IsRoomEntered();
 ```
 
 ### 退出房间
-通过调用此接口可以退出所在房间。
+通过调用此接口可以退出所在房间。这是一个同步接口，调用返回时会释放所占用的设备资源。
 > 函数原型  
 ```
 ITMGContext public void ExitRoom()
@@ -343,7 +348,7 @@ ITMGContext.GetInstance(this).GetRoom().GetRoomType();
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE == type)
         {
-		//对房间类型事件进行处理
+		//房间类型改变后的处理
 	 }
 }
 ```
@@ -409,27 +414,37 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 
 ## 实时语音音频接口
 初始化 SDK 之后进房，在房间中，才可以调用实时音频语音相关接口。
+调用场景举例：
+
+当用户界面点击打开/关闭麦克风/扬声器按钮时，建议如下方式：
+- 对于大部分的游戏类 App，总是应该同时调用 EnableAudioCaptureDevice/EnableAudioSend 和 EnableAudioPlayDevice/EnableAudioRecv；
+- 其他类型的移动端 App 例如社交类型 App，打开或者关闭采集设备，会伴随整个设备（采集及播放）重启，如果此时 App 正在播放背景音乐，那么背景音乐的播放也会被中断。利用控制上下行的方式来实现开关麦克风效果，不会中断播放设备。具体调用方式为：在进房的时候调用 EnableAudioCaptureDevice(true) && EnabledAudioPlayDevice(true) 一次，点击开关麦克风时只调用 EnableAudioSend/Recv 来控制音频流是否发送/接收。
+
+如目的是互斥（释放录音权限给其他模块使用），建议使用 PauseAudio/ResumeAudio。
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|PauseAudio    				       	|暂停音频引擎|
-|ResumeAudio    				      	|恢复音频引擎|
-|EnableMic    						|开关麦克风|
-|GetMicState    						|获取麦克风状态|
-|GetMicLevel    						|获取实时麦克风音量|
-|SetMicVolume    					|设置麦克风音量|
-|GetMicVolume    					|获取麦克风音量|
-|EnableSpeaker    					|开关扬声器|
-|GetSpeakerState    					|获取扬声器状态|
-|GetSpeakerLevel    					|获取实时扬声器音量|
-|SetSpeakerVolume    				|设置扬声器音量|
-|GetSpeakerVolume    				|获取扬声器音量|
-|EnableLoopBack    					|开关耳返|
+|PauseAudio    				       	   |暂停音频引擎		|
+|ResumeAudio    				      	 |恢复音频引擎		|
+|EnableAudioCaptureDevice    		|开关采集设备		|
+|IsAudioCaptureDeviceEnabled    	|获取采集设备状态	|
+|EnableAudioSend    				|打开关闭音频上行	|
+|IsAudioSendEnabled    				|获取音频上行状态	|
+|GetMicLevel    						|获取实时麦克风音量	|
+|SetMicVolume    					|设置麦克风音量		|
+|GetMicVolume    					|获取麦克风音量		|
+|EnableAudioPlayDevice    			|开关播放设备		|
+|IsAudioPlayDeviceEnabled    		|获取播放设备状态	|
+|EnableAudioRecv    					|打开关闭音频下行	|
+|IsAudioRecvEnabled    				|获取音频下行状态	|
+|GetSpeakerLevel    					|获取实时扬声器音量	|
+|SetSpeakerVolume    				|设置扬声器音量		|
+|GetSpeakerVolume    				|获取扬声器音量		|
+|EnableLoopBack    					|开关耳返			|
 
 ### 暂停音频引擎的采集和播放
-调用此接口暂停音频引擎的采集和播放，只在进房后有效。
-在 EnterRoom 接口调用成功之后之后就会占用麦克风权限，期间其他程序无法进行麦克风采集。调用 EnableMic(false) 无法释放麦克风占用。
-如果确实需要释放麦克风，请调用 PauseAudio 接口。调用 PauseAudio 接口后会整个暂停引擎，调用 ResumeAudio 接口可恢复音频采集。
+调用此接口暂停音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
+如果想单独释放采集或者播放设备，请参考接口 EnableAudioCaptureDevice 及 EnableAudioPlayDevice。
 
 > 函数原型  
 ```
@@ -441,7 +456,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().PauseAudio();
 ```
 
 ### 恢复音频引擎的采集和播放
-调用此接口恢复音频引擎的采集和播放，只在进房后有效。
+调用此接口恢复音频引擎的采集和播放，此接口为同步接口，且只在进房后有效。
 > 函数原型  
 ```
 ITMGContext ITMGAudioCtrl public int ResumeAudio()
@@ -453,55 +468,69 @@ ITMGContext.GetInstance(this).GetAudioCtrl().ResumeAudio();
 
 
 
-### 开启关闭麦克风
-此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
+### 开启关闭采集设备
+此接口用来开启/关闭采集设备。加入房间默认不打开设备。
+- 只能在进房后调用此接口，退房会自动关闭设备。
+- 在移动端，打开采集设备通常会伴随权限申请，音量类型调整等操作。
 
 > 函数原型  
+
 ```
-ITMGContext public void EnableMic(boolean isEnabled)
+ITMGContext public int EnableAudioCaptureDevice(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开麦克风，则传入的参数为 true，如果关闭麦克风，则参数为 false|
-> 示例代码  
+| isEnabled    |boolean     |如果需要打开采集设备，则传入的参数为 true，如果关闭采集设备，则参数为 false|
+
+> 示例代码
+
 ```
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(true);
+打开采集设备
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioCaptureDevice(true);
 ```
 
-### 麦克风事件的回调
-麦克风事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了麦克风，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_MIC， ITMG_MAIN_EVENT_TYPE_DISABLE_MIC，在 OnEvent 函数中对事件消息进行判断。
-传递的参数 intent 包含两个信息，一个是 audio_state，另一个是 audio_errcode。
+### 采集设备状态获取
+此接口用于采集设备状态获取。
+> 函数原型
+
+```
+ITMGContext public boolean IsAudioCaptureDeviceEnabled()
+```
+> 示例代码
+
+```
+bool IsAudioCaptureDevice =ITMGContext.GetInstance(this).GetAudioCtrl().IsAudioCaptureDeviceEnabled();
+```
+
+### 打开关闭音频上行
+此接口用于打开/关闭音频上行。如果采集设备已经打开，那么会发送采集到的音频数据。如果采集设备没有打开，那么仍旧无声。采集设备的打开关闭参见接口 EnableAudioCaptureDevice。
+
+> 函数原型
+
+```
+ITMGContext public int EnableAudioSend(boolean isEnabled)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| isEnabled    |boolean     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
+
 > 示例代码  
+
 ```
-public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENABLE_MIC == type)
-        {
-		nErrCode = data.getIntExtra("audio_errcode", 0);
-		if (nErrCode == AVError.AV_OK)
-            		{
-				//打开麦克风成功
-			}
-	}
-	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_DISABLE_MIC == type)
-        {
-		nErrCode = data.getIntExtra("audio_errcode", 0);
-		if (nErrCode == AVError.AV_OK)
-            		{
-				//关闭麦克风成功
-			}
-	}
-}
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioSend(true);
 ```
-### 麦克风状态获取
-此接口用于获取麦克风状态，返回值 0 为关闭麦克风状态，返回值 1 为打开麦克风状态，返回值 2 为麦克风设备正在操作中，返回值 3 为麦克风设备不存在，返回值 4 为设备没初始化好。
+
+### 音频上行状态获取
+此接口用于音频上行状态获取。
 > 函数原型  
 ```
-ITMGContext TMGAudioCtrl int GetMicState() 
+ITMGContext TMGAudioCtrl boolean IsAudioSendEnabled()
 ```
 > 示例代码  
 ```
-int micState = ITMGContext.GetInstance(this).GetAudioCtrl().GetMicState();
+bool IsAudioSend =  =ITMGContext.GetInstance(this).GetAudioCtrl().IsAudioSendEnabled();
 ```
+
 
 ### 获取麦克风实时音量
 此接口用于获取麦克风实时音量，返回值为 int 类型。
@@ -522,7 +551,7 @@ ITMGContext TMGAudioCtrl int SetMicVolume(int volume)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| volume    |int      |设置音量，范围 0 到 150|
+| volume    |int      |设置音量，范围 0 到 200|
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().SetMicVolume(volume);
@@ -538,56 +567,66 @@ ITMGContext TMGAudioCtrl public int GetMicVolume()
 ITMGContext.GetInstance(this).GetAudioCtrl().GetMicVolume();
 ```
 
-### 开启关闭扬声器
-此接口用于开启关闭扬声器。
+### 开启关闭播放设备
+此接口用于开启关闭播放设备。
+
 > 函数原型  
 ```
-ITMGContext public void EnableSpeaker(boolean isEnabled)
+ITMGContext public int EnableAudioPlayDevice(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean       |如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true|
+| isEnabled    |boolean        |如果需要关闭播放设备，则传入的参数为 false，如果打开播放设备，则参数为 true|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioPlayDevice(true);
 ```
 
-### 扬声器事件的回调
-扬声器事件的回调调用函数 OnEvent，SDK 通过此回调通知成功调用了扬声器，事件消息为 ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER， ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER。
-传递的参数 intent 包含两个信息，一个是 audio_state，另一个是 audio_errcode。
+### 播放设备状态获取
+此接口用于播放设备状态获取。
+> 函数原型
+
+```
+ITMGContext public int IsAudioPlayDeviceEnabled()
+```
 > 示例代码  
+
 ```
-public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
-	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER == type)
-        {
-		nErrCode = data.getIntExtra("audio_errcode", 0);
-		if (nErrCode == AVError.AV_OK)
-            		{
-				//打开扬声器成功
-			}
-	}
-	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER == type)
-        {
-		nErrCode = data.getIntExtra("audio_errcode", 0);
-		if (nErrCode == AVError.AV_OK)
-            		{
-				//关闭扬声器成功
-			}
-	}
-}
+bool IsAudioPlayDevice = ITMGContext.GetInstance(this).GetAudioCtrl().IsAudioPlayDeviceEnabled();
 ```
 
-### 扬声器状态获取
-此接口用于扬声器状态获取。返回值 0 为关闭扬声器状态，返回值 1 为打开扬声器状态，返回值 2 为扬声器设备正在操作中，返回值 3 为扬声器设备不存在，返回值 4 为设备没初始化好。
+### 打开关闭音频下行
+此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。播放设备的打开关闭参见接口 参见EnableAudioPlayDevice。
+
+> 函数原型  
+
+```
+ITMGContext public int EnableAudioRecv(boolean isEnabled)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| isEnabled    |boolean     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
+
+> 示例代码  
+
+```
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioRecv(true);
+```
+
+
+
+### 音频下行状态获取
+此接口用于音频下行状态获取。
 > 函数原型  
 ```
-ITMGContext TMGAudioCtrl public int GetSpeakerState() 
+ITMGContext TMGAudioCtrl public boolean IsAudioRecvEnabled()
 ```
 
 > 示例代码  
 ```
-int micState = ITMGContext.GetInstance(this).GetAudioCtrl().GetSpeakerState();
+bool IsAudioRecv = ITMGContext.GetInstance(this).GetAudioCtrl().IsAudioRecvEnabled();
 ```
+
 
 ### 获取扬声器实时音量
 此接口用于获取扬声器实时音量。返回值为 int 类型数值，表示扬声器实时音量。
@@ -611,7 +650,7 @@ ITMGContext TMGAudioCtrl public int SetSpeakerVolume(int volume)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| volume    |int        |设置音量，范围 0 到 150|
+| volume    |int        |设置音量，范围 0 到 200|
 > 示例代码  
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().SetSpeakerVolume(volume);
@@ -644,25 +683,6 @@ ITMGContext TMGAudioCtrl public int EnableLoopBack(boolean enable)
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().EnableLoopBack(true);
 ```
-
-### 消息详情
-
-|消息     | 消息代表的意义   
-| ------------- |:-------------:|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				       |打开麦克风消息|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				       |关闭麦克风消息|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER				       |打开扬声器消息|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER				       |关闭扬声器消息|
-
-### 消息对应的Data详情
-|消息     | Data         |例子|
-| ------------- |:-------------:|------------- |
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    				|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    			|result; error_info  					|{"error_info":"","result":0}|
-
-
 
 
 ## 实时语音伴奏相关接口
@@ -835,7 +855,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetAccompanyFileCurrentPlayed
 
 
 ### 播放音效
-此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。
+此接口用于播放音效。参数中音效 id 需要 App 侧进行管理，唯一标识一个独立文件。文件支持 m4a、AAC、wav、mp3 一共四种格式。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public int PlayEffect(int soundId, String filePath, boolean loop) 
@@ -994,9 +1014,10 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 
 ## 离线语音
+使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+
 |接口     | 接口含义   |
 | ------------- |:-------------:|
-|genSig    		|离线语音鉴权		|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1007,42 +1028,8 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 |StopPlayFile		|停止播放语音		|
 |GetFileSize 		|语音文件的大小		|
 |GetVoiceFileDuration	|语音文件的时长		|
-|SpeechToText 		|识别语音消息		|
+|SpeechToText 		|语音识别成文字		|
 
-
-### 离线语音技术接入初始化
-初始化需要传入鉴权 access token 给 TLS 相关函数。鉴权的获取详细流程见[GME密钥文档](../GME%20Key%20Manual.md)。  
-> 函数原型  
-```
-TlsSig public String getTLSSig(int sdkAppId, String openID, String key) 
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| sdkAppId  	|int           	|来自腾讯云控制台的 SdkAppId 号码|
-| openID    	|String   	|唯一标识一个用户，规则由 App 开发者自行制定|
-| key    		|String      	|来自腾讯云控制台的鉴权|
-
-```
-ITMGPTT public int ApplyAccessToken(String accessToken)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| accessToken    |String                       |getTLSSig 函数返回的 accessToken|
-> 示例代码  
-```
-private String GetAccessToken(String appid,String userid){
-	String key ="";//填入自己的鉴权
-	return TlsSig.getInstance().getTLSSig(Integer.parseInt(appid),userid,key);
-}
-
-//调用
-String sig = GetAccessToken(sdkAppId,identifier);
-	if (sig!=null){
-		ITMGContext.GetInstance(this).GetPTT().ApplyAccessToken(sig);
-	}else {
-		Log.e("Sig","SigError");
-	}
-```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1082,7 +1069,7 @@ ITMGContext.GetInstance(this).GetPTT().StartRecording(fileDir);
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	if (ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE == type)
         	{
-            		//录音回调
+            		//启动录音的回调
         	}
 }
 ```
@@ -1112,17 +1099,18 @@ ITMGContext.GetInstance(this).GetPTT().CancelRecording();
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。
+此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
-ITMGContext TMGPTT public void UploadRecordedFile(String filePath)
+ITMGContext TMGPTT public void UploadRecordedFile(String filePath ,byte[] AuthBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |String                      |上传的语音路径|
+| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().UploadRecordedFile(filePath);
+ITMGContext.GetInstance(this).GetPTT().UploadRecordedFile(filePath,authbuffer);
 ```
 
 
@@ -1133,25 +1121,26 @@ ITMGContext.GetInstance(this).GetPTT().UploadRecordedFile(filePath);
 public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	if(ITMGContext.ITMG_MAIN_EVENT_TYPE.ITMG_MAIN_EVNET_TYPE_PTT_UPLOAD_COMPLETE== type)
        	 {
-           	//上传语音成功
+           	//上传语音完成的回调
        	 }
 }
 ```
 
 
 ### 下载语音文件
-此接口用于下载语音文件。
+此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
 > 函数原型  
 ```
-ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downloadFilePath)
+ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downloadFilePath,byte[] AuthBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    			|String                      |文件的url路径	|
 | downloadFilePath 	|String                      |文件的本地保存路径	|
+| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path);
+ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path,authBuffer);
 ```
 
 
@@ -1243,17 +1232,19 @@ ITMGContext.GetInstance(this).GetPTT().GetVoiceFileDuration(path);
 
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。
+此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
+
 > 函数原型  
 ```
-ITMGContext TMGPTT public int SpeechToText(String fileID)
+ITMGContext TMGPTT public int SpeechToText(String fileID,byte[] AuthBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |String                     |语音文件 url|
+| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID);
+ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID,authBuffer);
 ```
 
 ### 识别回调
@@ -1386,10 +1377,6 @@ ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
 |ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|退出音频房间消息		|
 |ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT		|房间因为网络等原因断开消息	|
 |ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE		|房间类型变化事件		|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|打开麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|关闭麦克风消息			|
-|ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER		|打开扬声器消息			|
-|ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER		|关闭扬声器消息			|
 |ITMG_MAIN_EVENT_TYPE_ACCOMPANY_FINISH		|伴奏结束消息			|
 |ITMG_MAIN_EVNET_TYPE_USER_UPDATE		|房间成员更新消息		|
 |ITMG_MAIN_EVNET_TYPE_PTT_RECORD_COMPLETE	|PTT 录音完成			|
@@ -1398,7 +1385,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
 |ITMG_MAIN_EVNET_TYPE_PTT_PLAY_COMPLETE		|播放 PTT 完成			|
 |ITMG_MAIN_EVNET_TYPE_PTT_SPEECH2TEXT_COMPLETE	|语音转文字完成			|
 
-> Data 列表
+> Data 列表：
 
 |消息     | Data         |例子|
 | ------------- |:-------------:|------------- |
@@ -1406,10 +1393,6 @@ ITMGContext.GetInstance(this).GetAudioCtrl().RemoveAudioBlackList(openId);
 | ITMG_MAIN_EVENT_TYPE_EXIT_ROOM    		|result; error_info  			|{"error_info":"","result":0}|
 | ITMG_MAIN_EVENT_TYPE_ROOM_DISCONNECT    	|result; error_info  			|{"error_info":"waiting timeout, please check your network","result":0}|
 | ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_TYPE    	|result; error_info; new_room_type	|{"error_info":"","new_room_type":0,"result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_MIC    		|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_ENABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
-| ITMG_MAIN_EVENT_TYPE_DISABLE_SPEAKER    	|result; error_info  			|{"error_info":"","result":0}|
 | ITMG_MAIN_EVENT_TYPE_SPEAKER_NEW_DEVICE	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":false,"result":0}|
 | ITMG_MAIN_EVENT_TYPE_SPEAKER_LOST_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.0.00000000}.{a4f1e8be-49fa-43e2-b8cf-dd00542b47ae}","deviceName":"扬声器 (Realtek High Definition Audio)","error_info":"","isNewDevice":false,"isUsedDevice":false,"result":0}|
 | ITMG_MAIN_EVENT_TYPE_MIC_NEW_DEVICE    	|result; error_info  			|{"deviceID":"{0.0.1.00000000}.{5fdf1a5b-f42d-4ab2-890a-7e454093f229}","deviceName":"麦克风 (Realtek High Definition Audio)","error_info":"","isNewDevice":true,"isUsedDevice":true,"result":0}|
