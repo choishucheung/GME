@@ -1014,7 +1014,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 
 ## 离线语音
-使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+使用离线语音及转文字功能需要先初始化 SDK。
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
@@ -1099,18 +1099,17 @@ ITMGContext.GetInstance(this).GetPTT().CancelRecording();
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于上传语音文件。
 > 函数原型  
 ```
-ITMGContext TMGPTT public void UploadRecordedFile(String filePath ,byte[] AuthBuffer)
+ITMGContext TMGPTT public void UploadRecordedFile(String filePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |String                      |上传的语音路径|
-| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().UploadRecordedFile(filePath,authbuffer);
+ITMGContext.GetInstance(this).GetPTT().UploadRecordedFile(filePath);
 ```
 
 
@@ -1128,19 +1127,18 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 
 
 ### 下载语音文件
-此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于下载语音文件。
 > 函数原型  
 ```
-ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downloadFilePath,byte[] AuthBuffer)
+ITMGContext TMGPTT public void DownloadRecordedFile(String fileID, String downloadFilePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    			|String                      |文件的url路径	|
 | downloadFilePath 	|String                      |文件的本地保存路径	|
-| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path,authBuffer);
+ITMGContext.GetInstance(this).GetPTT().DownloadRecordedFile(url,path);
 ```
 
 
@@ -1232,19 +1230,18 @@ ITMGContext.GetInstance(this).GetPTT().GetVoiceFileDuration(path);
 
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于将指定的语音文件识别成文字。
 
 > 函数原型  
 ```
-ITMGContext TMGPTT public int SpeechToText(String fileID,byte[] AuthBuffer)
+ITMGContext TMGPTT public int SpeechToText(String fileID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |String                     |语音文件 url|
-| authBuffer    |byte[]                    |鉴权码|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID,authBuffer);
+ITMGContext.GetInstance(this).GetPTT().SpeechToText(fileID);
 ```
 
 ### 识别回调

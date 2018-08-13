@@ -146,12 +146,12 @@ ITMGContext public abstract int Uninit()
 ### 实时语音鉴权信息
 
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
-
+离线语音获取鉴权时，房间号参数必须填0。
 该接口返回值为 Byte[] 类型。
 > 函数原型
 
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key, int expTime, uint authBits)
+QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -159,18 +159,13 @@ QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string 
 | roomId    		|int   		|房间号，只支持32位				|
 | openId    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云控制台的密钥				|
-| expTime    		|int   		|authBuffer 超时时间				|
-| authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
 > 示例代码  
 
 ```
-byte[] GetAuthBuffer(string appId, string userId, int roomId, uint authBits)
+byte[] GetAuthBuffer(string appId, string userId, int roomId)
     {
-	TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-	double timeStamp = t.TotalSeconds;
-	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9", (int)timeStamp + 1800, authBits);
+	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9");
 }
-byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
 ```
 
 ### 加入房间
@@ -1150,10 +1145,11 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 
 
 ## 离线语音
-使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+使用离线语音及转文字功能需要先初始化 SDK。
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
+|ApplyPTTAuthbuffer    |鉴权初始化	|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1166,6 +1162,20 @@ IQAVContext.GetInstance().GetAudioEffectCtrl().SetEffectsVolume(volume);
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|语音识别成文字			|
 
+### 鉴权初始化
+在初始化 SDK 之后调用鉴权初始化，authBuffer 的获取参见上文实时语音鉴权信息接口。
+> 函数原型  
+```
+ITMGPTT int ApplyPTTAuthbuffer (byte[] authBuffer)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| authBuffer    |byte[]                   |鉴权|
+
+> 示例代码  
+```
+IQAVContext.GetInstance().GetPttCtrl().ApplyPTTAuthbuffer(authBuffer);
+```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1253,21 +1263,20 @@ IQAVContext.GetInstance().GetPttCtrl().CancelRecording();
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于上传语音文件。
 > 函数原型  
 
 ```
-IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
+IQAVPTT int UploadRecordedFile (string filePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |string                      |上传的语音路径|
-| authBuffer 	|Byte[] 	|鉴权码					|
 
 > 示例代码
 
 ```
-IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath，authBuffer);
+IQAVContext.GetInstance().GetPttCtrl().UploadRecordedFile(filePath);
 ```
 
 
@@ -1299,22 +1308,21 @@ void mInnerHandler(int code, string filepath, string fileid){
 
 
 ### 下载语音文件
-此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于下载语音文件。
 > 函数原型  
 
 ```
-IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] authBuffer)
+IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |string                       |文件的url路径|
 | downloadFilePath    |string                       |文件的本地保存路径|
-| authBuffer 	|Byte[] 	|鉴权码					|
 
 > 示例代码
 
 ```
-IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath，authBuffer);
+IQAVContext.GetInstance().GetPttCtrl().DownloadRecordedFile(fileId, filePath);
 ```
 
 
@@ -1443,22 +1451,21 @@ int fileDuration = IQAVContext.GetInstance().GetPttCtrl().GetVoiceFileDuratio
 
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于将指定的语音文件识别成文字。
 
 > 函数原型  
 
 ```
-IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
+IQAVPTT int SpeechToText(String fileID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |string                      |语音文件 url|
-| authBuffer 	|Byte[] 	|鉴权码					|
 
 > 示例代码  
 
 ```
-IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID，authBuffer);
+IQAVContext.GetInstance().GetPttCtrl().SpeechToText(fileID);
 ```
 
 ### 识别回调

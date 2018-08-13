@@ -202,30 +202,27 @@ ITMGContext -(QAVResult)SetDefaultAudienceAudioCategory:(ITMG_AUDIO_CATEGORY)aud
 
 
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。离线语音获取鉴权时，房间号参数必须填0。
 该接口返回值为 NSData 类型。
 > 函数原型
-
 ```
 @interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId openID:(NSString*)openID  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
-@end
++ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier key:(NSString*)key;
++ @end
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
 | roomId    		|int  		|房间号，只支持32位							|
-| openID  		|NSString    	|用户标识								|
+| identifier  		|NSString    	|用户标识								|
 | key    			|NSString    	|来自腾讯云控制台的密钥					|
-| expTime    		|int   		|authBuffer 超时时间						|
-| authBits   	 	|uint64    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）									|
 
 
 
 > 示例代码  
 
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId openID:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId openID:_openId key:AUTHKEY];
 ```
 
 ### 加入房间
@@ -1086,10 +1083,11 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 ```
 
 ## 离线语音
-使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+使用离线语音及转文字功能需要先初始化 SDK。
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
+|ApplyPTTAuthbuffer    |鉴权初始化	|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1102,6 +1100,22 @@ ITMGContext GetAudioEffectCtrl -(QAVResult)SetEffectsVolume:(int)volume
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|语音识别成文字		|
 
+ApplyPTTAuthbuffer:(NSData *)authBuffer;
+
+### 鉴权初始化
+在初始化 SDK 之后调用鉴权初始化，authBuffer 的获取参见上文实时语音鉴权信息接口。
+> 函数原型  
+```
+ITMGContext GetPTT -(QAVResult)ApplyPTTAuthbuffer:(NSData *)authBuffer
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| authBuffer    |NSData*                    |鉴权|
+
+> 示例代码  
+```
+[[[ITMGContext GetInstance]GetPTT]ApplyPTTAuthbuffer:(NSData *)authBuffer];
+```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1181,20 +1195,19 @@ ITMGContext GetPTT -(QAVResult)CancelRecording
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于上传语音文件。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath  authBuffer:(NSData *)authBuffer
+ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath 
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |NSString                      |上传的语音路径|
-| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path authBuffer:authBuffer];
+[[[ITMGContext GetInstance]GetPTT]UploadRecordedFile:path];
 ```
 
 ### 上传语音完成的回调
@@ -1213,21 +1226,20 @@ ITMGContext GetPTT -(void)UploadRecordedFile:(NSString*)filePath  authBuffer:(NS
 ```
 
 ### 下载语音文件
-此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于下载语音文件。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath  authBuffer:(NSData *)authBuffer
+ITMGContext GetPTT -(void)DownloadRecordedFile:(NSString*)fileId downloadFilePath:(NSString*)downloadFilePath 
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    			|NSString                      |文件的url路径		|
 | downloadFilePath 	|NSString                      |文件的本地保存路径	|
-| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]DownloadRecordedFile:fileIdpath downloadFilePath:path authBuffer:authBuffer];
+[[[ITMGContext GetInstance]GetPTT]DownloadRecordedFile:fileIdpath downloadFilePath:path];
 ```
 
 ### 下载语音文件完成回调
@@ -1322,20 +1334,19 @@ ITMGContext GetPTT -(int)GetVoiceFileDuration:(NSString*)filePath
 ```
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于将指定的语音文件识别成文字。
 > 函数原型  
 
 ```
-ITMGContext GetPTT -(void)SpeechToText:(NSString*)fileID  authBuffer:(NSData *)authBuffer
+ITMGContext GetPTT -(void)SpeechToText:(NSString*)fileID
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |NSString                     |语音文件 url|
-| authBuffer    |NSData *                      |鉴权码|
 > 示例代码  
 
 ```
-[[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID authBuffer:authBuffer];
+[[[ITMGContext GetInstance]GetPTT]SpeechToText:fileID];
 ```
 
 ### 识别回调

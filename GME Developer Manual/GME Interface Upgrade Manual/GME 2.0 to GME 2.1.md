@@ -126,47 +126,7 @@ QAVSig GenSig
 
 IQAVPTT ApplyAccessToken
 
-删除之后在以下接口中增加 authBuffer 参数，客户端生成的 authBuffer 最长有效期为24小时，需开发者自行维护，详情参考离线语音鉴权文档。
-
 - ### 离线语音上传语音文件
 #### 增加参数 authBuffer。
-
-此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
-> 函数原型  
-```
-IQAVPTT int UploadRecordedFile (string filePath, byte[] authBuffer)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| filePath    		|string   	|上传的语音路径	|
-| authBuffer 	|Byte[] 	|鉴权码			|
-
-
-- ### 离线语音下载语音文件
-#### 增加参数 authBuffer。
-此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
-> 函数原型  
-```
-IQAVPTT DownloadRecordedFile (string fileID, string downloadFilePath, byte[] authBuffer)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| fileID    |string                       |文件的url路径|
-| downloadFilePath    |string                       |文件的本地保存路径|
-| authBuffer 	|Byte[] 	|鉴权码					|
-
-
-- ### 将指定的语音文件识别为文字
-#### 增加参数 authBuffer。
-此接口用于将指定的语音文件识别为文字。鉴权码的生成参考接口 GenAuthBuffer。
-> 函数原型  
-```
-IQAVPTT int SpeechToText(String fileID, byte[] authBuffer)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| fileID    |string                      |语音文件 url|
-| authBuffer 	|Byte[] 	|鉴权码					|
-
 
 

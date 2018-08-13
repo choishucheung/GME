@@ -207,10 +207,11 @@ context->Uninit();
 
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
+离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int roomId, const char* strOpenID, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, unsigned int dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -218,10 +219,8 @@ QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, u
 | roomId    		|int  		|房间号，只支持32位				|
 | strOpenID  		|char*    	|用户标识					|
 | key    		|char*	    	|来自腾讯云控制台的密钥				|
-| expTime    		|int   		|authBuffer 超时时间				|
-| privilegeMap   	|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
-| retAuthBuff   	|char*    	|返回的 authbuff				|
 | buffLenght   		|int    	|返回的authbuff的长度				|
+
 
 
 
@@ -231,7 +230,7 @@ unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
 unsigned int expTime = cocos2d::utils::gettime()+60*60*24*3;
 
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY,&bufferLen);
 ```
 
 ### 加入房间
@@ -1217,10 +1216,11 @@ int volume=1;
 ITMGContextGetInstance()->GetAudioEffectCtrl()->SetEffectsVolume(volume);
 ```
 ## 离线语音
-使用离线语音及转文字功能需要先初始化 SDK。其中接口 UploadRecordedFile、DownloadRecordedFile、SpeechToText 涉及到鉴权的有效期，需要开发者维护。
+使用离线语音及转文字功能需要先初始化 SDK。
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
+|ApplyPTTAuthbuffer    |鉴权初始化	|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1233,6 +1233,22 @@ ITMGContextGetInstance()->GetAudioEffectCtrl()->SetEffectsVolume(volume);
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|语音识别成文字		|
 
+
+### 鉴权初始化
+在初始化 SDK 之后调用鉴权初始化，authBuffer 的获取参见上文实时语音鉴权信息接口。
+> 函数原型  
+```
+ITMGPTT virtual void ApplyPTTAuthbuffer(const char* authBuffer, int authBufferLen)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| authBuffer    |char*                    |鉴权|
+| authBufferLen    |int                |鉴权长度|
+
+> 示例代码  
+```
+ITMGContextGetInstance()->GetPTT()->ApplyPTTAuthbuffer(authBuffer,authBufferLen);
+```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
@@ -1309,19 +1325,17 @@ ITMGContextGetInstance()->GetPTT()->CancelRecording();
 ```
 
 ### 上传语音文件
-此接口用于上传语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于上传语音文件。
 > 函数原型  
 ```
-ITMGPTT virtual void UploadRecordedFile(const char* filePath, const char* authBuffer,int authBufferLen)
+ITMGPTT virtual void UploadRecordedFile(const char* filePath)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | filePath    |char*                       |上传的语音路径|
-| authBuffer    |char*                    |鉴权码|
-| authBufferLen    |int                    |鉴权码长度|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetPTT()->UploadRecordedFile(filePath,authBuffer,authBufferLen);
+ITMGContextGetInstance()->GetPTT()->UploadRecordedFile(filePath);
 ```
 
 ### 上传语音完成的回调
@@ -1345,20 +1359,18 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 ```
 
 ### 下载语音文件
-此接口用于下载语音文件。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于下载语音文件。
 > 函数原型  
 ```
-ITMGPTT virtual void DownloadRecordedFile(const char* fileId, const char* filePath, const char* authBuffer, int authBufferLen) 
+ITMGPTT virtual void DownloadRecordedFile(const char* fileId, const char* filePath) 
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileId  		|char*   	|文件的 url 路径	|
 | filePath 	|char*  	|文件的本地保存路径	|
-| authBuffer    |char*                    |鉴权码|
-| authBufferLen    |int                    |鉴权码长度|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetPTT()->DownloadRecordedFile(fileID,filePath,authBuffer,authBufferLen);
+ITMGContextGetInstance()->GetPTT()->DownloadRecordedFile(fileID,filePath);
 ```
 
 ### 下载语音文件完成回调
@@ -1456,19 +1468,17 @@ ITMGContextGetInstance()->GetPTT()->GetVoiceFileDuration(filePath);
 
 
 ### 将指定的语音文件识别成文字
-此接口用于将指定的语音文件识别成文字。鉴权码的生成参考接口 GenAuthBuffer。
+此接口用于将指定的语音文件识别成文字。
 > 函数原型  
 ```
-ITMGPTT virtual void SpeechToText(const char* fileID, const char* authBuffer, int authBufferLen)
+ITMGPTT virtual void SpeechToText(const char* fileID)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | fileID    |char*                      |语音文件 url|
-| authBuffer    |char*                    |鉴权码|
-| authBufferLen    |int                    |鉴权码长度|
 > 示例代码  
 ```
-ITMGContextGetInstance()->GetPTT()->SpeechToText(fileID,authBuffer,authBufferLen);
+ITMGContextGetInstance()->GetPTT()->SpeechToText(fileID);
 ```
 
 ### 识别回调
