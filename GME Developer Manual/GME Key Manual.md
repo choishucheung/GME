@@ -3,21 +3,23 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便开发者调试和接入腾讯云游戏多媒体引擎产品，这里向您介绍适用于所有平台的密钥相关技术文档。
 
 ## 语音密钥
-腾讯云游戏多媒体引擎提供鉴权密钥，用于相关功能的加密和鉴权。鉴权所用到的签名产生过程涉及到明文、密钥和算法。
+腾讯云游戏多媒体引擎提供鉴权密钥，用于实时语音及离线语音的鉴权。
+
+鉴权所用到的签名产生过程涉及到明文、密钥和算法。
 
 明文为以下字段的网络序拼接：
 
 
 |字段描述    		| 类型/长度			| 值定义/备注|
 | ---------------- |-------------------|--------------|
-| cVer				|unsigned char/1	|版本号，填写数值：0|
-| wAccountLen		|unsigned short/2	|第三方自己的帐号长度	|
-| buffAccount		|wAccountLen		|第三方自己的帐号字符	|
+| cVer				|unsigned char/1	|版本号，填写数值：0		|
+| wOpenIDLen		|unsigned short/2	|第三方自己的帐号长度	|
+| dwOpenID			|wAccountLen		|第三方自己的帐号字符	|
 | dwSdkAppid		|unsigned short/4	|第三方自己的 appid		|
-| dwAuthid			|unsigned int/4		|群组号码				|
+| dwRoomID			|unsigned int/4		|如果是实时语音，请填写房间号码；如果是离线语音，请填写0			|
 | dwExpTime		|unsigned int/4		|过期时间（当前时间+有效期[单位：秒，建议 300 秒]）|
-| dwPriviegeMap	|unsigned int/4		|ITMG_AUTH_BITS_DEFAULT 代表全部权限|
-| dwReserved		|unsigned int/4		|填写数值：0		|
+| dwReserved1		|unsigned int/4		|填写数值：-1 或者 0xFFFFFFFF|
+| dwReserved2		|unsigned int/4		|填写数值：0		|
 
 ### 1.密钥
 腾讯云 GME 控制台获取相关权限密钥。
@@ -56,6 +58,5 @@ TEA对称加密算法。
 
 >**注意:**
 >不用要把二进制串转成 16 进制)。
-
 
 
