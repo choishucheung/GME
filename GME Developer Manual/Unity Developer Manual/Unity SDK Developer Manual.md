@@ -159,6 +159,9 @@ QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
 | roomId    		|int   		|房间号，只支持32位				|
 | openId    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云控制台的密钥				|
+
+
+
 > 示例代码  
 
 ```
@@ -1089,17 +1092,20 @@ IQAAudioEffectCtrl int setVoiceType(int type)
 
 |类型参数     |参数代表|意义|
 | ------------- |-------------|------------- |
-|VOICE_TYPE_ORIGINAL_SOUND  	|0	|原声			|
-|VOICE_TYPE_LOLITA    		|1	|萝莉			|
-|VOICE_TYPE_UNCLE  		|2	|大叔			|
-|VOICE_TYPE_INTANGIBLE    	|3	|空灵			|
-|VOICE_TYPE_KINDER_GARTEN    	|4	|幼稚园			|
-|VOICE_TYPE_HEAVY_GARTEN    	|5	|重机器			|
-|VOICE_TYPE_OPTIMUS_PRIME    	|6	|擎天柱			|
-|VOICE_TYPE_CAGED_ANIMAL    	|7	|困兽			|
-|VOICE_TYPE_DIALECT    		|8	|土掉渣/歪果仁/方言	|
-|VOICE_TYPE_METAL_ROBOT    	|9	|金属机器人		|
-|VOICE_TYPE_DEAD_FATBOY    	|10	|死肥仔			|
+|VOICE_TYPE_ORIGINAL_SOUND  				|0	|原声			|
+|VOICE_TYPE_LOLITA    						|1	|萝莉			|
+|VOICE_TYPE_UNCLE  						|2	|大叔			|
+|VOICE_TYPE_INTANGIBLE    					|3	|空灵			|
+| ITMG_VOICE_TYPE_DEAD_FATBOY  			|4	|死肥仔			|
+| ITMG_VOICE_TYPE_HEAVY_MENTA			|5	|重金属			|
+| ITMG_VOICE_TYPE_DIALECT 				|6	|歪果仁			|
+| ITMG_VOICE_TYPE_INFLUENZA 				|7	|感冒			|
+| ITMG_VOICE_TYPE_CAGED_ANIMAL 			|8	|困兽			|
+| ITMG_VOICE_TYPE_HEAVY_MACHINE		|9	|重机器			|
+| ITMG_VOICE_TYPE_STRONG_CURRENT		|10	|强电流			|
+| ITMG_VOICE_TYPE_KINDER_GARTEN			|11	|幼稚园			|
+| ITMG_VOICE_TYPE_HUANG 					|12	|小黄人			|
+
 
 > 示例代码  
 
