@@ -199,7 +199,6 @@ context->Uninit();
 |ChangeRoomType 	|修改用户房间音频类型|
 |GetRoomType 		|获取用户房间音频类型|
 
-
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
 离线语音获取鉴权时，房间号参数必须填0。
@@ -210,21 +209,18 @@ QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int  		|房间号，只支持32位				|
-| strOpenID  		|char*    	|用户标识					|
-| key    		|char*	    	|来自腾讯云控制台的密钥				|
-| buffLenght   		|int    	|返回的authbuff的长度				|
-
-
-
+| nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| dwRoomID    		|int  		|房间号，只支持32位						|
+| strOpenID  		|char*    		|用户标识								|
+| strKey    			|char*	    	|来自腾讯云控制台的密钥					|
+|strAuthBuffer		|char*	    	|返回的 authbuff							|
+| buffLenght   		|int    		|返回的authbuff的长度					|
 
 > 示例代码  
 ```
 unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
-
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, &bufferLen);
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY,strAuthBuffer,&bufferLen);
 ```
 
 ### 加入房间

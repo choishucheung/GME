@@ -212,26 +212,25 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 
 ## 关于鉴权
 ### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。离线语音获取鉴权时，房间号参数必须填0。
 该接口返回值为 NSData 类型。
-
 > 函数原型
 ```
 @interface QAVAuthBuffer : NSObject
-+ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier  key:(NSString*)key expTime:(unsigned int)expTime authBits:(unsigned int) authBits;
-@end
++ (NSData*) GenAuthBuffer:(unsigned int)appId roomId:(unsigned int)roomId identifier:(NSString*)identifier key:(NSString*)key;
++ @end
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int  	|房间号，只支持32位			|
-| identifier    	|NSString|用户标识				|
-| key    			|NSString|来自腾讯云控制台的密钥			|
-| expTime    		|int   	|authBuffer 超时时间			|
-| authBits    		|uint64   |权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| roomId    		|int  		|房间号，只支持32位							|
+| identifier  		|NSString    	|用户标识								|
+| key    			|NSString    	|来自腾讯云控制台的密钥					|
+
 
 
 > 示例代码  
+
 ```
-NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId identifier:_openId key:AUTHKEY expTime:[[NSDate date] timeIntervalSince1970] + 3600 authBits:ITMG_AUTH_BITS_DEFAULT];
+NSData* authBuffer =   [QAVAuthBuffer GenAuthBuffer:SDKAPPID3RD.intValue roomId:_roomId openID:_openId key:AUTHKEY];
 ```

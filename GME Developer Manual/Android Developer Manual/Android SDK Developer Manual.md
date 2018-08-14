@@ -201,11 +201,11 @@ ITMGContext.GetInstance(this).Uninit();
 
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
-该接口返回值为 Byte[] 类型。
+该接口返回值为 Byte[] 类型。离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
 ```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -213,15 +213,12 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 | roomId    		|int   		|房间号，只支持32位				|
 | openID    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云控制台的密钥				|
-| expTime    		|int   		|authBuffer 超时时间				|
-| authBits    		|int    	|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
 
 
 > 示例代码  
 ```
 import com.tencent.av.sig.AuthBuffer;//头文件
-long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
-byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
+byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key);
 ```
 
 ### 加入房间
@@ -1018,6 +1015,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 
 |接口     | 接口含义   |
 | ------------- |:-------------:|
+|ApplyPTTAuthbuffer    |鉴权初始化	|
 |SetMaxMessageLength    |限制最大语音信息时长	|
 |StartRecording		|启动录音		|
 |StopRecording    	|停止录音		|
@@ -1030,6 +1028,20 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().SetEffectsVolume(Volume);
 |GetVoiceFileDuration	|语音文件的时长		|
 |SpeechToText 		|语音识别成文字		|
 
+### 鉴权初始化
+在初始化 SDK 之后调用鉴权初始化，authBuffer 的获取参见上文实时语音鉴权信息接口。
+> 函数原型  
+```
+ITMGContext TMGPTT public void ApplyPTTAuthbuffer(String authBuffer)
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| authBuffer    |String                    |鉴权|
+
+> 示例代码  
+```
+ITMGContext.GetInstance(this).GetPTT().ApplyPTTAuthbuffer(authBuffer);
+```
 
 ### 限制最大语音信息时长
 限制最大语音消息的长度，最大支持 60 秒。
