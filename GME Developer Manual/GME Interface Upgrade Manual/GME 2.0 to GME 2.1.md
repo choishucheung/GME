@@ -126,7 +126,7 @@ QAVSig GenSig
 
 IQAVPTT ApplyAccessToken
 
-- ### 离线语音上传语音文件
-#### 增加参数 authBuffer。
+- ### 离线语音鉴权校验
+#### 增加接口 ApplyPTTAuthbuffer (byte[] authBuffer)
 
 
