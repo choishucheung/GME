@@ -1,6 +1,7 @@
 ## 简介
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Cocos2d 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Cocos2d 开发的接入技术文档。
 
+**此文档对应GME sdk version：1.3.0.37965。**
 ## 目录
 	
 [SDK初始化](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md#sdk%E5%88%9D%E5%A7%8B%E5%8C%96)
