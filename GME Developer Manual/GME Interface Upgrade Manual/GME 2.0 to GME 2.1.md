@@ -7,13 +7,26 @@ QAVSig GenSig
 
 IQAVPTT ApplyAccessToken
 
-- ### 离线语音鉴权校验
+- ### 实时语音鉴权删除参数 
+Android：AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
+
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| roomId    		|int   		|房间号，只支持32位				|
+| openID    	|String 	|用户标识					|
+| key    		|string 	|来自腾讯云控制台的密钥				|
+
+- ### 离线语音鉴权校验增加
 #### 增加接口 ApplyPTTAuthbuffer (byte[] authBuffer)
 authBuffer 使用接口 genAuthBuffer 进行生成，其中参数 roomId 必须填 0。
 
-
+- ### EnableMic 及 EnableSpeaker 相关回调删除
 
 ## 主要接口更新
+这次更新保留接口 EnableMic 及 EnableSpeaker 接口，同时增加 EnableAudioCaptureDevice、EnableAudioSend、EnableAudioPlayDevice、EnableAudioRecv 四个接口。
+调用 EnableMic 相当于同时调用 EnableAudioCaptureDevice 及 EnableAudioSend，调用 EnableSpeaker 相当于同时调用 EnableAudioPlayDevice 及 EnableAudioRecv。
+
 
 - ### 增加接口：开启/关闭采集设备及开启/关闭音频上行
 #### ITMGContext ITMGAudioCtrl public int EnableAudioCaptureDevice
@@ -103,27 +116,7 @@ ITMGAudioCtrl bool IsAudioPlayDeviceEnabled()
 ITMGAudioCtrl bool IsAudioRecvEnabled()
 ```
 
-- ### 增加回调：设备占用和释放事件回调（Unity）
-在房间内，占用设备和释放设备时会回调，通过委托传递事件的相关消息。
 
-```
-委托函数：
-public delegate void QAVOnDeviceStateChangedEvent(int deviceType, string deviceId, bool openOrClose);
-事件函数：
-public abstract event QAVOnDeviceStateChangedEvent OnDeviceStateChangedEvent;
-```
-
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| deviceType    	|int       	|1 代表采集设备，2 代表播放设备							|
-| deviceId   	 	|string 	|设备GUID，用于标记设备，仅在 Windows 端和 Mac 端有效	|
-| openOrClose    |bool  	|采集设备/播放设备占用或者释放							|
-
-
-|参数     | 数值         |意义|
-| ------------- |:-------------:|-------------|
-| AUDIODEVICE_CAPTURE    	|1       	|代表采集设备|
-| AUDIODEVICE_PLAYER   	 	|2 			|代表播放设备|
 
 
 
