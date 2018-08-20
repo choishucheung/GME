@@ -64,6 +64,7 @@ protected void onCreate(Bundle savedInstanceState) {
         runOnGLThread(new Runnable() {
             @Override
             public void run() {
+                //初始化Java环境
                 gameWrapper.initOpensdk();
             }
         });

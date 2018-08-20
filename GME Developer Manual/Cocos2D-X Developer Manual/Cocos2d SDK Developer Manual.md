@@ -45,6 +45,8 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
+**GME 使用前请参考[工程配置文档](./Cocos2d%20SDK%20Project%20Configuration.md)对工程进行配置。**
+
 **此文档对应GME sdk version：2.0.2.38430。**
 
 ## 初始化相关接口
