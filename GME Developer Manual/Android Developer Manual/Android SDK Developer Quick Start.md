@@ -137,78 +137,35 @@ public void OnEvent(ITMGContext.ITMG_MAIN_EVENT_TYPE type, Intent data) {
 	}
 ```
 
-### 6、开启关闭采集设备
-此接口用来开启/关闭采集设备。加入房间默认不打开设备。
-- 只能在进房后调用此接口，退房会自动关闭设备。
-- 在移动端，打开采集设备通常会伴随权限申请，音量类型调整等操作。
-
-> 函数原型  
-
-```
-ITMGContext public int EnableAudioCaptureDevice(boolean isEnabled)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开采集设备，则传入的参数为 true，如果关闭采集设备，则参数为 false|
-
-> 示例代码
-
-```
-打开采集设备
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioCaptureDevice(true);
-```
-
-
-### 7、打开关闭音频上行
-此接口用于打开/关闭音频上行。如果采集设备已经打开，那么会发送采集到的音频数据。如果采集设备没有打开，那么仍旧无声。采集设备的打开关闭参见接口 EnableAudioCaptureDevice。
-
-> 函数原型
-
-```
-ITMGContext public int EnableAudioSend(boolean isEnabled)
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开音频上行，则传入的参数为 true，如果关闭音频上行，则参数为 false|
-
-> 示例代码  
-
-```
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioSend(true);
-```
-
-
-### 8、开启关闭播放设备
-此接口用于开启关闭播放设备。
+### 6、开启关闭麦克风
+此接口用来开启关闭麦克风。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型  
 ```
-ITMGContext public int EnableAudioPlayDevice(boolean isEnabled)
+ITMGContext public void EnableMic(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean        |如果需要关闭播放设备，则传入的参数为 false，如果打开播放设备，则参数为 true|
+| isEnabled    |boolean     |如果需要关闭麦克风，则传入的参数为 false，如果打开麦克风，则参数为 true|
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioPlayDevice(true);
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableMic(true);
 ```
 
-### 9、打开关闭音频下行
-此接口用于打开/关闭音频下行。如果播放设备已经打开，那么会播放房间里其他人的音频数据。如果播放设备没有打开，那么仍旧无声。播放设备的打开关闭参见接口 参见EnableAudioPlayDevice。
+
+### 7、开启关闭扬声器
+此接口用于开启关闭扬声器。
 
 > 函数原型  
-
 ```
-ITMGContext public int EnableAudioRecv(boolean isEnabled)
+ITMGContext public void EnableSpeaker(boolean isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |boolean     |如果需要打开音频下行，则传入的参数为 true，如果关闭音频下行，则参数为 false|
-
+| isEnabled    |boolean       |如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true|
 > 示例代码  
-
 ```
-ITMGContext.GetInstance(this).GetAudioCtrl().EnableAudioRecv(true);
+ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 ```
 
 
