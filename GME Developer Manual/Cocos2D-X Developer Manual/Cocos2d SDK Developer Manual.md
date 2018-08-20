@@ -1,6 +1,8 @@
 ## 简介
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Cocos2d 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Cocos2d 开发的接入技术文档。
 
+**GME 使用前请参考[工程配置文档](./Cocos2d%20SDK%20Project%20Configuration.md)对工程进行配置。**
+
 ## 目录
 [初始化相关接口](./Cocos2d%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
@@ -44,8 +46,6 @@
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
 **GME 需要调用 Poll 接口触发事件回调。**
-
-**GME 使用前请参考[工程配置文档](./Cocos2d%20SDK%20Project%20Configuration.md)对工程进行配置。**
 
 **此文档对应GME sdk version：2.0.2.38430。**
 
