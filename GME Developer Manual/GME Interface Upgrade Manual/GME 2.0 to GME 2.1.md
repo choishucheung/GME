@@ -7,7 +7,7 @@ QAVSig GenSig
 
 IQAVPTT ApplyAccessToken
 
-- ### 实时语音鉴权删除参数 
+- ### 实时语音鉴权删除参数：expTime（超时时间）和authBits（权限）
 Android：AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
 
 |参数     | 类型         |意义|
