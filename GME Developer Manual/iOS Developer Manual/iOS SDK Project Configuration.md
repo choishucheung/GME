@@ -8,7 +8,7 @@
 
 ### 2. 在界面中找到 iOS 版本的 SDK 资源。
 
-### 3. 点击【下载】按钮。
+### 3. 单击【下载】按钮。
 下载完的SDK资源解压后有以下部分：
 
 |名称     | 意义   
@@ -40,9 +40,9 @@ Bitcode 需要工程依赖的所有类库同时支持，SDK 暂时还不支持 B
 ![image](Image/i5.png)
 
 ### 4.权限申请
-iOS 平台所需要的隐私权限如下：
+腾讯音视频引擎 iOS 平台所需要的隐私权限如下：
 
 |key     | 意义   
 | ------------- |:-------------:|
-|Required background modes    				       |允许后台运行
-|Microphone Usaeg Description   				|允许麦克风权限
+|Required background modes    		 |允许后台运行|
+|Microphone Usaeg Description   	|允许麦克风权限|

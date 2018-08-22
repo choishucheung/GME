@@ -34,7 +34,7 @@
 |EnableMic	 	|开麦克风 	|
 |EnableSpeaker		|开扬声器 	|
 
-**说明**
+**说明：**
 
 **GME 的接口调用成功后返回值为 QAVError.OK，数值为0。**
 
@@ -1152,10 +1152,10 @@ IQAAudioEffectCtrl int setVoiceType(int type)
 
 |类型参数     |参数代表|意义|
 | ------------- |-------------|------------- |
-|VOICE_TYPE_ORIGINAL_SOUND  				|0	|原声			|
-|VOICE_TYPE_LOLITA    						|1	|萝莉			|
-|VOICE_TYPE_UNCLE  						|2	|大叔			|
-|VOICE_TYPE_INTANGIBLE    					|3	|空灵			|
+| ITMG_VOICE_TYPE_ORIGINAL_SOUND  		|0	|原声			|
+| ITMG_VOICE_TYPE_LOLITA    				|1	|萝莉			|
+| ITMG_VOICE_TYPE_UNCLE  				|2	|大叔			|
+| ITMG_VOICE_TYPE_INTANGIBLE    			|3	|空灵			|
 | ITMG_VOICE_TYPE_DEAD_FATBOY  			|4	|死肥仔			|
 | ITMG_VOICE_TYPE_HEAVY_MENTA			|5	|重金属			|
 | ITMG_VOICE_TYPE_DIALECT 				|6	|歪果仁			|

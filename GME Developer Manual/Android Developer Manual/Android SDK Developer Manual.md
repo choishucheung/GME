@@ -834,7 +834,7 @@ ITMGContext.GetInstance(this).GetAudioEffectCtrl().ResumeAccompany();
 
 
 ### 设置伴奏音量
-设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 - 200。
+设置 DB 音量，默认值为 100，数值大于 100 音量增益，数值小于 100 音量减益，值域为 0 到 200。
 > 函数原型  
 ```
 ITMGContext TMGAudioEffectCtrl public int SetAccompanyVolume(int vol)

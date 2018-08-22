@@ -17,10 +17,8 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 |Init    		|初始化 GME 	|
 |Poll    		|触发事件回调	|
 |EnterRoom	 	|进房  		|
-|EnableAudioCaptureDevice	 	|开关采集设备 	|
-|EnableAudioSend		|打开关闭音频上行 	|
-|EnableAudioPlayDevice    			|开关播放设备		|
-|EnableAudioRecv    					|打开关闭音频下行	|
+|EnableMic	 		|开麦克风 		|
+|EnableSpeaker		|开扬声器 		|
 
 **说明**
 **GME 的接口调用成功后返回值为 QAVError.OK，数值为0。**

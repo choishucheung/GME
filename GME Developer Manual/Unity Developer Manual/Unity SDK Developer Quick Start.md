@@ -159,6 +159,7 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
 ```
 QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
