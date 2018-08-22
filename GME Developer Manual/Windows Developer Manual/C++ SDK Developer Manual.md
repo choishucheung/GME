@@ -1,22 +1,22 @@
 ## 简介
-欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 C++ 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 C++ 开发的接入技术文档。
+欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Windows 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Windows 开发的接入技术文档。
 
 ## 目录
-[初始化相关接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[初始化相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音房间相关接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[实时语音房间相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-[实时语音音频接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+[实时语音音频接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
 
-[实时语音伴奏相关接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
+[实时语音伴奏相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
 
-[实时语音音效相关接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
+[实时语音音效相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3%E5%8F%AA%E6%94%AF%E6%8C%81%E7%A7%BB%E5%8A%A8%E7%AB%AF)
 
-[离线语音](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
+[离线语音](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
 
-[高级接口](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
+[高级接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
 
-[回调消息列表](./Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
+[回调消息列表](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
 
 ## 使用流程图
 ![image](Image/i0.png)
@@ -43,7 +43,7 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
-**此文档对应GME sdk version：2.0.2.38430。**
+**此文档对应GME sdk version：2.1.1.39800。**
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
 
@@ -193,8 +193,8 @@ context->Uninit();
 |GetRoomType 		|获取用户房间音频类型|
 
 
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。  
 离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
@@ -204,9 +204,9 @@ QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| dwRoomID    		|int  		|房间号，只支持32位						|
+| dwRoomID    		|int  		|房间号，只支持32位	（离线语音房间号参数必须填0）|
 | strOpenID  		|char*    		|用户标识								|
-| strKey    			|char*	    	|来自腾讯云控制台的密钥					|
+| strKey    			|char*	    	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥					|
 |strAuthBuffer		|char*	    	|返回的 authbuff							|
 | buffLenght   		|int    		|返回的authbuff的长度					|
 

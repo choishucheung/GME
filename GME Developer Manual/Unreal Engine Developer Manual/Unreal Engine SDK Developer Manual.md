@@ -43,7 +43,7 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
-**此文档对应GME sdk version：2.0.2.38430。**
+**此文档对应GME sdk version：2.1.1.39800。**
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
 
@@ -197,8 +197,8 @@ context->Uninit();
 |ChangeRoomType 	|修改用户房间音频类型|
 |GetRoomType 		|获取用户房间音频类型|
 
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。  
 离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
@@ -208,9 +208,9 @@ QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| dwRoomID    		|int  		|房间号，只支持32位						|
+| dwRoomID    		|int  		|房间号，只支持32位（离线语音房间号参数必须填0）|
 | strOpenID  		|char*    		|用户标识								|
-| strKey    			|char*	    	|来自腾讯云控制台的密钥					|
+| strKey    			|char*	    	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥					|
 |strAuthBuffer		|char*	    	|返回的 authbuff							|
 | buffLenght   		|int    		|返回的authbuff的长度					|
 

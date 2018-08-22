@@ -31,7 +31,7 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
-**此文档对应GME sdk version：2.0.2.38430。**
+**此文档对应GME sdk version：2.1.1.39800。**
 ## 快速接入步骤
 
 ### 1、获取单例
@@ -171,8 +171,8 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 
 
 ## 关于鉴权
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。    
 该接口返回值为 Byte[] 类型。离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
@@ -182,9 +182,9 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   		|房间号，只支持32位				|
+| roomId    		|int   		|房间号，只支持32位（离线语音房间号参数必须填0）|
 | openID    	|String 	|用户标识					|
-| key    		|string 	|来自腾讯云控制台的密钥				|
+| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 
 
 > 示例代码  
