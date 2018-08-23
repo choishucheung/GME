@@ -16,11 +16,12 @@ public abstract int InitSpatializer()
 
 > 函数原型  
 ```
-public abstract int EnableSpatializer(bool enable)
+public abstract int EnableSpatializer(bool enable, bool applyToTeam)
 ```
 |参数	|类型	|意义 |
 | ------- |---------|------|
 | enable    	|bool    	|开启之后可以听到 3D 音效|
+| applyToTeam  	|bool    	|3D语音是否作用于小队内部，仅 enble 为 true 时有效|
 
 ### 3、获取当前 3D 音效状态
 此函数用于获取当前 3D 音效状态。
@@ -50,36 +51,52 @@ public abstract bool IsEnableSpatializer()
 
 > 函数原型  
 ```
-public abstract int UpdateSelfPosition(int x, int y, int z, int pitch, int yaw, int roll, int range)
+public abstract void UpdateAudioRecvRange(int range)
 ```
+|参数     | 类型         |意义|
+| ------------- |-------------|-------------|
+| range 	|int  	|设定音效可接收的范围|
+
+```
+public abstract int UpdateSelfPosition(int position[3], float axisForward[3], float axisRight[3], float axisUp[3])
+```
+
 在GME中设计的世界坐标系下（此坐标系与 Unreal 引擎坐标系相同，与 Unity 引擎不同，需要开发者注意）：
 - x 轴指向前方，y 轴指向右方，z 轴指向上方。
-- pitch：绕右轴（Y轴）旋转，上下观察，数值为 0 是代表向前，向下数值增加，向上数值减少，与虚幻坐标系相反。
-- yaw：绕上轴（Z轴）旋转，相当于左右观察，数值为 0 代表东方向，往北数值增加，往南数值减少。
-- roll：围绕正轴（X轴）旋转，倾斜头部观察，数值为 0 代表人的身体垂直地面，逆时针倾斜数值增加，顺时针倾斜数值减少，与虚幻坐标系相反。
+
 
 |参数     | 类型         |意义|
 | ------------- |-------------|-------------
-| x   		|int		|自身坐标 x 轴坐标	|
-| y    	|int		|自身坐标 y 轴坐标	|
-| z    	|int 		|自身坐标 z 轴坐标	|
-| pitch   	|int  	|围绕 Y 轴旋转，也叫做俯仰角。范围是-90~90，数值90代表视线往 z 轴反方向看|
-| yaw    	|int  	|围绕 Z 轴旋转，也叫偏航角。范围是-180~180，数值90代表视线往 x 轴方向看|
-| roll    	|int  	|围绕 X 轴旋转，也叫翻滚角，范围是-180~180，数值90代表用户身体平行于地面且头朝 y 轴方向|
-| range 	|int  	|设定音效可接收的范围|
+| position   	|int[]		|自身在世界坐标系中的坐标，顺序是前、右、上|
+| axisForward   |float[]  	|自身坐标系前轴的单位向量|
+| axisRight    	|float[]  	|自身坐标系右轴的单位向量|
+| axisUp    	|float[]  	|自身坐标系上轴的单位向量|
+
+#### 示例代码
+
+Unreal:
+```
+FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+FRotator cameraRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraRotation();
+int position[] = { (int)cameraLocation.X,(int)cameraLocation.Y, (int)cameraLocation.Z };
+FMatrix matrix = ((FRotationMatrix)cameraRotation);
+float forward[] = { matrix.GetColumn(0).X,matrix.GetColumn(1).X,matrix.GetColumn(2).X };
+float right[] = { matrix.GetColumn(0).Y,matrix.GetColumn(1).Y,matrix.GetColumn(2).Y };
+float up[] = { matrix.GetColumn(0).Z,matrix.GetColumn(1).Z,matrix.GetColumn(2).Z};
+ITMGContextGetInstance()->GetRoom()->UpdateSelfPosition(position, forward, right, up); 	
+```
+Unity：
+```
+Transform selftrans = currentPlayer.gameObject.transform;
+Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, selftrans.rotation, Vector3.one);
+int[] position = new int[3] { selftrans.rotation.z, selftrans.rotation.x, selftrans.rotation.y };
+float[] axisForward = new float[3] { matrix.m22, matrix.m02, matrix.m12 };
+float[] axisRight = new float[3] { matrix.m20, matrix.m00, matrix.m10 };
+float[] axisUp = new float[3] { matrix.m21, matrix.m01, matrix.m11 };
+ITMGContext.GetInstance().GetRoom().UpdateSelfPosition(position, axisForward, axisRight, axisUp);
+```
 
 
-
-
->函数原理
-
-![](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Image/w0.png)
-
-从图看参数，假设接收端用户为 A 点位置，发送端用户为 B点位置 ,<a href="https://www.codecogs.com/eqnedit.php?latex=\angle&space;CAB'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\angle&space;CAB'" title="\angle CAB'" /></a> 为 azimuth 方位，<a href="https://www.codecogs.com/eqnedit.php?latex=\angle&space;B'AB" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\angle&space;B'AB" title="\angle B'AB" /></a> 为 elevation 角度，AB 即为 distance_cm 距离。
-假设坐标 <a href="https://www.codecogs.com/eqnedit.php?latex=A\left&space;(&space;x_{1},&space;y_{1},&space;z_{1}&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A\left&space;(&space;x_{1},&space;y_{1},&space;z_{1}&space;\right&space;)" title="A\left ( x_{1}, y_{1}, z_{1} \right )" /></a> ，<a href="https://www.codecogs.com/eqnedit.php?latex=B\left&space;(&space;x_{2},&space;y_{2},&space;z_{2}&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?B\left&space;(&space;x_{2},&space;y_{2},&space;z_{2}&space;\right&space;)" title="B\left ( x_{2}, y_{2}, z_{2} \right )" /></a>，转换为<a href="https://www.codecogs.com/eqnedit.php?latex=A\left&space;(&space;0,&space;0,0&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A\left&space;(&space;0,&space;0,0&space;\right&space;)" title="A\left ( 0, 0,0 \right )" /></a>，<a href="https://www.codecogs.com/eqnedit.php?latex=B\left&space;(&space;x,&space;y,z\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?B\left&space;(&space;x,&space;y,z\right&space;)" title="B\left ( x, y,z\right )" /></a>，其中 <a href="https://www.codecogs.com/eqnedit.php?latex=x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" title="x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" /></a>
-则计算公式为：
-
-![](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Image/w1.png)
 
 
 

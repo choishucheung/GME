@@ -32,7 +32,7 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 | false    	|Disabled |  
 
 ### Update self position (including orientation)
-Set own position and rotate information to GME for function: Spatializer && WorldMode
+Set own position and rotate information to GME for function: Spatializer && WorldMode.
 #### Function prototype  
 ```
 ITMGRoom virtual void UpdateAudioRecvRange(int range)
@@ -55,26 +55,27 @@ ITMGRoom virtual intUpdateSelfPosition(int position[3], float axisForward[3], fl
 
 
 #### Sample code
-```
-Unreal:
-    FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
-    FRotator cameraRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraRotation();
-	int position[] = { (int)cameraLocation.X,(int)cameraLocation.Y, (int)cameraLocation.Z };
-	FMatrix matrix = ((FRotationMatrix)cameraRotation);
-	float forward[] = { matrix.GetColumn(0).X,matrix.GetColumn(1).X,matrix.GetColumn(2).X };
-	float right[] = { matrix.GetColumn(0).Y,matrix.GetColumn(1).Y,matrix.GetColumn(2).Y };
-	float up[] = { matrix.GetColumn(0).Z,matrix.GetColumn(1).Z,matrix.GetColumn(2).Z};
-	ITMGContextGetInstance()->GetRoom()->UpdateSelfPosition(position, forward, right, up); 	
 
+Unreal:
+```
+FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+FRotator cameraRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraRotation();
+int position[] = { (int)cameraLocation.X,(int)cameraLocation.Y, (int)cameraLocation.Z };
+FMatrix matrix = ((FRotationMatrix)cameraRotation);
+float forward[] = { matrix.GetColumn(0).X,matrix.GetColumn(1).X,matrix.GetColumn(2).X };
+float right[] = { matrix.GetColumn(0).Y,matrix.GetColumn(1).Y,matrix.GetColumn(2).Y };
+float up[] = { matrix.GetColumn(0).Z,matrix.GetColumn(1).Z,matrix.GetColumn(2).Z};
+ITMGContextGetInstance()->GetRoom()->UpdateSelfPosition(position, forward, right, up); 	
+```
 Unity：
-	Transform selftrans = currentPlayer.gameObject.transform;
-	Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, selftrans.rotation, Vector3.one);
-	int[] position = new int[3] { selftrans.rotation.z, selftrans.rotation.x, selftrans.rotation.y };
-	float[] axisForward = new float[3] { matrix.m22, matrix.m02, matrix.m12 };
-	float[] axisRight = new float[3] { matrix.m20, matrix.m00, matrix.m10 };
-	float[] axisUp = new float[3] { matrix.m21, matrix.m01, matrix.m11 };
-	ITMGContext.GetInstance().GetRoom().UpdateSelfPosition(position, axisForward, axisRight, axisUp);
-	
+```
+Transform selftrans = currentPlayer.gameObject.transform;
+Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, selftrans.rotation, Vector3.one);
+int[] position = new int[3] { selftrans.rotation.z, selftrans.rotation.x, selftrans.rotation.y };
+float[] axisForward = new float[3] { matrix.m22, matrix.m02, matrix.m12 };
+float[] axisRight = new float[3] { matrix.m20, matrix.m00, matrix.m10 };
+float[] axisUp = new float[3] { matrix.m21, matrix.m01, matrix.m11 };
+ITMGContext.GetInstance().GetRoom().UpdateSelfPosition(position, axisForward, axisRight, axisUp);
 ```
 
 
