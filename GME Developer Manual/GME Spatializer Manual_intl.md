@@ -14,7 +14,7 @@ QAVAudioCtrl virtual int EnableSpatializer(bool enable, bool applyToTeam)
 | Parameter | Type | Description |
 | ------------- |:-------------:|-------------
 | enable    |bool         | Specifies whether to enable 3D sound effect |
-| enable    |bool         |  be valid while bEnable=true, specifies whether to use spatial audioin the same team |
+| applyToTeam    |bool         | Be valid while bEnable=true, specifies whether to use spatial audioin in the same team |
 
 
 
