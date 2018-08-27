@@ -3,33 +3,40 @@
 
 
 ## 3D音效接入
-### 1、开关 3D 音效
-此函数用于开关 3D 音效。在使用 3D 音效之前必须先调用此接口，只接收 3D 音效而不发出 3D 音效的用户也需要调用此接口。
+### 1、初始化 3D 音效引擎
+此函数用于初始化 3D 音效引擎，在进房后调用。在使用 3D 音效之前必须先调用此接口，只接收 3D 音效而不发出 3D 音效的用户也需要调用此接口。
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual int EnableSpatializer(bool enable)
+public abstract int InitSpatializer()
 ```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| enable    |bool         |设置是否开启|
 
-
-
-### 2、获取当前 3D 音效状态
-此函数获取当前 3D 音效的状态，返回值为 bool 类型数值。
+### 2、开启或关闭 3D 音效
+此函数用于开启或关闭 3D 音效。开启之后可以听到 3D 音效。
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual bool IsEnableSpatializer()
+public abstract int EnableSpatializer(bool enable, bool applyToTeam)
+```
+|参数	|类型	|意义 |
+| ------- |---------|------|
+| enable    	|bool    	|开启之后可以听到 3D 音效|
+| applyToTeam  	|bool    	|3D语音是否作用于小队内部，仅 enble 为 true 时有效|
+
+### 3、获取当前 3D 音效状态
+此函数用于获取当前 3D 音效状态。
+
+> 函数原型  
+```
+public abstract bool IsEnableSpatializer()
 ```
 |返回值	|意义	|
 | ------- |---------|
 | true    	|开启状态    	|
 | false    	|关闭状态	|  
 
-### 3、更新声源方位（包含朝向）
-此函数用于更新声源方位角信息，传入用户 openID 后每帧调用便可实现 3D 音效效果。
+### 4、更新声源方位（包含朝向）
+此函数用于更新声源方位角信息，每帧调用便可实现 3D 音效效果。
 
 #### 距离与声音衰减的关系
 
@@ -37,102 +44,61 @@ QAVAudioCtrl virtual bool IsEnableSpatializer()
 
 |距离范围（引擎单位）|衰减公式	|
 | ------- |---------|
-| 0< N <40  	|衰减系数：1.0 （音量无衰减）	|
-| N≥40  |衰减系数：40/N          			|
+| 0< N <range/5  	|衰减系数：1.0 （音量无衰减）	|
+| N≥range/5  |衰减系数：40/N          			|
 
 ![](https://github.com/TencentMediaLab/GME/blob/master/Image/t1.jpg)
 
 > 函数原型  
 ```
-QAVAudioCtrl virtual int UpdateSpatializer(string identifier,float azimuth,float elevation,float distance_cm)
+public abstract void UpdateAudioRecvRange(int range)
 ```
 |参数     | 类型         |意义|
+| ------------- |-------------|-------------|
+| range 	|int  	|设定音效可接收的范围|
+
+```
+public abstract int UpdateSelfPosition(int position[3], float axisForward[3], float axisRight[3], float axisUp[3])
+```
+
+在GME中设计的世界坐标系下（此坐标系与 Unreal 引擎坐标系相同，与 Unity 引擎不同，需要开发者注意）：
+- x 轴指向前方，y 轴指向右方，z 轴指向上方。
+
+
+|参数     | 类型         |意义|
 | ------------- |-------------|-------------
-| identifier   		|string	|传入一个 identifier，以识别用户（identifier 在进房时候已经确定）	|
-| azimuth    		|float	|方位参数（需要计算）											|
-| elevation    	|float 	|角度参数（需要计算）											|
-| distance_cm    	|float  	|距离参数（需要计算）											|
+| position   	|int[]		|自身在世界坐标系中的坐标，顺序是前、右、上|
+| axisForward   |float[]  	|自身坐标系前轴的单位向量|
+| axisRight    	|float[]  	|自身坐标系右轴的单位向量|
+| axisUp    	|float[]  	|自身坐标系上轴的单位向量|
 
->函数原理
+#### 示例代码
 
-![](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Image/w0.png)
-
-从图看参数，假设接收端用户为 A 点位置，发送端用户为 B点位置 ,<a href="https://www.codecogs.com/eqnedit.php?latex=\angle&space;CAB'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\angle&space;CAB'" title="\angle CAB'" /></a> 为 azimuth 方位，<a href="https://www.codecogs.com/eqnedit.php?latex=\angle&space;B'AB" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\angle&space;B'AB" title="\angle B'AB" /></a> 为 elevation 角度，AB 即为 distance_cm 距离。
-假设坐标 <a href="https://www.codecogs.com/eqnedit.php?latex=A\left&space;(&space;x_{1},&space;y_{1},&space;z_{1}&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A\left&space;(&space;x_{1},&space;y_{1},&space;z_{1}&space;\right&space;)" title="A\left ( x_{1}, y_{1}, z_{1} \right )" /></a> ，<a href="https://www.codecogs.com/eqnedit.php?latex=B\left&space;(&space;x_{2},&space;y_{2},&space;z_{2}&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?B\left&space;(&space;x_{2},&space;y_{2},&space;z_{2}&space;\right&space;)" title="B\left ( x_{2}, y_{2}, z_{2} \right )" /></a>，转换为<a href="https://www.codecogs.com/eqnedit.php?latex=A\left&space;(&space;0,&space;0,0&space;\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A\left&space;(&space;0,&space;0,0&space;\right&space;)" title="A\left ( 0, 0,0 \right )" /></a>，<a href="https://www.codecogs.com/eqnedit.php?latex=B\left&space;(&space;x,&space;y,z\right&space;)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?B\left&space;(&space;x,&space;y,z\right&space;)" title="B\left ( x, y,z\right )" /></a>，其中 <a href="https://www.codecogs.com/eqnedit.php?latex=x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" title="x=x_{2}-x_{1},y=y_{2}-y_{1},z=z_{2}-z_{1}" /></a>
-则计算公式为：
-
-![](https://github.com/TencentMediaLab/GME/blob/master/GME%20Developer%20Manual/Windows%20Developer%20Manual/Image/w1.png)
-
-
->示例代码
+Unreal:
 ```
-private void CalculatePosition()
-{
-	Transform selftrans = currentPlayer.gameObject.transform;
-	Vector3 relativePos = new  Vector3 (playerPrefab.transform.position.x - selftrans.position.x, playerPrefab.transform.position.y - selftrans.position.y, playerPrefab.transform.position.z - selftrans.position.z);
-	Vector3 rotation = Quaternion.Inverse(selftrans.rotation) * relativePos;  
-	double distance = 0;
-	double azimuth = 0;
-	double elevation = 0;
-	double x = rotation.z;
-	double y = rotation.x;
-	double z = rotation.y;
-	double sqxy = Math.Sqrt(x*x + y*y);
-	distance = Math.Sqrt(relativePos.x*relativePos.x + relativePos.y*relativePos.y + relativePos.z*relativePos.z)*10;
-	if (y != 0)
-	{
-		if (x != 0)
-		{
-			if (x > 0)
-			{
-				azimuth =  Math.Atan(y / x);
-			}
-			else
-			{
-				azimuth = (Math.PI) + Math.Atan(y / x);
-			}
-		}
-		else
-		{
-			if (y > 0)
-			{
-				azimuth = -Math.PI/2;
-			}
-			else
-			{
-				azimuth = Math.PI/2;
-			}
-		}
-	}
-	else
-	{
-		if (x > 0)
-		{
-			azimuth = 0;
-		}
-		else
-		{
-			azimuth = -Math.PI;
-		}
-	}
-
-	if (sqxy != 0)
-	{
-		elevation = Math.Atan(z / sqxy);
-	}
-	else
-	{
-		if (z > 0)
-		{
-			elevation = Math.PI;
-		}
-		else
-		{
-			elevation = -Math.PI;
-		}
-	}
-	Debug.LogFormat(string.Format ("3Daudio UpdateSpatializer, azimuth:{0}, elevation:{1}, distance:{2}", (float)(azimuth * 180)/Math.PI, (float)(elevation * 180)/Math.PI,distance));		
-}
+FVector cameraLocation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+FRotator cameraRotation = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraRotation();
+int position[] = { (int)cameraLocation.X,(int)cameraLocation.Y, (int)cameraLocation.Z };
+FMatrix matrix = ((FRotationMatrix)cameraRotation);
+float forward[] = { matrix.GetColumn(0).X,matrix.GetColumn(1).X,matrix.GetColumn(2).X };
+float right[] = { matrix.GetColumn(0).Y,matrix.GetColumn(1).Y,matrix.GetColumn(2).Y };
+float up[] = { matrix.GetColumn(0).Z,matrix.GetColumn(1).Z,matrix.GetColumn(2).Z};
+ITMGContextGetInstance()->GetRoom()->UpdateSelfPosition(position, forward, right, up); 	
 ```
+Unity：
+```
+Transform selftrans = currentPlayer.gameObject.transform;
+Matrix4x4 matrix = Matrix4x4.TRS(Vector3.zero, selftrans.rotation, Vector3.one);
+int[] position = new int[3] { selftrans.rotation.z, selftrans.rotation.x, selftrans.rotation.y };
+float[] axisForward = new float[3] { matrix.m22, matrix.m02, matrix.m12 };
+float[] axisRight = new float[3] { matrix.m20, matrix.m00, matrix.m10 };
+float[] axisUp = new float[3] { matrix.m21, matrix.m01, matrix.m11 };
+ITMGContext.GetInstance().GetRoom().UpdateSelfPosition(position, axisForward, axisRight, axisUp);
+```
+
+
+
+
+
 
 

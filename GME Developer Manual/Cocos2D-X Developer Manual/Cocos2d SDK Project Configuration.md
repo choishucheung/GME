@@ -19,20 +19,10 @@ SDK 支持在 Mac 系统上编译。
 ## iOS Xcode 预备工作
 
 ### 1. 导入 SDK 相关的 framework 文件 
-需要将 framework 添加到 Xcode 工程中并设置头文件引用位置，结果如下图所示。
+需要将 framework 添加到 Xcode 工程中并设置头文件引用位置。
 
-![image](Image/cocos1.png)
+TMG_SDK 文件夹里面有 GMESDK.framework 游戏音视频 SDK framework 文件，必须添加到工程中。
 
-TMG_SDK 文件夹里面有三个 framework，如下：
->TMGSDK_cocos_audio.framework：
-
-音视频的 SDK，必选。
->QAVSDKAuthBuffer.framework：
-
-用来生成语音房间权限加密串的 SDK，正式部署的时候可以部署在后台，则不需要这个 SDK。
->QAVSDKTlsSig.framework：
-
-用来生成 PTT（离线语音） 加密验证串的 SDK，如果没有使用 PTT（离线语音） 可以不设置。
 
 ### 2. 添加依赖库  
 参考下图：  
@@ -49,15 +39,10 @@ public class AppActivity extends Cocos2dxActivity {
     static final String TAG = "AppActivity";
     static OpensdkGameWrapper gameWrapper ;
     static {
-        Log.e(TAG, "Load so begin");
-        System.loadLibrary("stlport_shared");
-        System.loadLibrary("xplatform");
-        System.loadLibrary("UDT");
-        System.loadLibrary("qav_tlssign");
-        System.loadLibrary("traeimp-armeabi-v7a");
-        System.loadLibrary("qavsdk");
-        Log.e(TAG, "Load so end");
+        //加载SDK so
+        OpensdkGameWrapper.loadSdkLibrary();
     }
+
 }
 ```
 
@@ -73,7 +58,7 @@ protected void onCreate(Bundle savedInstanceState) {
         gameWrapper = new OpensdkGameWrapper(this);
         runOnGLThread(new Runnable() {
             @Override
-            public void run() {
+            public void run() {          
                 gameWrapper.initOpensdk();
             }
         });

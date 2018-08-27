@@ -1,6 +1,6 @@
 ## 简介
 
-欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 C++ 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 C++ 开发的快速接入文档。
+欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Windows 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Windows 开发的快速接入文档。
 
 
 ## 使用流程图
@@ -13,12 +13,12 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 
 |重要接口     | 接口含义|
-| ------------- |-------------|
-|Init   				|初始化 GME 	|
-|Poll    				|触发事件回调	|
-|EnterRoom	 		|进房  			|
-|EnableMic	 		|开麦克风 		|
-|EnableSpeaker		|开扬声器 		|
+| ------------- |:-------------:|
+|Init    		|初始化 GME 	|
+|Poll    		|触发事件回调	|
+|EnterRoom	 	|进房  		|
+|EnableMic	 		|开麦克风 	|
+|EnableSpeaker			|开扬声器 	|
 
 **说明**
 
@@ -28,7 +28,9 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
-**此文档对应GME sdk version：2.0.2.38430。**
+**GME 需要调用 Poll 接口触发事件回调。**
+
+**此文档对应GME sdk version：2.1.1.39800。**
 ## 快速接入步骤
 
 ### 1、获取单例
@@ -91,11 +93,11 @@ ITMGContextGetInstance()->Poll();
 
 > 函数原型
 ```
-ITMGContext virtual void EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)
+ITMGContext virtual void EnterRoom(int roomID, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId			|int   				|房间号，只支持32位|
+| roomID			|int   				|房间号，只支持32位|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
 | authBuffer    		|char*    				|鉴权码			|
 | buffLen   			|int   				|鉴权码长度		|
@@ -119,7 +121,8 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
 > 示例代码  
 ```
-//在头文件中继承了 ITMGDelegate，并进行声明。
+
+
 //实现代码
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 	switch (eventType) {
@@ -147,7 +150,6 @@ ITMGAudioCtrl virtual void EnableMic(bool bEnabled)
 ITMGContextGetInstance()->GetAudioCtrl()->EnableMic(true);
 ```
 
-
 ### 7、开启关闭扬声器
 此接口用于开启关闭扬声器。
 
@@ -157,7 +159,7 @@ ITMGAudioCtrl virtual void EnableSpeaker(bool enabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| enable   		|bool       	|如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true	|
+| enable   		|bool       	|如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true	|
 > 示例代码  
 ```
 ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
@@ -165,26 +167,26 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 
 
 ## 关于鉴权
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署详情见[GME密钥文档](../GME%20Key%20Manual.md)。  
+离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
 ```
-QAVSDK_API int QAVSDK_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int appId, unsigned int authId, const char* strOpenID, const char* key, unsigned int expTime, unsigned int privilegeMap, unsigned char* retAuthBuff, unsigned int* buffLenght);
+QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, unsigned int dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
 ```
 |参数     | 类型         |意义|
-| ------------- |:-------------:|-------------
-| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| authId    		|int  		|要加入的房间名							|
+| ------------- |:-------------:|-------------|
+| nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| dwRoomID    		|int  		|房间号，只支持32位	（离线语音房间号参数必须填0）|
 | strOpenID  		|char*    		|用户标识								|
-| key    			|char*	    	|来自腾讯云控制台的密钥					|
-| expTime    		|int   		|authBuffer 超时时间						|
-| privilegeMap   	|int    		|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
-| retAuthBuff   	|char*    		|返回的 authbuff							|
-| buffLenght   	|int    		|返回的authbuff的长度					|
-
+| strKey    			|char*	    	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥					|
+|strAuthBuffer		|char*	    	|返回的 authbuff							|
+| buffLenght   		|int    		|返回的authbuff的长度					|
 
 > 示例代码  
 ```
-QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY, expTime, ITMG_AUTH_BITS_DEFAULT, retAuthBuff, &bufferLen);
+unsigned int bufferLen = 512;
+unsigned char retAuthBuff[512] = {0};
+QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY,strAuthBuffer,&bufferLen);
 ```

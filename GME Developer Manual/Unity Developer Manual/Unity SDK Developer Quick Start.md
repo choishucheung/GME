@@ -13,10 +13,10 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 
 |重要接口     | 接口含义|
-| ------------- |-------------|
-|Init    				|初始化 GME 	|
-|Poll    				|触发事件回调	|
-|EnterRoom	 		|进房  			|
+| ------------- |:-------------:|
+|Init    		|初始化 GME 	|
+|Poll    		|触发事件回调	|
+|EnterRoom	 	|进房  		|
 |EnableMic	 		|开麦克风 		|
 |EnableSpeaker		|开扬声器 		|
 
@@ -27,7 +27,9 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
-**此文档对应GME sdk version：2.0.2.38430。**
+**GME 需要调用 Poll 接口触发事件回调。**
+
+**此文档对应GME sdk version：2.1.1.39800。**
 ## 快速接入步骤
 
 
@@ -66,11 +68,11 @@ ITMGContext public abstract int Poll();
 
 > 函数原型
 ```
-ITMGContext EnterRoom(int relationId, int roomType, byte[] authBuffer)
+ITMGContext EnterRoom(int roomID, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId		|int    	|房间号，只支持32位					|
+| roomID		|int    	|房间号，只支持32位					|
 | roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
@@ -139,37 +141,36 @@ ITMGAudioCtrl EnableSpeaker(bool isEnabled)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| isEnabled    |bool        |如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true|
+| isEnabled    |bool        |如果需要关闭扬声器，则传入的参数为 false，如果打开扬声器，则参数为 true|
 > 示例代码  
 ```
 打开扬声器
 IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
 ```
 
-
 ## 关于鉴权
-### 实时语音鉴权信息
-生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
+### 鉴权信息
+
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。    
+离线语音获取鉴权时，房间号参数必须填0。
 该接口返回值为 Byte[] 类型。
 > 函数原型
+
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string identifier, string key, int expTime, uint authBits)
+QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码					|
-| roomId    		|int   		|房间号，只支持32位									|
-| identifier    	|String 		|用户标识											|
-| key    			|string 		|来自腾讯云控制台的密钥								|
-| expTime    		|int   		|authBuffer 超时时间									|
-| authBits    		|int    		|权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）	|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| roomId    		|int   		|房间号，只支持32位	（离线语音房间号参数必须填0）|
+| openId    	|String 	|用户标识					|
+| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 > 示例代码  
+
 ```
-byte[] GetAuthBuffer(string appId, string userId, int roomId, uint authBits)
+byte[] GetAuthBuffer(string appId, string userId, int roomId)
     {
-	TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-	double timeStamp = t.TotalSeconds;
-	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9", (int)timeStamp + 1800, authBits);
+	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9");
 }
-byte[] authBuffer = this.GetAuthBuffer(str_appId,, str_userId, roomId, recvOnly ? IQAVContext.AUTH_BITS_RECV : IQAVContext.AUTH_BITS_ALL);
 ```

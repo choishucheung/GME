@@ -3,18 +3,17 @@
 
 ### 1.加入房间
 用生成的鉴权数据进房。
->注意:加入房间默认不打开麦克风及扬声器。
 
 
 #### 实时语音房间
 > 函数原型
 ```
-ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
+ITMGContext EnterRoom(int roomId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
 ```
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    		|房间号，只支持32位|
+| roomId		|int    		|房间号，只支持32位|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型				|
 | authBuffer    	|Byte[]  		|鉴权数据					|
 
@@ -63,15 +62,15 @@ ITMGContext EnterRoom(int relationId, ITMG_ROOM_TYPE roomType, byte[] authBu
 
 对语音距离范围的补充：
 - 是否在语音距离范围内，不影响同一小队成员互相通话。
-- 设置接收语音距离范围参考 API：UpdateCoordinate
+- 设置接收语音距离范围参考 API：SetGameAudioRecvRange
 
 > 函数原型
 ```
-ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
+ITMGContext  EnterTeamRoom(int roomId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| relationId		|int    		|房间号，只支持32位									|
+| roomId		|int    		|房间号，只支持32位									|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型（参数只能为1）|
 | authBuffer    	|Byte[] 		|鉴权数据								|
 | teamId    		|int    		|加入的小队语音队伍标识码（不能为 0 ）	|
@@ -86,35 +85,30 @@ ITMGContext  EnterTeamRoom(int relationId,ITMG_ROOM_TYPE roomType, byte[] authBu
 通过此函数修改小队语音通话模式。
 > 函数原型  
 ```
-ITMGRoom int ChangeTeamAudioMode(int audioMode)
+ITMGRoom int ChangeGameAudioMode(Type_AudioMode gameAudioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| audioMode    |int     |0 代表全局语音，1 代表小队语音|
+| Type_AudioMode    |int     |0 代表全局语音，1 代表小队语音|
 
 > 示例代码  
 ```
-ITMGContext.GetInstance().GetRoom().ChangeTeamAudioMode(1);
+ITMGContext.GetInstance().GetRoom().ChangeGameAudioMode(1);
 ```
 
 ### 3.设置接收语音距离范围
 此函数用于设置接收的语音范围（距离以游戏引擎为准）。
-- 调用此函数需要每帧调用
-- 进房的前提下调用。
-- 游戏中每个用户都需要调用。
 
 > 函数原型  
 ```
-ITMGRoom int UpdateCoordinate(int pos_x, int pos_y, int pos_z, int range)
+ITMGRoom int SetGameAudioRecvRange(int range)
 ```
 |参数     | 类型         |意义|
 | ------------- |-------------|-------------
-| pos_x    |int         |传入用户自身坐标的 x 坐标						|
-| pos_y    |int         |传入用户自身坐标的 y 坐标						|
-| pos_z    |int         |传入用户自身坐标的 z 坐标						|
-| range 	 |int 	  |传入收听的范围，以游戏引擎的距离单位为单位		|
+| range    |int         | 最大可以接收音频的范围				|
+
 
 > 示例代码  
 ```
-ITMGContext.GetInstance().GetRoom().UpdateCoordinate(pos_x,pos_y,pos_z,10);
+ITMGContext.GetInstance().GetRoom().SetGameAudioRecvRange(300);
 ```

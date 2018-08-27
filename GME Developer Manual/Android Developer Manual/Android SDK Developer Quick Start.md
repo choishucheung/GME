@@ -13,10 +13,10 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 
 |重要接口     | 接口含义|
-| ------------- |-------------|
-|Init    				|初始化 GME 	|
-|Poll    				|触发事件回调	|
-|EnterRoom	 		|进房  			|
+| ------------- |:-------------:|
+|Init    		|初始化 GME 	|
+|Poll    		|触发事件回调	|
+|EnterRoom	 	|进房  		|
 |EnableMic	 		|开麦克风 		|
 |EnableSpeaker		|开扬声器 		|
 
@@ -27,7 +27,13 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
+<<<<<<< HEAD
 **此文档对应GME sdk version：2.0.2.38430。**
+=======
+**GME 需要调用 Poll 接口触发事件回调。**
+
+**此文档对应GME sdk version：2.1.1.39800。**
+>>>>>>> GME_2.1_Dev
 ## 快速接入步骤
 
 ### 1、获取单例
@@ -89,11 +95,11 @@ ITMGContext.GetInstance(this).Poll();
 
 > 函数原型
 ```
-ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[] authBuffer)
+ITMGContext public abstract void  EnterRoom(int roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| relationId 	|int		|房间号，只支持32位|
+| roomId 	|int		|房间号，只支持32位|
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
@@ -108,7 +114,7 @@ ITMGContext public abstract void  EnterRoom(int relationId, int roomType, byte[]
 
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(relationId),roomType, authBuffer);    
+ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(roomId),roomType, authBuffer);    
 ```
 
 ### 5、加入房间事件的回调
@@ -165,27 +171,32 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 ```
 
 
+
 ## 关于鉴权
+<<<<<<< HEAD
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
 该接口返回值为 Byte[] 类型。
+=======
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。    
+该接口返回值为 Byte[] 类型。离线语音获取鉴权时，房间号参数必须填0。
+>>>>>>> GME_2.1_Dev
 
 > 函数原型
 ```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key, int expTime, int authBits)
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| appId    		|int   	|来自腾讯云控制台的 SdkAppId 号码	|
-| roomId    		|int   	|房间号，只支持32位			|
-| identifier    	|String |用户标识				|
-| key    		|string |来自腾讯云控制台的密钥			|
-| expTime    		|int   	|authBuffer 超时时间			|
-| authBits    		|int    |权限（ITMG_AUTH_BITS_DEFAULT 代表拥有全部权限）|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
+| roomId    		|int   		|房间号，只支持32位（离线语音房间号参数必须填0）|
+| openID    	|String 	|用户标识					|
+| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 
 
 > 示例代码  
 ```
-long nExpUTCTime = 1800 + System.currentTimeMillis() / 1000L;
-byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key, (int)nExpUTCTime, (int) ITMGContext.ITMG_AUTH_BITS_DEFAULT);
+import com.tencent.av.sig.AuthBuffer;//头文件
+byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key);
 ```

@@ -17,10 +17,10 @@
 ## 预备工作
 
 ### 1. 导入 SDK 文件  
-在 Xcode  需要导入的文件为： TMGSDK_mac.framework。
+在 Xcode  需要导入的文件为： GMESDK.framework。
 
 ### 2. 添加依赖库  
 参考下图：  
 
-![image](Image/i4.jpg)
+![image](Image/i4.png)
   
