@@ -2,6 +2,7 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Mac 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Mac 开发的接入技术文档。
 
 ## 目录
+<<<<<<< HEAD
 [初始化相关接口](./Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
 [实时语音房间相关接口](./Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
@@ -17,6 +18,23 @@
 [高级接口](./Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
 
 [回调消息列表](./Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
+=======
+[初始化相关接口](./Mac%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音房间相关接口](./Mac%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音音频接口](./Mac%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E9%A2%91%E6%8E%A5%E5%8F%A3)
+
+[实时语音伴奏相关接口](./Mac%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E4%BC%B4%E5%A5%8F%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[实时语音音效相关接口](./Mac%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E9%9F%B3%E6%95%88%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+
+[离线语音](./Mac%20SDK%20Developer%20Manual.md#%E7%A6%BB%E7%BA%BF%E8%AF%AD%E9%9F%B3)
+
+[高级接口](./Mac%20SDK%20Developer%20Manual.md#%E9%AB%98%E7%BA%A7-api)
+
+[回调消息列表](./Mac%20SDK%20Developer%20Manual.md#%E5%9B%9E%E8%B0%83%E6%B6%88%E6%81%AF)
+>>>>>>> GME_2.1_Dev
 
 ## 使用流程图
 ![image](Image/i0.png)

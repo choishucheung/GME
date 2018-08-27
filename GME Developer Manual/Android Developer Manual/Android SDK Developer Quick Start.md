@@ -28,7 +28,13 @@ GME 快速入门文档只提供最主要的接入接口，更多详细接口请�
 **GME 加入房间需要鉴权，请参考文档关于鉴权部分内容。**
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 **此文档对应GME sdk version：2.0.2.38430。**
+=======
+**GME 需要调用 Poll 接口触发事件回调。**
+
+**此文档对应GME sdk version：2.1.1.39800。**
+>>>>>>> GME_2.1_Dev
 =======
 **GME 需要调用 Poll 接口触发事件回调。**
 
@@ -174,9 +180,15 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 
 ## 关于鉴权
 <<<<<<< HEAD
+<<<<<<< HEAD
 ### 实时语音鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关参数获取及详情见[GME密钥文档](../GME%20Key%20Manual.md)。    
 该接口返回值为 Byte[] 类型。
+=======
+### 鉴权信息
+生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。    
+该接口返回值为 Byte[] 类型。离线语音获取鉴权时，房间号参数必须填0。
+>>>>>>> GME_2.1_Dev
 =======
 ### 鉴权信息
 生成 AuthBuffer，用于相关功能的加密和鉴权，相关后台部署见[GME密钥文档](../GME%20Key%20Manual.md)。    
