@@ -38,7 +38,7 @@
 - [Cocos2D-X 开发接入技术文档](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
 
 #### 原生应用
-- [Windows 工程配置文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Quick%20Start.md)
+- [Windows 工程配置文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Project%20Configuration.md)
 
 - [Windows 快速接入文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Quick%20Start.md)
 
@@ -63,6 +63,26 @@
 - [Android 开发接入技术文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
 
 ## SDK更新说明
+### GME_SDK2.1 2018-08-21
+
+#### 新增功能：
+1、Windows 版支持变声；
+
+2、Windows 端支持离线语音；
+
+3、Windows 端支持 3D 音效；
+
+4、Android SDK 支持 x86 架构；
+
+5、iOS 和 MacSDK 适配 XCode10；
+
+#### 优化能力：
+1、离线语音鉴权优化；
+
+2、移动端设备支持单独关闭；
+
+3、优化中音质的网络抗性；
+
 ### GME2.0（2018-06-22）
 #### 新增功能
 1、GME 上架 PC Native、PC Unity 版本；
