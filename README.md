@@ -38,13 +38,17 @@
 - [Cocos2D-X 开发接入技术文档](./GME%20Developer%20Manual/Cocos2D-X%20Developer%20Manual/Cocos2d%20SDK%20Developer%20Manual.md)
 
 #### 原生应用
-- [PC（C++）快速接入文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Quick%20Start.md)
+- [Windows 工程配置文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Quick%20Start.md)
 
-- [PC（C++）开发接入技术文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/C%2B%2B%20SDK%20Developer%20Manual.md)
+- [Windows 快速接入文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Quick%20Start.md)
+
+- [Windows 开发接入技术文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md)
 
 - [Mac 工程配置文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Project%20Configuration.md)
 
 - [Mac 快速接入文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Quick%20Start.md)
+
+- [Mac 开发接入技术文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md)
 
 - [iOS 工程配置文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
@@ -57,8 +61,6 @@
 - [Android 快速接入文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Quick%20Start.md)
 
 - [Android 开发接入技术文档](./GME%20Developer%20Manual/Android%20Developer%20Manual/Android%20SDK%20Developer%20Manual.md)
-
-
 
 ## SDK更新说明
 ### GME2.0（2018-06-22）
