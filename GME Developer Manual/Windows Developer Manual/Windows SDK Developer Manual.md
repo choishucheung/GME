@@ -2,7 +2,7 @@
 欢迎使用腾讯云游戏多媒体引擎 SDK 。为方便 Windows 开发者调试和接入腾讯云游戏多媒体引擎产品 API，这里向您介绍适用于 Windows 开发的接入技术文档。
 
 ## 目录
-[初始化相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
+[初始化相关接口](./Windows%20SDK%20Developer%20Manual.md#%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
 [实时语音房间相关接口](./Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md#%E5%AE%9E%E6%97%B6%E8%AF%AD%E9%9F%B3%E6%88%BF%E9%97%B4%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
