@@ -19,18 +19,18 @@ ITMGContext virtual void SetLogLevel(int logLevel, bool enableWrite, bool enable
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| logLevel    		|int   		|打印日志级别		|
-| enableWrite    	|bool   				|是否写文件，默认为是	|
-| enablePrint    	|bool   				|是否写控制台，默认为是	|
+| logLevel    		|int   		|打印日志级别			|
+| enableWrite    	|bool   		|是否写文件，默认为是	|
+| enablePrint    	|bool   		|是否写控制台，默认为是	|
 
 
 |ITMG_LOG_LEVEL|意义|
 | -------------------------------|:-------------:|
-|TMG_LOG_LEVEL_NONE=0		|不打印日志			|
+|TMG_LOG_LEVEL_NONE=0		|不打印日志				|
 |TMG_LOG_LEVEL_ERROR=1		|打印错误日志（默认）	|
-|TMG_LOG_LEVEL_INFO=2			|打印提示日志		|
-|TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志	|
-|TMG_LOG_LEVEL_VERBOSE=4		|打印高频日志		|
+|TMG_LOG_LEVEL_INFO=2		|打印提示日志			|
+|TMG_LOG_LEVEL_DEBUG=3		|打印开发调试日志		|
+|TMG_LOG_LEVEL_VERBOSE=4	|打印高频日志			|
 
 #### 示例代码  
 ```
