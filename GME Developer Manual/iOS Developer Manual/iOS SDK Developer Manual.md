@@ -417,6 +417,16 @@ ITMGContext GetRoom -(int)GetRoomType
 }
 ```
 
+### 质量监控事件
+质量监控事件，事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_QUALITY，返回的参数为 weight、floss  及 delay，代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|参数     | 含义         |
+| ------------- |-------------|
+|weight    				|范围是 1 到 50，数值为 50 是音质评分极好，数值为 1 是音质评分很差，几乎不能使用，数值为 0 代表初始值，无意义|
+|floss    				|丢包率|
+|delay    		|音频触达延迟时间（ms）|
+
+
 ### 消息详情
 
 |消息     | 消息代表的意义   
@@ -673,6 +683,7 @@ ITMGContext GetAudioCtrl -(int)GetSpeakerState
 
 ```
 ITMGContext GetAudioCtrl -(QAVResult)EnableAudioPlayDevice:(BOOL)enabled
+<<<<<<< HEAD
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -682,8 +693,22 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableAudioPlayDevice:(BOOL)enabled
 ```
 打开播放设备
 [[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioPlayDevice:enabled];
+=======
+>>>>>>> GME_2.1_Dev
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| enabled    |BOOL        |如果需要关闭播放设备，则传入的参数为 NO，如果打开播放设备，则参数为 YES|
+> 示例代码
+
+<<<<<<< HEAD
+=======
+```
+打开播放设备
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioPlayDevice:enabled];
 ```
 
+>>>>>>> GME_2.1_Dev
 
 ### 播放设备状态获取
 此接口用于播放设备状态获取。
@@ -703,6 +728,7 @@ BOOL IsAudioPlayDevice =  [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioPlayD
 
 > 函数原型  
 
+<<<<<<< HEAD
 ```
 ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 ```
@@ -714,8 +740,24 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 
 ```
 [[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioRecv:enabled];
+=======
+>>>>>>> GME_2.1_Dev
+```
+ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
+```
+|参数     | 类型         |意义|
+| ------------- |:-------------:|-------------|
+| enabled    |BOOL     |如果需要打开音频下行，则传入的参数为 YES，如果关闭音频下行，则参数为 NO|
+
+> 示例代码  
+
+<<<<<<< HEAD
+=======
+```
+[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioRecv:enabled];
 ```
 
+>>>>>>> GME_2.1_Dev
 ### 音频下行状态获取
 此接口用于音频下行状态获取。
 > 函数原型  

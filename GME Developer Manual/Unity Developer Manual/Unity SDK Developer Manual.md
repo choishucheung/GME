@@ -411,7 +411,18 @@ void OnEndpointsUpdateInfo(int eventID, int count, string[] openIdList)
 ```
 
 
+<<<<<<< HEAD
 
+=======
+### 质量监控事件
+质量监控事件，事件消息为 ITMG_MAIN_EVENT_TYPE_CHANGE_ROOM_QUALITY，返回的参数为 weight、floss  及 delay，代表的信息如下，在 OnEvent 函数中对事件消息进行判断。
+
+|参数     | 含义         |
+| ------------- |-------------|
+|weight    				|范围是 1 到 50，数值为 50 是音质评分极好，数值为 1 是音质评分很差，几乎不能使用，数值为 0 代表初始值，无意义|
+|floss    				|丢包率|
+|delay    		|音频触达延迟时间（ms）|
+>>>>>>> GME_2.1_Dev
 
 
 ## 实时语音音频接口
