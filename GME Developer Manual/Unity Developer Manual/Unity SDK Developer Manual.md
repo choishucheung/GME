@@ -1556,11 +1556,7 @@ public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | code    |int                       |当code为0时，录制完成|
-<<<<<<< HEAD
-| fileid    |string                      |语音文件 url|
-=======
 | fileid    |string                      |语音文件 url	|
->>>>>>> GME_2.1_Dev
 | result    |string                      |转换的文本结果|
 > 示例代码
 
