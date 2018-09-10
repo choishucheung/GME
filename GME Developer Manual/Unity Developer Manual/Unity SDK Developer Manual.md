@@ -1556,7 +1556,7 @@ public abstract event QAVSpeechToTextCallback OnSpeechToTextComplete;
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | code    |int                       |当code为0时，录制完成|
-| filepath    |string                      |录制的存放地址|
+| fileid    |string                      |语音文件 url|
 | result    |string                      |转换的文本结果|
 > 示例代码
 
