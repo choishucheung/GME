@@ -683,7 +683,6 @@ ITMGContext GetAudioCtrl -(int)GetSpeakerState
 
 ```
 ITMGContext GetAudioCtrl -(QAVResult)EnableAudioPlayDevice:(BOOL)enabled
-<<<<<<< HEAD
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
@@ -693,22 +692,8 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableAudioPlayDevice:(BOOL)enabled
 ```
 打开播放设备
 [[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioPlayDevice:enabled];
-=======
->>>>>>> GME_2.1_Dev
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| enabled    |BOOL        |如果需要关闭播放设备，则传入的参数为 NO，如果打开播放设备，则参数为 YES|
-> 示例代码
-
-<<<<<<< HEAD
-=======
-```
-打开播放设备
-[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioPlayDevice:enabled];
 ```
 
->>>>>>> GME_2.1_Dev
 
 ### 播放设备状态获取
 此接口用于播放设备状态获取。
@@ -728,7 +713,6 @@ BOOL IsAudioPlayDevice =  [[[ITMGContext GetInstance] GetAudioCtrl] IsAudioPlayD
 
 > 函数原型  
 
-<<<<<<< HEAD
 ```
 ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 ```
@@ -740,24 +724,8 @@ ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
 
 ```
 [[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioRecv:enabled];
-=======
->>>>>>> GME_2.1_Dev
-```
-ITMGContext GetAudioCtrl -(QAVResult)EnableAudioRecv:(BOOL)enabled
-```
-|参数     | 类型         |意义|
-| ------------- |:-------------:|-------------|
-| enabled    |BOOL     |如果需要打开音频下行，则传入的参数为 YES，如果关闭音频下行，则参数为 NO|
-
-> 示例代码  
-
-<<<<<<< HEAD
-=======
-```
-[[[ITMGContext GetInstance]GetAudioCtrl ]EnableAudioRecv:enabled];
 ```
 
->>>>>>> GME_2.1_Dev
 ### 音频下行状态获取
 此接口用于音频下行状态获取。
 > 函数原型  

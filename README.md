@@ -43,25 +43,12 @@
 - [Windows 快速接入文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Quick%20Start.md)
 
 - [Windows 开发接入技术文档](./GME%20Developer%20Manual/Windows%20Developer%20Manual/Windows%20SDK%20Developer%20Manual.md)
-<<<<<<< HEAD
 
 - [Mac 工程配置文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Project%20Configuration.md)
 
 - [Mac 快速接入文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Quick%20Start.md)
 
 - [Mac 开发接入技术文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md)
-
-- [Mac 工程配置文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Project%20Configuration.md)
-
-- [Mac 快速接入文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Quick%20Start.md)
-=======
-
-- [Mac 工程配置文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Project%20Configuration.md)
-
-- [Mac 快速接入文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Quick%20Start.md)
-
-- [Mac 开发接入技术文档](./GME%20Developer%20Manual/Mac%20Developer%20Manual/Mac%20SDK%20Developer%20Manual.md)
->>>>>>> GME_2.1_Dev
 
 - [iOS 工程配置文档](./GME%20Developer%20Manual/iOS%20Developer%20Manual/iOS%20SDK%20Project%20Configuration.md)
 
@@ -77,17 +64,10 @@
 
 ## SDK更新说明
 ### GME_SDK2.1 2018-08-21
-<<<<<<< HEAD
 
 #### 新增功能：
 1、Windows 版支持变声；
 
-=======
-
-#### 新增功能：
-1、Windows 版支持变声；
-
->>>>>>> GME_2.1_Dev
 2、Windows 端支持离线语音；
 
 3、Windows 端支持 3D 音效；
