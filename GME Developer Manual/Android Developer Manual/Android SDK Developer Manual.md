@@ -42,6 +42,8 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
+**GME 回调信息参考回调消息列表。**
+
 **此文档对应GME sdk version：2.1.1.39800。**
 
 ## 初始化相关接口
@@ -203,34 +205,35 @@ ITMGContext.GetInstance(this).Uninit();
 
 > 函数原型
 ```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, String roomId, String identifier, String key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   		|房间号，只支持32位	（离线语音房间号参数必须填0）|
+| roomId    		|String   		|房间号，最大支持127字符（离线语音房间号参数必须填0）|
 | openID    	|String 	|用户标识					|
-| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
+| key    		|String 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 
 
 > 示例代码  
 ```
 import com.tencent.av.sig.AuthBuffer;//头文件
-byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key);
+byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), strRoomID,identifier, key);
 ```
 
 ### 加入房间
 用生成的鉴权信息进房，会收到消息为 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM 的回调。加入房间默认不打开麦克风及扬声器。
 
 > 函数原型
+
 ```
-ITMGContext public abstract void  EnterRoom(int roomId, int roomType, byte[] authBuffer)
+ITMGContext public abstract void  EnterRoom(String roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomId 	|int		|房间号，只支持32位	|
-| roomType 	|int		|房间音频类型		|
-| authBuffer	|byte[]	|鉴权码				|
+| roomId 	|String		|房间号，最大支持127字符|
+| roomType 	|int		|房间音频类型|
+| authBuffer	|byte[]	|鉴权码|
 
 |音频类型     	|含义|参数|音量类型|控制台推荐采样率设置|适用场景|
 | ------------- |------------ | ---- |---- |---- |---- |
@@ -244,7 +247,7 @@ ITMGContext public abstract void  EnterRoom(int roomId, int roomType, byte[] aut
 
 > 示例代码  
 ```
-ITMGContext.GetInstance(this).EnterRoom(Integer.parseInt(roomId),roomType, authBuffer);    
+ITMGContext.GetInstance(this).EnterRoom(roomId,roomType, authBuffer);    
 ```
 
 ### 加入房间事件的回调
@@ -579,8 +582,8 @@ ITMGContext TMGAudioCtrl int GetMicLevel()
 int micLevel = ITMGContext.GetInstance(this).GetAudioCtrl().GetMicLevel();
 ```
 
-### 设置麦克风的软件音量
-此接口用于设置麦克风的软件音量。参数 volume 用于设置麦克风的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置麦克风的音量
+此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 > 函数原型  
 ```
 ITMGContext TMGAudioCtrl int SetMicVolume(int volume) 
@@ -592,8 +595,8 @@ ITMGContext TMGAudioCtrl int SetMicVolume(int volume)
 ```
 ITMGContext.GetInstance(this).GetAudioCtrl().SetMicVolume(volume);
 ```
-###  获取麦克风的软件音量
-此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+###  获取麦克风的音量
+此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型  
 ```
 ITMGContext TMGAudioCtrl public int GetMicVolume()
@@ -702,9 +705,9 @@ ITMGContext TMGAudioCtrl public int GetSpeakerLevel()
 int SpeakLevel = ITMGContext.GetInstance(this).GetAudioCtrl().GetSpeakerLevel();
 ```
 
-### 设置扬声器的软件音量
-此接口用于设置扬声器的软件音量。
-参数 volume 用于设置扬声器的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置扬声器的音量
+此接口用于设置扬声器的音量。
+参数 volume 用于设置扬声器的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 
 > 函数原型  
 ```
@@ -718,9 +721,9 @@ ITMGContext TMGAudioCtrl public int SetSpeakerVolume(int volume)
 ITMGContext.GetInstance(this).GetAudioCtrl().SetSpeakerVolume(volume);
 ```
 
-### 获取扬声器的软件音量
-此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
-Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
+### 获取扬声器的音量
+此接口用于获取扬声器的音量。返回值为 int 类型数值，代表扬声器的音量，返回值为101代表没调用过接口 SetSpeakerVolume。
+Level 是实时音量，Volume 是扬声器的音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
 > 函数原型  
 ```

@@ -18,7 +18,7 @@
 | Libs     	| 开发工具包 Libs     
 
 ## 系统要求
-SDK 支持 在 Android 4.0.3（API 15）及以上系统上运行，但只有 ( Android 4.3) API 18 以上的系统才能开启硬件编码。
+SDK 支持 在 Android 4.2 及以上系统上运行，但只有 ( Android 4.3) API 18 以上的系统才能开启硬件编码。
 
 ## 预备工作
 
@@ -50,3 +50,5 @@ sourceSets {
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 ```
+
+

@@ -44,6 +44,8 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
+**GME 回调信息参考回调消息列表。**
+
 **此文档对应GME sdk version：2.1.1.39800。**
 
 ## 初始化相关接口
@@ -149,12 +151,12 @@ ITMGContext public abstract int Uninit()
 > 函数原型
 
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
+QAVAuthBuffer GenAuthBuffer(int appId, string roomId, string openId, string key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   		|房间号，只支持32位	（离线语音房间号参数必须填0）|
+| roomId    		|string   		|房间号，最大支持127字符	（离线语音房间号参数必须填0）|
 | openId    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 
@@ -163,7 +165,7 @@ QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
 > 示例代码  
 
 ```
-byte[] GetAuthBuffer(string appId, string userId, int roomId)
+byte[] GetAuthBuffer(string appId, string userId, string roomId)
     {
 	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9");
 }
@@ -179,11 +181,11 @@ byte[] GetAuthBuffer(string appId, string userId, int roomId)
 > 函数原型
 
 ```
-ITMGContext EnterRoom(int roomId, int roomType, byte[] authBuffer)
+ITMGContext EnterRoom(string roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomId		|int    	|房间号，只支持32位					|
+| roomId		|string    	|房间号，最大支持127字符					|
 | roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
@@ -590,8 +592,8 @@ ITMGAudioCtrl -(int)GetMicLevel
 IQAVContext.GetInstance().GetAudioCtrl().GetMicLevel();
 ```
 
-### 设置麦克风的软件音量
-此接口用于设置麦克风的软件音量。参数 volume 用于设置麦克风的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置麦克风的音量
+此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 > 函数原型
 
 ```
@@ -607,8 +609,8 @@ int micVol = (int)(value * 100);
 IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
 ```
 
-### 获取麦克风的软件音量
-此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+### 获取麦克风的音量
+此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型
 
 ```
@@ -727,9 +729,9 @@ ITMGAudioCtrl GetSpeakerLevel()
 IQAVContext.GetInstance().GetAudioCtrl().GetSpeakerLevel();
 ```
 
-### 设置扬声器的软件音量
-此接口用于设置扬声器的软件音量。
-参数 volume 用于设置扬声器的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置扬声器的音量
+此接口用于设置扬声器的音量。
+参数 volume 用于设置扬声器的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 
 > 函数原型  
 
@@ -746,9 +748,9 @@ int speVol = (int)(value * 100);
 IQAVContext.GetInstance().GetAudioCtrl().SetSpeakerVolume(speVol);
 ```
 
-### 获取扬声器的软件音量
-此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
-Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
+### 获取扬声器的音量
+此接口用于获取扬声器的音量。返回值为 int 类型数值，代表扬声器的音量，返回值为101代表没调用过接口 SetSpeakerVolume。
+Level 是实时音量，Volume 是扬声器的音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
 > 函数原型
 
@@ -1686,3 +1688,5 @@ ITMGContext ITMGAudioCtrl RemoveAudioBlackList(string openId)
 ```
 IQAVContext.GetInstance().GetAudioCtrl ().RemoveAudioBlackList (id);
 ```
+
+
