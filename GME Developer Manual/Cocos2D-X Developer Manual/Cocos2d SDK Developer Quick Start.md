@@ -92,11 +92,11 @@ ITMGContextGetInstance()->Poll();
 
 > 函数原型
 ```
-ITMGContext virtual void EnterRoom(int roomID, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)
+ITMGContext virtual void EnterRoom(const char*  roomId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)//普通进房接口
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomID			|int   				|房间号，只支持32位|
+| roomId			| char*    		|房间号，最大支持127字符	|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型	|
 | authBuffer    		|char*    				|鉴权码			|
 | buffLen   			|int   				|鉴权码长度		|
@@ -118,10 +118,9 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 ### 5、加入房间事件的回调
 加入房间完成后会发送信息 ITMG_MAIN_EVENT_TYPE_ENTER_ROOM，在 OnEvent 函数中进行判断。
-> 示例代码  
+> 示例代码
+  
 ```
-
-
 //实现代码
 void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 	switch (eventType) {
@@ -171,13 +170,15 @@ ITMGContextGetInstance()->GetAudioCtrl()->EnableSpeaker(true);
 离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
+
 ```
-QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, unsigned int dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
+QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, const char* dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
 ```
+
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| dwRoomID    		|int  		|房间号，只支持32位（离线语音房间号参数必须填0）	|
+| dwRoomID    		|char*     |房间号，最大支持127字符（离线语音房间号参数必须填0）|
 | strOpenID  		|char*    		|用户标识								|
 | strKey    			|char*	    	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥					|
 |strAuthBuffer		|char*	    	|返回的 authbuff							|
@@ -189,3 +190,4 @@ unsigned int bufferLen = 512;
 unsigned char retAuthBuff[512] = {0};
 QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY,strAuthBuffer,&bufferLen);
 ```
+

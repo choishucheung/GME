@@ -91,11 +91,11 @@ ITMGContext.GetInstance(this).Poll();
 
 > 函数原型
 ```
-ITMGContext public abstract void  EnterRoom(int roomId, int roomType, byte[] authBuffer)
+ITMGContext public abstract void  EnterRoom(String roomId, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomId 	|int		|房间号，只支持32位|
+| roomId 	|String		|房间号，最大支持127字符|
 | roomType 	|int		|房间音频类型		|
 | authBuffer	|byte[]	|鉴权码				|
 
@@ -175,14 +175,14 @@ ITMGContext.GetInstance(this).GetAudioCtrl().EnableSpeaker(true);
 
 > 函数原型
 ```
-AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String identifier, String key)
+AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, String roomId, String identifier, String key)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   		|房间号，只支持32位（离线语音房间号参数必须填0）|
-| openID    	|String 	|用户标识					|
-| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
+| appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码|
+| roomId    		|String   	|房间号，最大支持127字符（离线语音房间号参数必须填0）|
+| openID    	|String 	|用户标识|
+| key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥|
 
 
 > 示例代码  
@@ -190,3 +190,5 @@ AuthBuffer public native byte[] genAuthBuffer(int sdkAppId, int roomId, String i
 import com.tencent.av.sig.AuthBuffer;//头文件
 byte[] authBuffer=AuthBuffer.getInstance().genAuthBuffer(Integer.parseInt(sdkAppId), Integer.parseInt(strRoomID),identifier, key);
 ```
+
+

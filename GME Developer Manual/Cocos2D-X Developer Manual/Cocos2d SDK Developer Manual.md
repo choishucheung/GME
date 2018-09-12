@@ -45,6 +45,8 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
+**GME 回调信息参考回调消息列表。**
+
 **此文档对应GME sdk version：2.1.1.39800。**
 
 ## 初始化相关接口
@@ -63,6 +65,7 @@
 ### 准备工作
 接入 GME 首先需要引入头文件 tmg_sdk.h，头文件类继承 ITMGDelegate 以进行消息的传递及回调。
 > 示例代码  
+
 ```
 #include "tmg_sdk.h"
 
@@ -87,6 +90,7 @@ context->SetTMGDelegate(this);
 接口类采用 Delegate 方法用于向应用程序发送回调通知，消息类型参考 ITMG_MAIN_EVENT_TYPE，data 在 Windows 平台下是 json 字符串格式， 具体 key-value 参见说明文档。
 
 > 示例代码 
+
 ```
 //函数实现：
 //TMGTestScene.h:
@@ -143,6 +147,7 @@ public:
 
 ```
 >示例代码
+
 ```
 //头文件中的声明
 class TMGTestScene : public cocos2d::Scene,public ITMGDelegate
@@ -181,6 +186,7 @@ ITMGContext  int Resume()
 反初始化 SDK，进入未初始化状态。
 
 > 函数原型 
+
 ```
 ITMGContext int Uninit()
 
@@ -210,14 +216,15 @@ context->Uninit();
 离线语音获取鉴权时，房间号参数必须填0。
 
 > 函数原型
+
 ```
-QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, unsigned int dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
+QAVSDK_AUTHBUFFER_API int QAVSDK_AUTHBUFFER_CALL QAVSDK_AuthBuffer_GenAuthBuffer(unsigned int nAppId, const char* dwRoomID, const char* strOpenID, const char* strKey, unsigned char* strAuthBuffer, unsigned int bufferLength);
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | nAppId    			|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| dwRoomID    		|int  		|房间号，只支持32位	（离线语音房间号参数必须填0）	|
-| strOpenID  		|char*    		|用户标识								|
+| dwRoomID    		|char*     |房间号，最大支持127字符（离线语音房间号参数必须填0）|
+| strOpenID  		|char*     	|用户标识|
 | strKey    			|char*	    	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥					|
 |strAuthBuffer		|char*	    	|返回的 authbuff							|
 | buffLenght   		|int    		|返回的authbuff的长度					|
@@ -236,11 +243,11 @@ QAVSDK_AuthBuffer_GenAuthBuffer(atoi(SDKAPPID3RD), roomId, "10001", AUTHKEY,strA
 > 函数原型
 
 ```
-ITMGContext virtual void EnterRoom(int roomId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)//普通进房接口
+ITMGContext virtual void EnterRoom(const char*  roomId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen)//普通进房接口
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomId			|int   		|房间号，只支持32位	|
+| roomId			| char*    		|房间号，最大支持127字符	|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型		|
 | authBuffer    		|char*     	|鉴权码			|
 | buffLen   			|int   		|鉴权码长度		|
@@ -268,11 +275,11 @@ context->EnterRoom(roomId, ITMG_ROOM_TYPE_STANDARD, (char*)retAuthBuff,bufferLen
 
 > 函数原型
 ```
-ITMGContext virtual void EnterTeamRoom(int roomId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
+ITMGContext virtual void EnterTeamRoom(const char* roomId, ITMG_ROOM_TYPE roomType, const char* authBuff, int buffLen, int teamId, int gameAudioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomId		|int   		|房间号，只支持32位 			|
+| roomId			| char*    		|房间号，最大支持127字符	|
 | roomType 		|ITMG_ROOM_TYPE	|房间音频类型				|
 | authBuffer    	|char*    	|鉴权码					|
 | buffLen   		|int   		|鉴权码长度				|
@@ -700,8 +707,8 @@ ITMGAudioCtrl virtual int GetMicLevel()
 ITMGContextGetInstance()->GetAudioCtrl()->GetMicLevel();
 ```
 
-### 设置麦克风的软件音量
-此接口用于设置麦克风的软件音量。参数 volume 用于设置麦克风的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置麦克风的音量
+此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int SetMicVolume(int vol)
@@ -715,8 +722,8 @@ int vol = 100;
 ITMGContextGetInstance()->GetAudioCtrl()->SetMicVolume(vol);
 ```
 
-### 获取麦克风的软件音量
-此接口用于获取麦克风的软件音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+### 获取麦克风的音量
+此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetMicVolume()
@@ -878,9 +885,9 @@ ITMGAudioCtrl virtual int GetSpeakerLevel()
 ITMGContextGetInstance()->GetAudioCtrl()->GetSpeakerLevel();
 ```
 
-### 设置扬声器的软件音量
-此接口用于设置扬声器的软件音量。
-参数 volume 用于设置扬声器的软件音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+### 设置扬声器的音量
+此接口用于设置扬声器的音量。
+参数 volume 用于设置扬声器的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
 
 > 函数原型  
 ```
@@ -895,9 +902,9 @@ int vol = 100;
 ITMGContextGetInstance()->GetAudioCtrl()->SetSpeakerVolume(vol);
 ```
 
-### 获取扬声器的软件音量
-此接口用于获取扬声器的软件音量。返回值为 int 类型数值，代表扬声器的软件音量，返回值为101代表没调用过接口 SetSpeakerVolume。
-Level 是实时音量，Volume 是扬声器的软件音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
+### 获取扬声器的音量
+此接口用于获取扬声器的音量。返回值为 int 类型数值，代表扬声器的音量，返回值为101代表没调用过接口 SetSpeakerVolume。
+Level 是实时音量，Volume 是扬声器的音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
 > 函数原型  
 ```

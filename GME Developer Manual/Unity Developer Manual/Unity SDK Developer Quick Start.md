@@ -68,11 +68,11 @@ ITMGContext public abstract int Poll();
 
 > 函数原型
 ```
-ITMGContext EnterRoom(int roomID, int roomType, byte[] authBuffer)
+ITMGContext EnterRoom(string roomID, int roomType, byte[] authBuffer)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
-| roomID		|int    	|房间号，只支持32位					|
+| roomID		|string    	|房间号，最大支持127字符					|
 | roomType 	|ITMGRoomType		|房间音频类型		|
 | authBuffer 	|Byte[] 	|鉴权码					|
 
@@ -157,20 +157,21 @@ IQAVContext.GetInstance().GetAudioCtrl().EnableSpeaker(true);
 > 函数原型
 
 ```
-QAVAuthBuffer GenAuthBuffer(int appId, int roomId, string openId, string key)
+QAVAuthBuffer GenAuthBuffer(int appId, string roomId, string openId, string key)
 ```
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------|
 | appId    		|int   		|来自腾讯云控制台的 SdkAppId 号码		|
-| roomId    		|int   		|房间号，只支持32位	（离线语音房间号参数必须填0）|
+| roomId    		|string   		|房间号，最大支持127字符	（离线语音房间号参数必须填0）|
 | openId    	|String 	|用户标识					|
 | key    		|string 	|来自腾讯云[控制台](https://console.cloud.tencent.com/gamegme)的密钥				|
 > 示例代码  
 
 ```
-byte[] GetAuthBuffer(string appId, string userId, int roomId)
+byte[] GetAuthBuffer(string appId, string userId, string roomId)
     {
 	return QAVAuthBuffer.GenAuthBuffer(int.Parse(appId), roomId, userId, "a495dca2482589e9");
 }
 ```
+
