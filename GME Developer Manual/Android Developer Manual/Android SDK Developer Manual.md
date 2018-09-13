@@ -584,6 +584,7 @@ int micLevel = ITMGContext.GetInstance(this).GetAudioCtrl().GetMicLevel();
 
 ### 设置麦克风的音量
 此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+
 > 函数原型  
 ```
 ITMGContext TMGAudioCtrl int SetMicVolume(int volume) 
@@ -597,6 +598,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().SetMicVolume(volume);
 ```
 ###  获取麦克风的音量
 此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+
 > 函数原型  
 ```
 ITMGContext TMGAudioCtrl public int GetMicVolume()
@@ -722,6 +724,7 @@ ITMGContext.GetInstance(this).GetAudioCtrl().SetSpeakerVolume(volume);
 ```
 
 ### 获取扬声器的音量
+
 此接口用于获取扬声器的音量。返回值为 int 类型数值，代表扬声器的音量，返回值为101代表没调用过接口 SetSpeakerVolume。
 Level 是实时音量，Volume 是扬声器的音量，最终声音音量相当于 Level*Volume%。举个例子：实时音量是数值是 100 的话，此时Volume的数值是 60，那么最终发出来的声音数值也是 60。
 
@@ -1027,10 +1030,10 @@ ITMGContext TMGAudioEffectCtrl  public int setVoiceType(int type);
 
 |类型参数     |参数代表|意义|
 | ------------- |-------------|------------- |
-|VOICE_TYPE_ORIGINAL_SOUND  				|0	|原声			|
-|VOICE_TYPE_LOLITA    						|1	|萝莉			|
-|VOICE_TYPE_UNCLE  						|2	|大叔			|
-|VOICE_TYPE_INTANGIBLE    					|3	|空灵			|
+|ITMG_VOICE_TYPE_ORIGINAL_SOUND  		|0	|原声			|
+|ITMG_VOICE_TYPE_LOLITA    				|1	|萝莉			|
+|ITMG_VOICE_TYPE_UNCLE  				|2	|大叔			|
+|ITMG_VOICE_TYPE_INTANGIBLE    			|3	|空灵			|
 | ITMG_VOICE_TYPE_DEAD_FATBOY  			|4	|死肥仔			|
 | ITMG_VOICE_TYPE_HEAVY_MENTA			|5	|重金属			|
 | ITMG_VOICE_TYPE_DIALECT 				|6	|歪果仁			|

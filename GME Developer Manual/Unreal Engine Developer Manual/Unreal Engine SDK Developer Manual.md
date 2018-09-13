@@ -43,6 +43,8 @@
 
 **GME 需要调用 Poll 接口触发事件回调。**
 
+**GME 回调信息参考回调消息列表。**
+
 **此文档对应GME sdk version：2.1.1.39800。**
 ## 初始化相关接口
 未初始化前，SDK 处于未初始化阶段，需要初始化鉴权后，通过初始化 SDK，才可以进房。
@@ -697,6 +699,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->GetMicLevel();
 
 ### 设置麦克风的音量
 此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int SetMicVolume(int vol)
@@ -712,6 +715,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->SetMicVolume(vol);
 
 ### 获取麦克风的音量
 此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetMicVolume()
