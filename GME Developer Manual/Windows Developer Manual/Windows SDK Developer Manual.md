@@ -497,6 +497,8 @@ void TMGTestScene::OnEvent(ITMG_MAIN_EVENT_TYPE eventType,const char* data){
 |GetMicLevel    						|获取实时麦克风音量	|
 |SetMicVolume    					|设置麦克风音量		|
 |GetMicVolume    					|获取麦克风音量		|
+|EnableSpeaker    					|开关扬声器|
+|GetSpeakerState    					|获取扬声器状态|
 |EnableAudioPlayDevice    			|开关播放设备		|
 |IsAudioPlayDeviceEnabled    		|获取播放设备状态	|
 |EnableAudioRecv    					|打开关闭音频下行	|
@@ -693,6 +695,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->GetMicLevel();
 
 ### 设置麦克风的音量
 此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int SetMicVolume(int vol)
@@ -708,6 +711,7 @@ ITMGContextGetInstance()->GetAudioCtrl()->SetMicVolume(vol);
 
 ### 获取麦克风的音量
 此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+
 > 函数原型  
 ```
 ITMGAudioCtrl virtual int GetMicVolume()
@@ -1233,10 +1237,10 @@ TMGAudioEffectCtrl int setVoiceType(int type)
 
 |类型参数     |参数代表|意义|
 | ------------- |-------------|------------- |
-|VOICE_TYPE_ORIGINAL_SOUND  				|0	|原声			|
-|VOICE_TYPE_LOLITA    						|1	|萝莉			|
-|VOICE_TYPE_UNCLE  						|2	|大叔			|
-|VOICE_TYPE_INTANGIBLE    					|3	|空灵			|
+|ITMG_VOICE_TYPE_ORIGINAL_SOUND  		|0	|原声			|
+|ITMG_VOICE_TYPE_LOLITA    				|1	|萝莉			|
+|ITMG_VOICE_TYPE_UNCLE  				|2	|大叔			|
+|ITMG_VOICE_TYPE_INTANGIBLE    			|3	|空灵			|
 | ITMG_VOICE_TYPE_DEAD_FATBOY  			|4	|死肥仔			|
 | ITMG_VOICE_TYPE_HEAVY_MENTA			|5	|重金属			|
 | ITMG_VOICE_TYPE_DIALECT 				|6	|歪果仁			|

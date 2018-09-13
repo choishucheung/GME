@@ -594,6 +594,7 @@ IQAVContext.GetInstance().GetAudioCtrl().GetMicLevel();
 
 ### 设置麦克风的音量
 此接口用于设置麦克风的音量。参数 volume 用于设置麦克风的音量，当数值为 0 的时候表示静音，当数值为 100 的时候表示音量不增不减，默认数值为 100。
+
 > 函数原型
 
 ```
@@ -611,6 +612,7 @@ IQAVContext.GetInstance().GetAudioCtrl().SetMicVolume (micVol);
 
 ### 获取麦克风的音量
 此接口用于获取麦克风的音量。返回值为一个int类型数值，返回值为101代表没调用过接口 SetMicVolume。
+
 > 函数原型
 
 ```

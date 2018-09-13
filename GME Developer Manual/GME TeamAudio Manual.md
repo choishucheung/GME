@@ -8,12 +8,12 @@
 #### 实时语音房间
 > 函数原型
 ```
-ITMGContext EnterRoom(int roomId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
+ITMGContext EnterRoom(string roomId, ITMG_ROOM_TYPE roomType, byte[] authBuffer)
 ```
 
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomId		|int    		|房间号，只支持32位|
+| roomId		|string    		|房间号，最大支持127字符|
 | roomType 			|ITMG_ROOM_TYPE	|房间音频类型				|
 | authBuffer    	|Byte[]  		|鉴权数据					|
 
@@ -66,12 +66,12 @@ ITMGContext EnterRoom(int roomId, ITMG_ROOM_TYPE roomType, byte[] authBuffer
 
 > 函数原型
 ```
-ITMGContext  EnterTeamRoom(int roomId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
+ITMGContext  EnterTeamRoom(string roomId,ITMG_ROOM_TYPE roomType, byte[] authBuffer,int teamId, int audioMode)
 ```
 |参数     | 类型         |意义|
 | ------------- |:-------------:|-------------
-| roomId		|int    		|房间号，只支持32位									|
-| roomType 			|ITMG_ROOM_TYPE	|房间音频类型（参数只能为1）|
+| roomId		|string    		|房间号，最大支持127字符									|
+| roomType 			|ITMG_ROOM_TYPE	|房间音频类型（参数只能为 1）|
 | authBuffer    	|Byte[] 		|鉴权数据								|
 | teamId    		|int    		|加入的小队语音队伍标识码（不能为 0 ）	|
 | audioMode    		|int    		|0 代表全局语音，1 代表小队语音			|
